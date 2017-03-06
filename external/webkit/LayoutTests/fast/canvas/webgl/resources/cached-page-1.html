@@ -1,0 +1,22 @@
+<script src="webgl-test.js"></script>
+<script src="webgl-test-utils.js"></script>
+<script>
+var wtu;
+var canvas;
+var gl;
+    
+function loadNext() {
+    wtu = WebGLTestUtils;
+    canvas = document.getElementById("canvas");
+    gl = wtu.create3DContext(canvas);
+
+    if (window.opener.reportPageOneOnload() == 1) {
+        window.opener.debug('resources/cached-page-1.html about to navigate to resources/cached-page-2.html')
+        // Location changes need to happen outside the onload handler to generate history entries.
+        setTimeout(function() { location.href = 'cached-page-2.html'; }, 0);
+    }
+}
+</script>
+<body onload="loadNext()">
+<canvas id="canvas"/>
+</body>

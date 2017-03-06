@@ -1,0 +1,17 @@
+MODULE_NAME := libnvodm_query
+
+MODULE_SUFFIX := $(DLL_OR_LIB_SUFFIX)
+
+MODULE_IN_EBOOT := static
+
+# if the RM implementation and kernel libraries are different,
+# then the TARGET_OS has a real kernel, and the ODM query
+# static library will be needed for the RM, regardless of
+# the presence of EBoot.
+ifneq ($(strip $(notdir $(NVLIB_NVRM_KERNEL))),$(strip $(notdir $(NVLIB_NVRM_IMPL))))
+MODULE_FORCE_KERNEL_BUILD := $(TARGET_OS)
+endif
+
+MODULE_IN_MONITOR := secure
+
+include $(TEGRA_TOP)/core/drivers/nvodm/makefiles/Makefile.odm_common

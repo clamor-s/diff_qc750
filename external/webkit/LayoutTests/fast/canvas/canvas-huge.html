@@ -1,0 +1,38 @@
+<html>
+<head>
+<script type="text/javascript">
+function dumpTree() {
+    if (window.layoutTestController) {
+        window.layoutTestController.notifyDone();
+    }
+}
+
+function testCanvas(framesLeft) {
+    ctx = document.getElementById('c').getContext("2d");
+    ctx.fillStyle = "#000000";
+    ctx.fillRect(0,0,100,100);
+
+    framesLeft--;
+    if (framesLeft == 0 && window.layoutTestController) {
+        setTimeout(dumpTree, 16);
+    } else {
+        setTimeout(function() { testCanvas(framesLeft); }, 16);
+    }
+}
+
+// Tries to crash the browser by making a canvas larger than
+// The maximum texture size.
+function runTest() {
+    if (window.layoutTestController) {
+        window.layoutTestController.dumpAsText(true);
+        window.layoutTestController.waitUntilDone();
+    }
+    testCanvas(3);
+}
+</script>
+</head>
+
+<body onload="runTest();">
+<canvas width="5000" height="1000" id="c"></canvas>
+</body>
+</html>

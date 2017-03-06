@@ -1,0 +1,16 @@
+Please be aware that the init.rc MUST be modified to include the code snipped shown below otherwise NVSI will not work properly.
+
+<start of init.rc>
+...
+on fs
+  # Mount system to allow checkpoint and set NVSI symlink
+  mount ext4 /dev/block/platform/sdhci-tegra.3/by-name/APP /system rw
+
+  # Create NVSI filter symlink
+  symlink /data/data/com.nvidia.NvCPLSvc/files/com.nvidia.nvsiutilv1.xml /system/etc/permissions/com.nvidia.nvsiutilv1.xml
+
+  # Remount system read-only
+  mount ext4 /dev/block/platform/sdhci-tegra.3/by-name/APP /system wait ro remount
+  
+<remainder of init.rc>
+

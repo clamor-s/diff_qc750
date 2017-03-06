@@ -1,0 +1,13 @@
+NvStorMgrInit
+NvStorMgrDeinit
+NvStorMgrFileOpen
+NvStorMgrFileClose
+NvStorMgrFileRead
+NvStorMgrFileWrite
+NvStorMgrFileSeek
+NvStorMgrFtell
+NvStorMgrFileIoctl
+NvStorMgrFileQueryFstat
+NvStorMgrFileQueryStat
+NvStorMgrFileSystemQueryStat
+NvStorMgrPartitionQueryStat

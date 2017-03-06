@@ -1,0 +1,356 @@
+/* All material contained herein is copyright (c) 2001,2002,2008 Trusted Logic S.A.
+All Rights Reserved. No use of this material may be made without express written
+permission of the copyright holder. */
+
+/* Style Sheet for the TF4T project */
+
+/* Define colors, fonts and other style attributes here to override the defaults */
+
+/* Page background color */
+body
+{
+   background-color: white;
+   font-family: 'helvetica', sans-serif;
+   font-style: normal;
+   font-size: 14px;
+   color: black;
+}
+
+div.plain-headerbar
+{
+   height: 80px;
+   background-repeat: no-repeat;
+   background-position: top right;
+   border-bottom: 2px solid black;
+   font-size: 80%;
+}
+
+div.tl-headerbar
+{
+   height: 80px;
+   background-image: url(./style/LogoTL_32x64.gif);
+   background-repeat: no-repeat;
+   background-position: top right;
+   border-bottom: 2px solid black;
+   font-size: 80%;
+}
+
+div.tl-footerbar
+{
+   height: 30px;
+   padding-top: 5px;
+   border-top: 2px solid black;
+   font-size: 80%;
+}
+
+p
+{
+   margin-left: 20px;
+}
+
+dt
+{
+   margin-top: 6px;
+   font-weight: bold;
+}
+
+dd
+{
+   margin-top: 3px;
+}
+
+dl
+{
+   margin-left: 20px;
+}
+
+h1
+{
+   padding-bottom: 10px;
+   font-size: 30px;
+   font-weight: normal;
+}
+
+h2
+{
+   padding-top: 10px;
+   font-size: 18px;
+   font-weight: normal;
+}
+
+h3
+{
+   margin-left: 15px;
+   padding-top: 10px;
+   font-size: 16px;
+   font-weight: bold;
+}
+
+h4
+{
+   margin-left: 20px;
+   padding-top: 10px;
+   font-size: 14px;
+   font-weight: bold;
+}
+
+div.toc1
+{
+}
+div.toc2
+{
+   margin-left:10px
+}
+div.toc3
+{
+   margin-left:20px
+}
+
+table
+{
+	font-size: 100%;
+	border-collapse: collapse;
+}
+
+p.tl-copyright
+{
+   font-style: italic;
+}
+
+span.tl-confidential
+{
+   background-image: url(locker.gif);
+   background-repeat: no-repeat;
+   background-position: center left;
+   background-color: white;
+   height: 16px;
+   padding-left: 23px;
+   padding-bottom: 0px;
+}
+
+span.tl-redirectionup, span.tl-redirectionright, span.tl-redirectionleft
+{
+   background-repeat: no-repeat;
+   background-position: center left;
+   background-color: white;
+   padding-left: 21px;
+   padding-top: 1px;
+   height: 20px;
+   color : #000090;
+   cursor: hand;
+}
+
+span.tl-redirectionup
+{
+   background-image: url(prev.gif);
+}
+
+span.tl-redirectionright
+{
+   background-image: url(right.gif);
+}
+
+span.tl-redirectionleft
+{
+   background-image: url(left.gif);
+}
+
+pre.source
+{
+   white-space: pre;
+   margin-left: 20px;
+   padding-right: 10px;
+   padding-left: 10px;
+   padding-top: 10px;
+   padding-bottom: 10px;
+   background-color: 'lightgrey';
+   color: 'black';
+   font-weight: normal;
+   font-size: 14px;
+   font-family: 'courier new', 'courier', monospace;
+   border: 1px solid;
+   border-color: 'grey';
+   text-align: left;
+}
+
+p.tl-commandline
+{
+   margin-left: 35px;
+   font-family: 'courier new', 'courier', monospace;
+}
+
+span.tl-filename
+{
+   font-family: 'courier new', 'courier', monospace;
+   font-size: 16px;
+}
+
+p.tl-defitem
+{
+   margin-left: 35px;
+   margin-bottom: 0px;
+   font-weight: bold;
+}
+
+p.tl-defdef
+{
+   margin-left: 60px;
+   margin-top: 5px;
+}
+
+ul
+{
+   margin-top: 0px;
+   list-style-position: outside;
+   list-style-image: url(bullet.gif);
+   list-style-type: disc;
+}
+
+table.tl-simple
+{
+   margin-left: 20px;
+   border: 1px solid gainsboro;
+   padding: 0px;
+   font-family: 'helvetica', sans-serif;
+   font-style: normal;
+   font-size: 14px;
+   text-align: left;
+}
+
+th
+{
+   border-bottom: gainsboro 1px solid;
+   border-left: white 1px solid;
+   border-right: white 1px solid;
+   border-top: gainsboro 1px solid;
+   background-color: gainsboro;
+   color: black;
+   font-style: normal;
+   font-weight: bold;
+   padding-right: 5px;
+   padding-left: 5px;
+   padding-top: 2px;
+   padding-bottom: 2px;
+}
+
+td
+{
+   border: 1px solid gainsboro;
+   padding-right: 5px;
+   padding-left: 5px;
+   padding-top: 2px;
+   padding-bottom: 2px;
+   background-color: white;
+   color: black;
+}
+
+span.tl-key
+{
+   padding-right: 6px;
+   padding-left: 6px;
+   padding-top: 1px;
+   padding-bottom: 1px;
+   background-color: 'gainsboro';
+   color: black;
+   font-weight: bold;
+   font-size: 14px;
+   font-family: 'courier new', 'courier', monospace;
+   border: 2px outset;
+   border-color: 'grey';
+   width: 70px;
+   text-align: center;
+}
+
+p.tl-lcd
+{
+   margin-left: 35px;
+   padding-right: 6px;
+   padding-left: 6px;
+   padding-top: 1px;
+   padding-bottom: 1px;
+   background-color: 'yellowgreen';
+   color: 'black';
+   font-weight: bold;
+   font-size: 14px;
+   font-family: 'courier new', 'courier', monospace;
+   border: 3px ridge;
+   border-color: 'grey';
+   width: 200px;
+   height: 50px;
+   text-align: left;
+}
+
+span.tl-tfold, span.tl-tfile, span.tl-tpdf
+{
+   background-repeat: no-repeat;
+   background-position: top left;
+   background-color: white;
+   height: 20px;
+   padding-left: 20px;
+   font-family: 'helvetica', sans-serif;
+   font-weight: normal;
+   font-size: 12px;
+   color : black;
+}
+
+span.tl-tfold
+{
+   background-image: url(folder.gif);
+}
+
+span.tl-tfile
+{
+   background-image: url(file.gif);
+}
+
+span.tl-tpdf
+{
+   background-image: url(pdf.gif);
+}
+
+span.tl-tvert, span.tl-tt, span.tl-tlast, span.tl-tblank
+{
+   background-repeat: no-repeat;
+   background-position: top left;
+   background-color: white;
+   height: 20px;
+   padding-left: 20px;
+}
+
+span.tl-tvert
+{
+   background-image: url(vert.gif);
+}
+
+span.tl-tt
+{
+   background-image: url(t.gif);
+}
+
+span.tl-tlast
+{
+   background-image: url(last.gif);
+}
+
+span.tl-tcom
+{
+   height: 20px;
+   font-family: 'helvetica', sans-serif;
+   font-weight: normal;
+   font-size: 12px;
+   color : black;
+   margin-left: 35px;
+}
+
+
+p.tl-warning
+{
+   background-image: url(warning.gif);
+   background-repeat: no-repeat;
+   background-position: center left;
+   background-color: white;
+   margin-left: 20px;
+   height: 35px;
+   padding-left: 40px;
+   color : black;
+}

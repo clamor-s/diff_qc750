@@ -1,0 +1,110 @@
+# NVRAM file for BCM94334WLAGB board
+# 5GHz FEM Skyworks 65525(35)  and 2.4GHz FEM Skyworks 65524(34) 
+
+manfid=0x2d0
+prodid=0x05de
+vendid=0x14e4
+devid=0x4380
+boardtype=0x05de
+boardrev=0x1203
+boardnum=22
+macaddr=00:90:4c:c5:12:38
+sromrev=3
+#boardflags: 5GHz FEM: has ext 5GHz PA + LNA
+#            2.4GHz FEM: has ext 2.4GHz PA + LNA
+#            2.4GHz FEM: SP3T switch share with BT
+#            keep original 0x200
+boardflags=0x10081a00
+xtalfreq=37400
+nocrc=1
+ag0=255
+aa2g=1
+ccode=ALL
+pa0itssit=0x20
+#PA parameters for 2.4GHz
+pa0b0=5715
+pa0b1=-738
+pa0b2=-200
+tssifloor2g=14
+extpagain2g=2
+extpagain5g=2
+# rssi params for 2.4GHz
+rssismf2g=0xf
+rssismc2g=0x8
+rssisav2g=0x1
+cckPwrOffset=0
+# rssi params for 5GHz
+rssismf5g=0xf
+rssismc5g=0x8
+rssisav5g=0x1
+#PA parameters for lower a-band
+pa1lob0=6318
+pa1lob1=-792
+pa1lob2=-225
+tssifloor5gl=21
+#PA parameters for midband
+pa1b0=6764
+pa1b1=-827
+pa1b2=-207
+tssifloor5gm=21
+#PA paramasdeters for high band
+pa1hib0=6367
+pa1hib1=-793
+pa1hib2=-223
+tssifloor5gh=21
+rxpo5g=0
+maxp2ga0=0x4c
+#il0macaddr=00:90:4c:c5:12:38
+#wl0id=0x431b
+#pagc2g=0x10
+#dacgc2g=4
+
+# SDIO oob parameters
+sd_gpout=0
+sd_oobonly=1
+
+# Parameters for DAC2x mode and ALPF bypass
+#dacrate2xen=1
+#txalpfbyp=1
+
+#Skyworks 2G & 5G FEM switch control table
+swctrlmap_2g=0x00080008,0x00220002,0x00020002,0x12202,0x17f
+swctrlmap_5g=0x00040004,0x00500040,0x00400040,0x12202,0x25c
+gain=32
+triso2g=5
+triso5g=a
+
+dacpu.fab.4=1
+#tx parameters
+loflag=1
+iqlocalidx5g=40
+dlocalidx5g=70
+iqcalidx5g=50
+lpbckmode5g=0 
+txiqlopapu5g=0
+txiqlopapu2g=0
+dlorange_lowlimit=5
+
+aci_detect_en_2g=1
+
+#rx parameters
+gain_settle_dly_2g=4
+gain_settle_dly_5g=4
+noise_cal_po_2g=-1
+noise_cal_po_40_2g=-1
+noise_cal_high_gain_2g=73
+noise_cal_nf_substract_val_2g=346
+noise_cal_po_5g=-1
+noise_cal_po_40_5g=-1
+noise_cal_high_gain_5g=73
+noise_cal_nf_substract_val_5g=346
+
+#USI nvram change history:
+#0629 - initial version, for 57604
+#0703 - change aci_detect_en_2g=1, switch table, triso2g=5, triso5g=a for RX performance
+#0727 - fix 5G VDET shunt 0.1uF cap issue, refer by BRCM new release
+#0806 - change lpbckmode5g=0 for 5G TX TSSI range improvement
+#0820 - Re-cal power for 5G match tuning
+#0917 - Re-cal power by 3rd build
+
+muxenab=0x10

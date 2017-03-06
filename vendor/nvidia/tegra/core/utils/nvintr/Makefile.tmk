@@ -1,0 +1,54 @@
+################################### tell Emacs this is a -*- makefile-gmake -*-
+#
+# Copyright (c) 2011 NVIDIA CORPORATION.  All Rights Reserved.
+#
+# NVIDIA CORPORATION and its licensors retain all intellectual property
+# and proprietary rights in and to this software, related documentation
+# and any modifications thereto.  Any use, reproduction, disclosure or
+# distribution of this software and related documentation without an express
+# license agreement from NVIDIA CORPORATION is strictly prohibited.
+#
+# tmake for SW Mobile component makefile
+#
+# nvintr static library component makefile
+#
+###############################################################################
+
+ifdef NV_COMPONENT_FLAG_STATIC_LIBRARY_SECTION
+include $(NV_BUILD_START_COMPONENT)
+
+NV_COMPONENT_NAME              := libnvintr
+NV_COMPONENT_OWN_INTERFACE_DIR := .
+NV_COMPONENT_SOURCES           := \
+	nvintrhandler.c \
+	nvintrhandler_apbdma.c \
+	nvintrhandler_apbdma_ap20.c \
+	nvintrhandler_apbdma_t30.c \
+	nvintrhandler_ap20.c \
+	nvintrhandler_common.c \
+	nvintrhandler_gpio.c \
+	nvintrhandler_gpio_ap20.c \
+	nvintrhandler_gpio_t30.c \
+	nvintrhandler_sim.c
+NV_COMPONENT_INCLUDES          := \
+	../../drivers/hwinc \
+	../../drivers/nvrm/nvrmkernel/core/common
+
+NV_COMPONENT_CODE_GENERATION := arm
+
+NV_COMPONENT_CFLAGS            += \
+	-DTRUSTZONE_ENABLED=0 \
+	-DENABLE_SECURITY=0
+
+ifneq ($(filter ap20, $(NV_TARGET_SOC)),)
+NV_COMPONENT_CFLAGS            += \
+	-DTARGET_SOC_AP20
+endif
+
+include $(NV_BUILD_STATIC_LIBRARY)
+endif
+
+# Local Variables:
+# indent-tabs-mode: t
+# tab-width: 8
+# End:

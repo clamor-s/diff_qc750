@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Tests whether plugin drawing while view is suspended hangs the browser</title>
+</head>
+<body>
+<embed style="width:200px; height:200px" type="application/x-webkit-test-netscape" test="surface-texture-hang" onpaintevent="startTest()"></embed>
+
+<div id="status"></div>
+<script>
+    if (!window.layoutTestController) {
+        alert('this test can only be run by DumpRenderTree')
+        return;
+    }
+    layoutTestController.waitUntilDone();
+    layoutTestController.dumpAsText();
+
+    var embed = document.getElementsByTagName("embed")[0];
+    var started = false;
+    function startTest() {
+        if (started)
+            return;
+        setTimeout(runTest, 100);
+        started = true;
+    }
+    function runTest() {
+        layoutTestController.pauseDrawing();
+        for (var i = 0; i < 1000; ++i) {
+            embed.draw();
+        }
+        layoutTestController.resumeDrawing();
+        embed.parentNode.removeChild(embed);
+        document.getElementById("status").innerHTML = "PASS";
+        layoutTestController.notifyDone();
+    }
+</script>
+</body>
+</html>

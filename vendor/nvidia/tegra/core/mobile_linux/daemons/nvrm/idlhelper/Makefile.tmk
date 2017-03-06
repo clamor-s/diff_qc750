@@ -1,0 +1,38 @@
+################################### tell Emacs this is a -*- makefile-gmake -*-
+#
+# Copyright (c) 2012 NVIDIA CORPORATION.  All Rights Reserved.
+#
+# NVIDIA CORPORATION and its licensors retain all intellectual property
+# and proprietary rights in and to this software, related documentation
+# and any modifications thereto.  Any use, reproduction, disclosure or
+# distribution of this software and related documentation without an express
+# license agreement from NVIDIA CORPORATION is strictly prohibited.
+#
+# tmake for SW Mobile component makefile
+#
+# libnvdispatch_helper shared library component makefile fragment
+#
+###############################################################################
+
+ifdef NV_COMPONENT_FLAG_SHARED_LIBRARY_SECTION
+include $(NV_BUILD_START_COMPONENT)
+
+NV_COMPONENT_NAME              := nvdispatch_helper
+NV_COMPONENT_SOURCES           := \
+	nvrm_daemon_idlhelper.c
+NV_COMPONENT_INCLUDES          := \
+	$(NV_SOURCE)/core/drivers/nvrm/nvrmkernel/core/common
+NV_COMPONENT_NEEDED_HEADER_INTERFACE_DIRS := \
+	../../../../drivers/nvrm
+NV_COMPONENT_NEEDED_INTERFACE_DIRS := \
+	../../../../utils/nvos
+
+NV_COMPONENT_OWN_INTERFACE_DIR := .
+
+include $(NV_BUILD_SHARED_LIBRARY)
+endif
+
+# Local Variables:
+# indent-tabs-mode: t
+# tab-width: 8
+# End:

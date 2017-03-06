@@ -1,0 +1,131 @@
+################################### tell Emacs this is a -*- makefile-gmake -*-
+#
+# Copyright (c) 2011-2012, NVIDIA CORPORATION.  All rights reserved.
+#
+# NVIDIA CORPORATION and its licensors retain all intellectual property
+# and proprietary rights in and to this software, related documentation
+# and any modifications thereto.  Any use, reproduction, disclosure or
+# distribution of this software and related documentation without an express
+# license agreement from NVIDIA CORPORATION is strictly prohibited.
+#
+# tmake for SW Mobile component makefile
+#
+# libnvos_aos: bootloader static library, Nvidia OS functions
+#
+###############################################################################
+
+#------------------------------------------------------------------------------
+# Static library
+# ------------------------------------------------------------------------------
+ifdef NV_COMPONENT_FLAG_STATIC_LIBRARY_SECTION
+include $(NV_BUILD_START_COMPONENT)
+
+NV_COMPONENT_NAME              := libnvos_aos
+NV_COMPONENT_OWN_INTERFACE_DIR := .
+NV_COMPONENT_SOURCES           := \
+	../nvos_alloc.c \
+	../nvos_coop_thread.c \
+	../nvos_debug.c \
+	../nvos_file.c \
+	../nvos_internal.c \
+	../nvos_pointer_hash.c \
+	../nvos_thread.c \
+	../nvos_trace.c \
+	../../nvosutils/nvuhash.c \
+	../../nvosutils/nvustring.c \
+	aos_print.c \
+	aos_process_args.c \
+	aos_profile.c \
+	aos_semi_rvice.c \
+	aos_semi_uart.c \
+	dlmalloc.c \
+	nvos_aos.c \
+	nvos_aos_core.c \
+	nvos_aos_semi.c \
+	nvap/aos_cpu.c \
+	nvap/aos_cpu_odmstub.c \
+	nvap/aos_mon_mode.c \
+	nvap/aos_ns_mode.c \
+	nvap/aos_cpu_t30.c \
+	nvap/aos_odmoption_ap20.c \
+	nvap/aos_odmoption_t30.c \
+	nvap/aos_pl310.c \
+	nvap/aos_scu.c \
+	nvap/aos_uart.c \
+	nvap/init_cpu.c \
+	nvap/init_fpu.c \
+	nvap/nvos_aos_gcc.c
+
+# AOS FPGA build uses rvds toolchain, which does not use above libc
+# implementation. And since currently we only support AOS in FPGA
+# build, we skip this file in FPGA build entirely.
+ifneq ($(NV_BUILD_CONFIGURATION_IS_EMULATION),1)
+NV_COMPONENT_SOURCES           += \
+	nvap/nvos_aos_libc.c
+endif
+
+NV_COMPONENT_INCLUDES          := \
+	. \
+	.. \
+	../../../drivers/hwinc \
+	../../../drivers/hwinc/$(NV_TARGET_SOC_FAMILY)
+
+NV_COMPONENT_CODE_GENERATION   := arm
+
+NV_COMPONENT_HAS_BROKEN_CODE   := ignore-all
+
+NV_COMPONENT_CFLAGS            += \
+	-DNVAOS_SHELL=0
+ifeq ($(NV_TARGET_BOOTLOADER_PINMUX),kernel)
+NV_COMPONENT_CFLAGS += -DSET_KERNEL_PINMUX
+endif
+
+ifeq ($(NV_BUILD_CONFIGURATION_IS_EMULATION),1)
+NV_COMPONENT_CFLAGS            += \
+	-DNVOS_ADVANCED_DEBUG=0
+NV_COMPONENT_INCLUDES          += \
+	../../../include/nvposix
+else ifeq ($(NV_BUILD_CONFIGURATION_IS_ANDROID),1)
+NV_COMPONENT_CFLAGS            += \
+	-DNO_MALLINFO \
+	-DNVOS_IS_LINUX=0 \
+	-DCOMPILE_ARCH_V7=1
+endif
+
+ifeq ($(NV_TARGET_SOC),ap20)
+ifneq ($(NV_TARGET_BOOTLOADER_PINMUX),kernel)
+NV_COMPONENT_SOURCES           += \
+	nvap/aos_uart_ap20.c
+endif
+NV_COMPONENT_CFLAGS            += \
+	-DNV_AOS_ENTRY_POINT=0x00108000 \
+	-DAES_KEYSCHED_LOCK_WAR_BUG_598910=1 \
+	-DSE_AES_KEYSCHED_READ_LOCK=0 \
+	-DCONFIG_PLLP_BASE_AS_408MHZ=0
+else
+ifneq ($(NV_TARGET_BOOTLOADER_PINMUX),kernel)
+NV_COMPONENT_SOURCES           += \
+	nvap/aos_uart_t30.c
+endif
+NV_COMPONENT_CFLAGS            += \
+	-DNV_AOS_ENTRY_POINT=0x80108000 \
+	-DAES_KEYSCHED_LOCK_WAR_BUG_598910=0 \
+	-DSE_AES_KEYSCHED_READ_LOCK=1 \
+	-DCONFIG_PLLP_BASE_AS_408MHZ=1 \
+	-DARCH_ARM_HAVE_NEON=1
+endif
+
+ifeq ($(AOS_MON_MODE_ENABLE),1)
+NV_COMPONENT_CFLAGS += -DAOS_MON_MODE_ENABLE=1
+else
+NV_COMPONENT_CFLAGS += -DAOS_MON_MODE_ENABLE=0
+endif
+
+include $(NV_BUILD_STATIC_LIBRARY)
+endif #NV_COMPONENT_FLAG_STATIC_LIBRARY_SECTION
+
+# Local Variables:
+# indent-tabs-mode: t
+# tab-width: 8
+# End:
+# vi: set tabstop=8 noexpandtab:

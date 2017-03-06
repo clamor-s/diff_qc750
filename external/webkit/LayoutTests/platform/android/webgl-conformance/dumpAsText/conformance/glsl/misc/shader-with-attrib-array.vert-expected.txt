@@ -1,0 +1,17 @@
+CONSOLE MESSAGE: line 24: *** Error compiling shader '[object WebGLShader]':ERROR: 0:2: 'attribute highp 4-component vector of float' : cannot declare arrays of this qualifier 
+ERROR: 0:5: 'vPosition' : undeclared identifier 
+ERROR: 0:5: 'vPosition' :  left of '[' is not of type array, matrix, or vector  
+ERROR: 0:5: 'vPosition' :  left of '[' is not of type array, matrix, or vector  
+ERROR: 0:5: 'assign' :  cannot convert from 'float' to 'Position highp 4-component vector of float'
+
+vertex shader that uses attribute array should fail as per GLSL page 110, appendix A, section 5
+
+On success, you will see a series of "PASS" messages, followed by "TEST COMPLETE".
+
+test: vertex shader that uses attribute array should fail  as per GLSL page 110, appendix A, section 5
+test vertex shader
+default fragment shaderPASS vertex shader that uses attribute array should fail  as per GLSL page 110, appendix A, section 5
+PASS successfullyParsed is true
+
+TEST COMPLETE
+

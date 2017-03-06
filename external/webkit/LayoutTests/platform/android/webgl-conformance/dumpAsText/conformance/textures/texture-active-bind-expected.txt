@@ -1,0 +1,18 @@
+ 
+Tests that glActiveTexture and glBindTexture work as expectedSpecifically texture targets are per active texture unit.
+
+On success, you will see a series of "PASS" messages, followed by "TEST COMPLETE".
+
+PASS getError was expected value: NO_ERROR : 
+PASS getError was expected value: NO_ERROR : 
+PASS getError was expected value: NO_ERROR : 
+PASS getError was expected value: NO_ERROR : 
+PASS getError was expected value: NO_ERROR : 
+PASS expected:0, 192, 128, 255 found: 0, 192, 128, 255
+PASS expected:128, 64, 255, 255 found: 128, 64, 255, 255
+PASS expected:192, 255, 64, 255 found: 192, 255, 64, 255
+PASS expected:200, 0, 255, 255 found: 200, 0, 255, 255
+PASS successfullyParsed is true
+
+TEST COMPLETE
+

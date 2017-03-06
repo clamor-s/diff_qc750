@@ -1,0 +1,40 @@
+<html>
+<style type="text/css">
+canvas {
+  display: block;
+  border: 10px solid black;
+  padding: 10px;
+  background-color: #008800;
+  width: 20px;
+  height: 20px;
+  margin: 0;
+}
+body {
+  height: 1000px;
+}
+</style>
+<script type="text/javascript">
+function init() {
+    if (window.layoutTestController) {
+        layoutTestController.dumpAsText(true);
+    }
+
+    var canvas = document.getElementsByTagName("canvas")[0];
+    var ctx = canvas.getContext("2d");
+    var w = canvas.width;
+    var h = canvas.height;
+
+    function draw() {
+        ctx.fillStyle = "#00ff00";
+        ctx.fillRect(0, 0, w, h);
+    }
+    draw();
+    // you should see a green 20px wide canvas surrounded by a 10px wide dark green padding and 10px wide black border
+}
+</script>
+<body onload="init();">
+<p>
+<canvas>
+</canvas>
+</body>
+</html>

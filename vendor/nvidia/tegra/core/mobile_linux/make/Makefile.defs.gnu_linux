@@ -1,0 +1,12 @@
+NV_MAKEFILE_LIST += $(TEGRA_TOP)/core/mobile_linux/make/Makefile.defs.gnu_linux
+
+
+KHRONOS_LIBS :=
+KHRONOS_LIBS += libEGL.so
+KHRONOS_LIBS += libGLESv1_CM.so
+KHRONOS_LIBS += libGLESv2.so
+KHRONOS_LIBS += libcgdrv.so
+
+KHRONOS_LIBS := $(addprefix $(TEGRA_TOP)/core/$(OUTDIR)/,$(KHRONOS_LIBS))
+
+KHRONOS_LIBS += $(TEGRA_TOP)/core-private/$(OUTDIR)/libKD.so

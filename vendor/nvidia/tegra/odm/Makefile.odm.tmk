@@ -1,0 +1,195 @@
+################################### tell Emacs this is a -*- makefile-gmake -*-
+#
+# Copyright (c) 2011-2012 NVIDIA CORPORATION.  All Rights Reserved.
+#
+# NVIDIA CORPORATION and its licensors retain all intellectual property
+# and proprietary rights in and to this software, related documentation
+# and any modifications thereto.  Any use, reproduction, disclosure or
+# distribution of this software and related documentation without an express
+# license agreement from NVIDIA CORPORATION is strictly prohibited.
+#
+# tmake for SW Mobile component makefile
+#
+# ODM: board specific component chooser
+#
+###############################################################################
+_odm_board_basename :=
+
+ifeq ($(NV_TARGET_BOARD),harmony)
+#
+# Board: harmony (AP20)
+#
+_odm_board_components := \
+	nvidia-partner/dtvtuner \
+	nvidia-partner/hdmi \
+	nvidia-partner/keyboard \
+	nvidia-partner/misc \
+	nvidia-partner/query \
+	nvidia-partner/scrollwheel \
+	nvidia-partner/touch
+
+else ifeq ($(NV_TARGET_BOARD),ventana)
+#
+# Board: ventana (AP20)
+#
+_odm_board_components := \
+	nvidia-partner/keyboard \
+	nvidia-partner/misc \
+	nvidia-partner/query
+
+else ifeq ($(NV_TARGET_BOARD),whistler)
+#
+# Board: whistler (AP20)
+#
+_odm_board_components := \
+	nvidia-partner/dtvtuner \
+	nvidia-partner/misc \
+	nvidia-partner/query \
+	nvidia-partner/scrollwheel \
+	nvidia-partner/touch
+
+else ifeq ($(NV_TARGET_BOARD),cardhu)
+#
+# Board: cardhu (T30)
+#
+_odm_board_components := \
+	nvidia-partner/disp \
+	nvidia-partner/fuelgaugefwupgrade \
+	nvidia-partner/keyboard \
+	nvidia-partner/misc \
+	nvidia-partner/query \
+	nvidia-partner/scrollwheel
+
+else ifeq ($(NV_TARGET_BOARD),e1853)
+#
+# Board: e1853 (T30)
+#
+_odm_board_components := \
+	nvidia-partner/disp \
+	nvidia-partner/hdmi \
+	nvidia-partner/query
+
+else ifeq ($(NV_TARGET_BOARD),enterprise)
+#
+# Board: enterprise (T30)
+#
+_odm_board_components := \
+	nvidia-partner/disp \
+	nvidia-partner/misc \
+	nvidia-partner/query
+
+else ifeq ($(NV_TARGET_BOARD),kai)
+#
+# Board: kai (T33)
+#
+_odm_board_components := \
+	nvidia-partner/disp \
+	nvidia-partner/fuelgaugefwupgrade \
+	nvidia-partner/keyboard \
+	nvidia-partner/misc \
+	nvidia-partner/query \
+	nvidia-partner/scrollwheel
+
+else ifeq ($(NV_TARGET_BOARD),p852)
+#
+# Board: p852 (T20)
+#
+_odm_board_components := \
+	nvidia-partner/dtvtuner \
+	nvidia-partner/misc \
+	nvidia-partner/query
+
+else ifeq ($(NV_TARGET_BOARD),p1852)
+#
+# Board: p1852 (T30)
+#
+_odm_board_components := \
+	nvidia-partner/disp \
+	nvidia-partner/hdmi \
+	nvidia-partner/query
+
+###############################################################################
+#
+# CUSTOMERS: insert your board configuration here, e.g.
+#
+# else ifeq ($(NV_TARGET_BOARD),customer_board_1)
+# _odm_board_components := \
+#       ...
+#
+###############################################################################
+
+else ifndef NV_CUSTOMER_BUILD
+#
+# Otherwise must be a Nvidia development board
+#
+include $(NV_SOURCE)/customers/nvidia/Makefile.odm.tmk
+else
+$(error unsupported board configuration '$(NV_TARGET_BOARD)' for nvodm)
+endif
+
+#
+# List of all ODM components and their paths
+#
+_odm_component_map := \
+	audiocodec=odm_kit/adaptations/audiocodec \
+	charging=odm_kit/adaptations/charging \
+	disp=odm_kit/adaptations/disp \
+	disp_devfb=odm_kit/adaptations/disp_devfb \
+	dtvtuner=odm_kit/adaptations/dtvtuner \
+	extfs=os/linux/system/extfs \
+	extfsmgr=os/linux/system/nvextfsmgr \
+	fuelgaugefwupgrade=odm_kit/platform/fuelgaugefwupgrade \
+	gpio_ext=odm_kit/adaptations/gpio_ext \
+	hdmi=odm_kit/adaptations/hdmi \
+	imager=odm_kit/adaptations/imager \
+	keyboard=odm_kit/platform/keyboard \
+	misc=odm_kit/adaptations/misc \
+	query=odm_kit/query \
+	pmu=odm_kit/adaptations/pmu \
+	scrollwheel=odm_kit/platform/scrollwheel \
+	system_update=odm_kit/platform/ota \
+	tmon=odm_kit/adaptations/tmon \
+	touch=odm_kit/platform/touch
+
+#
+# Select board specific components
+#
+# $(1): variable with the component list request by calling makefile
+_odm_select = $(foreach _c, $($(strip $(1))), \
+	$(eval _pc := $(filter %$(_c), $(_odm_board_components))) \
+	$(addprefix $(NV_SOURCE)/customers/, \
+	$(addprefix $(if $(_pc), $(dir $(_pc))$(if $(_odm_board_basename),$(_odm_board_basename),$(NV_TARGET_BOARD))/, nvidia-partner/template/), \
+	$(word 2, $(subst =, , $(filter $(_c)=%, $(_odm_component_map)))))))
+
+#
+# Error check
+#
+$(foreach _c, $(NV_COMPONENT_ODM_STATIC) $(NV_COMPONENT_ODM_WHOLE_STATIC), \
+	$(if $(filter $(_c)=%, $(_odm_component_map)), , \
+		$(error unknown ODM component '$(_c)' selected)))
+
+#
+# Select board specific components
+#
+NV_COMPONENT_NEEDED_STATIC_INTERFACE_DIRS       += \
+	$(call _odm_select, NV_COMPONENT_ODM_STATIC)
+NV_COMPONENT_NEEDED_WHOLE_STATIC_INTERFACE_DIRS += \
+	$(call _odm_select, NV_COMPONENT_ODM_WHOLE_STATIC)
+_c  :=
+_pc :=
+
+# variable cleanup
+_odm_board_basename   :=
+_odm_board_components :=
+_odm_component_map    :=
+_odm_select           :=
+
+# input parameter cleanup
+NV_COMPONENT_ODM_STATIC       :=
+NV_COMPONENT_ODM_WHOLE_STATIC :=
+
+# Local Variables:
+# indent-tabs-mode: t
+# tab-width: 8
+# End:
+# vi: set tabstop=8 noexpandtab:

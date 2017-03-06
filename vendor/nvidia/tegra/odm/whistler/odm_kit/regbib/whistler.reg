@@ -1,0 +1,30 @@
+;------------------------------------------------------------------------------
+; WiFi Specific Registry settings for this platform
+;
+
+IF BSP_NV_WLAN
+; turn on WiFi by default
+[HKEY_LOCAL_MACHINE\Comm\NdisPower]
+    "AR6K_SD1"=-
+    "AR6K1_SD1"=-
+ENDIF
+
+;------------------------------------------------------------------------------
+; Bluetooth Reference frequency of the whistler platform
+;
+
+; @CESYSGEN IF CE_MODULES_BTD
+IF BSP_BLUETOOTH_BUILTIN_UART
+[HKEY_LOCAL_MACHINE\Software\CSR\PSConfig]
+  "ChipRefCrystalFreq"=dword:00006590
+ENDIF
+; @CESYSGEN ENDIF CE_MODULES_BTD
+
+; @CESYSGEN IF CE_MODULES_DEVICE
+; @CESYSGEN IF COREDLL_BATTERY
+IF BSP_NV_BATTERY
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\Battery]
+   "UseECI"=dword:0 ; Use EC Interface for battery if present
+ENDIF
+; @CESYSGEN ENDIF COREDLL_BATTERY
+; @CESYSGEN ENDIF CE_MODULES_DEVICE

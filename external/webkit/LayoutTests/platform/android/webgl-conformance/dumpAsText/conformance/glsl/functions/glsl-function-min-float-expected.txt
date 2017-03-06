@@ -1,0 +1,128 @@
+Testing GLSL feature: min
+
+On success, you will see a series of "PASS" messages, followed by "TEST COMPLETE".
+
+
+Testing: min(float, float) in vertex shader
+
+reference vertex shader
+reference fragment shader
+test vertex shader
+test fragment shader
+PASS getError was expected value: NO_ERROR : no errors from draw
+PASS getError was expected value: NO_ERROR : no errors from draw
+
+ref
+
+test
+
+PASS images are the same
+
+Testing: min(vec2, float) in vertex shader
+
+reference vertex shader
+reference fragment shader
+test vertex shader
+test fragment shader
+PASS getError was expected value: NO_ERROR : no errors from draw
+PASS getError was expected value: NO_ERROR : no errors from draw
+
+ref
+
+test
+
+PASS images are the same
+
+Testing: min(vec3, float) in vertex shader
+
+reference vertex shader
+reference fragment shader
+test vertex shader
+test fragment shader
+PASS getError was expected value: NO_ERROR : no errors from draw
+PASS getError was expected value: NO_ERROR : no errors from draw
+
+ref
+
+test
+
+PASS images are the same
+
+Testing: min(vec4, float) in vertex shader
+
+reference vertex shader
+reference fragment shader
+test vertex shader
+test fragment shader
+PASS getError was expected value: NO_ERROR : no errors from draw
+PASS getError was expected value: NO_ERROR : no errors from draw
+
+ref
+
+test
+
+PASS images are the same
+
+Testing: min(float, float) in fragment shader
+
+reference vertex shader
+reference fragment shader
+test vertex shader
+test fragment shader
+PASS getError was expected value: NO_ERROR : no errors from draw
+PASS getError was expected value: NO_ERROR : no errors from draw
+
+ref
+
+test
+
+PASS images are the same
+
+Testing: min(vec2, float) in fragment shader
+
+reference vertex shader
+reference fragment shader
+test vertex shader
+test fragment shader
+PASS getError was expected value: NO_ERROR : no errors from draw
+PASS getError was expected value: NO_ERROR : no errors from draw
+
+ref
+
+test
+
+PASS images are the same
+
+Testing: min(vec3, float) in fragment shader
+
+reference vertex shader
+reference fragment shader
+test vertex shader
+test fragment shader
+PASS getError was expected value: NO_ERROR : no errors from draw
+PASS getError was expected value: NO_ERROR : no errors from draw
+
+ref
+
+test
+
+PASS images are the same
+
+Testing: min(vec4, float) in fragment shader
+
+reference vertex shader
+reference fragment shader
+test vertex shader
+test fragment shader
+PASS getError was expected value: NO_ERROR : no errors from draw
+PASS getError was expected value: NO_ERROR : no errors from draw
+
+ref
+
+test
+
+PASS images are the same
+PASS successfullyParsed is true
+
+TEST COMPLETE
+

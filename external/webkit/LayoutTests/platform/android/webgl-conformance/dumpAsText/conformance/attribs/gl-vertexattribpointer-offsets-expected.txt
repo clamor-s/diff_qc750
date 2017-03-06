@@ -1,0 +1,638 @@
+test vertexattribpointer offsets work
+
+On success, you will see a series of "PASS" messages, followed by "TEST COMPLETE".
+
+
+check with FLOAT at offset: 4 with stride:12 normalize: false
+PASS should be black
+PASS should be black
+PASS should be green
+PASS should be green
+PASS should be green
+
+check with FLOAT at offset: 4 with stride:16 normalize: false
+PASS should be black
+PASS should be black
+PASS should be red
+PASS should be red
+PASS should be red
+
+check with FLOAT at offset: 4 with stride:20 normalize: false
+PASS should be black
+PASS should be black
+PASS should be green
+PASS should be green
+PASS should be green
+
+check with FLOAT at offset: 8 with stride:12 normalize: false
+PASS should be black
+PASS should be black
+PASS should be red
+PASS should be red
+PASS should be red
+
+check with FLOAT at offset: 8 with stride:16 normalize: false
+PASS should be black
+PASS should be black
+PASS should be green
+PASS should be green
+PASS should be green
+
+check with FLOAT at offset: 8 with stride:20 normalize: false
+PASS should be black
+PASS should be black
+PASS should be red
+PASS should be red
+PASS should be red
+
+check with FLOAT at offset: 12 with stride:12 normalize: false
+PASS should be black
+PASS should be black
+PASS should be green
+PASS should be green
+PASS should be green
+
+check with FLOAT at offset: 12 with stride:16 normalize: false
+PASS should be black
+PASS should be black
+PASS should be red
+PASS should be red
+PASS should be red
+
+check with FLOAT at offset: 12 with stride:20 normalize: false
+PASS should be black
+PASS should be black
+PASS should be green
+PASS should be green
+PASS should be green
+
+check with FLOAT at offset: 4 with stride:12 normalize: false
+PASS should be black
+PASS should be black
+PASS should be red
+PASS should be red
+PASS should be red
+
+check with FLOAT at offset: 4 with stride:16 normalize: false
+PASS should be black
+PASS should be black
+PASS should be green
+PASS should be green
+PASS should be green
+
+check with FLOAT at offset: 4 with stride:20 normalize: false
+PASS should be black
+PASS should be black
+PASS should be red
+PASS should be red
+PASS should be red
+
+check with FLOAT at offset: 8 with stride:12 normalize: false
+PASS should be black
+PASS should be black
+PASS should be green
+PASS should be green
+PASS should be green
+
+check with FLOAT at offset: 8 with stride:16 normalize: false
+PASS should be black
+PASS should be black
+PASS should be red
+PASS should be red
+PASS should be red
+
+check with FLOAT at offset: 8 with stride:20 normalize: false
+PASS should be black
+PASS should be black
+PASS should be green
+PASS should be green
+PASS should be green
+
+check with FLOAT at offset: 12 with stride:12 normalize: false
+PASS should be black
+PASS should be black
+PASS should be red
+PASS should be red
+PASS should be red
+
+check with FLOAT at offset: 12 with stride:16 normalize: false
+PASS should be black
+PASS should be black
+PASS should be green
+PASS should be green
+PASS should be green
+
+check with FLOAT at offset: 12 with stride:20 normalize: false
+PASS should be black
+PASS should be black
+PASS should be red
+PASS should be red
+PASS should be red
+
+check with SHORT at offset: 2 with stride:6 normalize: true
+PASS should be black
+PASS should be black
+PASS should be green
+PASS should be green
+PASS should be green
+
+check with SHORT at offset: 2 with stride:8 normalize: true
+PASS should be black
+PASS should be black
+PASS should be red
+PASS should be red
+PASS should be red
+
+check with SHORT at offset: 2 with stride:10 normalize: true
+PASS should be black
+PASS should be black
+PASS should be green
+PASS should be green
+PASS should be green
+
+check with SHORT at offset: 4 with stride:6 normalize: true
+PASS should be black
+PASS should be black
+PASS should be red
+PASS should be red
+PASS should be red
+
+check with SHORT at offset: 4 with stride:8 normalize: true
+PASS should be black
+PASS should be black
+PASS should be green
+PASS should be green
+PASS should be green
+
+check with SHORT at offset: 4 with stride:10 normalize: true
+PASS should be black
+PASS should be black
+PASS should be red
+PASS should be red
+PASS should be red
+
+check with SHORT at offset: 6 with stride:6 normalize: true
+PASS should be black
+PASS should be black
+PASS should be green
+PASS should be green
+PASS should be green
+
+check with SHORT at offset: 6 with stride:8 normalize: true
+PASS should be black
+PASS should be black
+PASS should be red
+PASS should be red
+PASS should be red
+
+check with SHORT at offset: 6 with stride:10 normalize: true
+PASS should be black
+PASS should be black
+PASS should be green
+PASS should be green
+PASS should be green
+
+check with UNSIGNED_SHORT at offset: 2 with stride:6 normalize: true
+PASS should be black
+PASS should be black
+PASS should be red
+PASS should be red
+PASS should be red
+
+check with UNSIGNED_SHORT at offset: 2 with stride:8 normalize: true
+PASS should be black
+PASS should be black
+PASS should be green
+PASS should be green
+PASS should be green
+
+check with UNSIGNED_SHORT at offset: 2 with stride:10 normalize: true
+PASS should be black
+PASS should be black
+PASS should be red
+PASS should be red
+PASS should be red
+
+check with UNSIGNED_SHORT at offset: 4 with stride:6 normalize: true
+PASS should be black
+PASS should be black
+PASS should be green
+PASS should be green
+PASS should be green
+
+check with UNSIGNED_SHORT at offset: 4 with stride:8 normalize: true
+PASS should be black
+PASS should be black
+PASS should be red
+PASS should be red
+PASS should be red
+
+check with UNSIGNED_SHORT at offset: 4 with stride:10 normalize: true
+PASS should be black
+PASS should be black
+PASS should be green
+PASS should be green
+PASS should be green
+
+check with UNSIGNED_SHORT at offset: 6 with stride:6 normalize: true
+PASS should be black
+PASS should be black
+PASS should be red
+PASS should be red
+PASS should be red
+
+check with UNSIGNED_SHORT at offset: 6 with stride:8 normalize: true
+PASS should be black
+PASS should be black
+PASS should be green
+PASS should be green
+PASS should be green
+
+check with UNSIGNED_SHORT at offset: 6 with stride:10 normalize: true
+PASS should be black
+PASS should be black
+PASS should be red
+PASS should be red
+PASS should be red
+
+check with UNSIGNED_SHORT at offset: 2 with stride:6 normalize: false
+PASS should be black
+PASS should be black
+PASS should be green
+PASS should be green
+PASS should be green
+
+check with UNSIGNED_SHORT at offset: 2 with stride:8 normalize: false
+PASS should be black
+PASS should be black
+PASS should be red
+PASS should be red
+PASS should be red
+
+check with UNSIGNED_SHORT at offset: 2 with stride:10 normalize: false
+PASS should be black
+PASS should be black
+PASS should be green
+PASS should be green
+PASS should be green
+
+check with UNSIGNED_SHORT at offset: 4 with stride:6 normalize: false
+PASS should be black
+PASS should be black
+PASS should be red
+PASS should be red
+PASS should be red
+
+check with UNSIGNED_SHORT at offset: 4 with stride:8 normalize: false
+PASS should be black
+PASS should be black
+PASS should be green
+PASS should be green
+PASS should be green
+
+check with UNSIGNED_SHORT at offset: 4 with stride:10 normalize: false
+PASS should be black
+PASS should be black
+PASS should be red
+PASS should be red
+PASS should be red
+
+check with UNSIGNED_SHORT at offset: 6 with stride:6 normalize: false
+PASS should be black
+PASS should be black
+PASS should be green
+PASS should be green
+PASS should be green
+
+check with UNSIGNED_SHORT at offset: 6 with stride:8 normalize: false
+PASS should be black
+PASS should be black
+PASS should be red
+PASS should be red
+PASS should be red
+
+check with UNSIGNED_SHORT at offset: 6 with stride:10 normalize: false
+PASS should be black
+PASS should be black
+PASS should be green
+PASS should be green
+PASS should be green
+
+check with SHORT at offset: 2 with stride:6 normalize: false
+PASS should be black
+PASS should be black
+PASS should be red
+PASS should be red
+PASS should be red
+
+check with SHORT at offset: 2 with stride:8 normalize: false
+PASS should be black
+PASS should be black
+PASS should be green
+PASS should be green
+PASS should be green
+
+check with SHORT at offset: 2 with stride:10 normalize: false
+PASS should be black
+PASS should be black
+PASS should be red
+PASS should be red
+PASS should be red
+
+check with SHORT at offset: 4 with stride:6 normalize: false
+PASS should be black
+PASS should be black
+PASS should be green
+PASS should be green
+PASS should be green
+
+check with SHORT at offset: 4 with stride:8 normalize: false
+PASS should be black
+PASS should be black
+PASS should be red
+PASS should be red
+PASS should be red
+
+check with SHORT at offset: 4 with stride:10 normalize: false
+PASS should be black
+PASS should be black
+PASS should be green
+PASS should be green
+PASS should be green
+
+check with SHORT at offset: 6 with stride:6 normalize: false
+PASS should be black
+PASS should be black
+PASS should be red
+PASS should be red
+PASS should be red
+
+check with SHORT at offset: 6 with stride:8 normalize: false
+PASS should be black
+PASS should be black
+PASS should be green
+PASS should be green
+PASS should be green
+
+check with SHORT at offset: 6 with stride:10 normalize: false
+PASS should be black
+PASS should be black
+PASS should be red
+PASS should be red
+PASS should be red
+
+check with BYTE at offset: 1 with stride:3 normalize: true
+PASS should be black
+PASS should be black
+PASS should be green
+PASS should be green
+PASS should be green
+
+check with BYTE at offset: 1 with stride:4 normalize: true
+PASS should be black
+PASS should be black
+PASS should be red
+PASS should be red
+PASS should be red
+
+check with BYTE at offset: 1 with stride:5 normalize: true
+PASS should be black
+PASS should be black
+PASS should be green
+PASS should be green
+PASS should be green
+
+check with BYTE at offset: 2 with stride:3 normalize: true
+PASS should be black
+PASS should be black
+PASS should be red
+PASS should be red
+PASS should be red
+
+check with BYTE at offset: 2 with stride:4 normalize: true
+PASS should be black
+PASS should be black
+PASS should be green
+PASS should be green
+PASS should be green
+
+check with BYTE at offset: 2 with stride:5 normalize: true
+PASS should be black
+PASS should be black
+PASS should be red
+PASS should be red
+PASS should be red
+
+check with BYTE at offset: 3 with stride:3 normalize: true
+PASS should be black
+PASS should be black
+PASS should be green
+PASS should be green
+PASS should be green
+
+check with BYTE at offset: 3 with stride:4 normalize: true
+PASS should be black
+PASS should be black
+PASS should be red
+PASS should be red
+PASS should be red
+
+check with BYTE at offset: 3 with stride:5 normalize: true
+PASS should be black
+PASS should be black
+PASS should be green
+PASS should be green
+PASS should be green
+
+check with UNSIGNED_BYTE at offset: 1 with stride:3 normalize: true
+PASS should be black
+PASS should be black
+PASS should be red
+PASS should be red
+PASS should be red
+
+check with UNSIGNED_BYTE at offset: 1 with stride:4 normalize: true
+PASS should be black
+PASS should be black
+PASS should be green
+PASS should be green
+PASS should be green
+
+check with UNSIGNED_BYTE at offset: 1 with stride:5 normalize: true
+PASS should be black
+PASS should be black
+PASS should be red
+PASS should be red
+PASS should be red
+
+check with UNSIGNED_BYTE at offset: 2 with stride:3 normalize: true
+PASS should be black
+PASS should be black
+PASS should be green
+PASS should be green
+PASS should be green
+
+check with UNSIGNED_BYTE at offset: 2 with stride:4 normalize: true
+PASS should be black
+PASS should be black
+PASS should be red
+PASS should be red
+PASS should be red
+
+check with UNSIGNED_BYTE at offset: 2 with stride:5 normalize: true
+PASS should be black
+PASS should be black
+PASS should be green
+PASS should be green
+PASS should be green
+
+check with UNSIGNED_BYTE at offset: 3 with stride:3 normalize: true
+PASS should be black
+PASS should be black
+PASS should be red
+PASS should be red
+PASS should be red
+
+check with UNSIGNED_BYTE at offset: 3 with stride:4 normalize: true
+PASS should be black
+PASS should be black
+PASS should be green
+PASS should be green
+PASS should be green
+
+check with UNSIGNED_BYTE at offset: 3 with stride:5 normalize: true
+PASS should be black
+PASS should be black
+PASS should be red
+PASS should be red
+PASS should be red
+
+check with BYTE at offset: 1 with stride:3 normalize: false
+PASS should be black
+PASS should be black
+PASS should be green
+PASS should be green
+PASS should be green
+
+check with BYTE at offset: 1 with stride:4 normalize: false
+PASS should be black
+PASS should be black
+PASS should be red
+PASS should be red
+PASS should be red
+
+check with BYTE at offset: 1 with stride:5 normalize: false
+PASS should be black
+PASS should be black
+PASS should be green
+PASS should be green
+PASS should be green
+
+check with BYTE at offset: 2 with stride:3 normalize: false
+PASS should be black
+PASS should be black
+PASS should be red
+PASS should be red
+PASS should be red
+
+check with BYTE at offset: 2 with stride:4 normalize: false
+PASS should be black
+PASS should be black
+PASS should be green
+PASS should be green
+PASS should be green
+
+check with BYTE at offset: 2 with stride:5 normalize: false
+PASS should be black
+PASS should be black
+PASS should be red
+PASS should be red
+PASS should be red
+
+check with BYTE at offset: 3 with stride:3 normalize: false
+PASS should be black
+PASS should be black
+PASS should be green
+PASS should be green
+PASS should be green
+
+check with BYTE at offset: 3 with stride:4 normalize: false
+PASS should be black
+PASS should be black
+PASS should be red
+PASS should be red
+PASS should be red
+
+check with BYTE at offset: 3 with stride:5 normalize: false
+PASS should be black
+PASS should be black
+PASS should be green
+PASS should be green
+PASS should be green
+
+check with UNSIGNED_BYTE at offset: 1 with stride:3 normalize: false
+PASS should be black
+PASS should be black
+PASS should be red
+PASS should be red
+PASS should be red
+
+check with UNSIGNED_BYTE at offset: 1 with stride:4 normalize: false
+PASS should be black
+PASS should be black
+PASS should be green
+PASS should be green
+PASS should be green
+
+check with UNSIGNED_BYTE at offset: 1 with stride:5 normalize: false
+PASS should be black
+PASS should be black
+PASS should be red
+PASS should be red
+PASS should be red
+
+check with UNSIGNED_BYTE at offset: 2 with stride:3 normalize: false
+PASS should be black
+PASS should be black
+PASS should be green
+PASS should be green
+PASS should be green
+
+check with UNSIGNED_BYTE at offset: 2 with stride:4 normalize: false
+PASS should be black
+PASS should be black
+PASS should be red
+PASS should be red
+PASS should be red
+
+check with UNSIGNED_BYTE at offset: 2 with stride:5 normalize: false
+PASS should be black
+PASS should be black
+PASS should be green
+PASS should be green
+PASS should be green
+
+check with UNSIGNED_BYTE at offset: 3 with stride:3 normalize: false
+PASS should be black
+PASS should be black
+PASS should be red
+PASS should be red
+PASS should be red
+
+check with UNSIGNED_BYTE at offset: 3 with stride:4 normalize: false
+PASS should be black
+PASS should be black
+PASS should be green
+PASS should be green
+PASS should be green
+
+check with UNSIGNED_BYTE at offset: 3 with stride:5 normalize: false
+PASS should be black
+PASS should be black
+PASS should be red
+PASS should be red
+PASS should be red
+PASS successfullyParsed is true
+
+TEST COMPLETE
+

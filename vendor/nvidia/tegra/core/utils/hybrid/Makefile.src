@@ -1,0 +1,23 @@
+HG_SRCS :=
+HG_SRCS += hg/hgdefs.c
+HG_SRCS += hg/hgfill.c
+HG_SRCS += hg/hgfloat.c
+HG_SRCS += hg/hgint32.c
+HG_SRCS += hg/hgint64.c
+HG_SRCS += hg/hgmalloc.c
+HG_SRCS += hg/hgdebugmalloc.c
+
+STITCHGEN_SRCS :=
+STITCHGEN_SRCS += stitchgen/sgcodecache.c
+STITCHGEN_SRCS += stitchgen/sgstitchinterp.c
+
+ARMEMULATOR_SRCS :=
+ARMEMULATOR_SRCS += armemulator/armdis.c
+ARMEMULATOR_SRCS += armemulator/armdismemory.c
+ARMEMULATOR_SRCS += armemulator/armemuhelp.c
+ARMEMULATOR_SRCS += armemulator/armdisexecute.c
+ARMEMULATOR_SRCS += armemulator/armemu.c
+ARMEMULATOR_SRCS += armemulator/armemumemory.c
+ARMEMULATOR_SRCS += armemulator/armdishelp.c
+ARMEMULATOR_SRCS += armemulator/armemuexecute.c
+ARMEMULATOR_SRCS += armemulator/armemuvfpexecute.c

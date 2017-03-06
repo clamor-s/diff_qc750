@@ -1,0 +1,10 @@
+tests that turning on attribs that have no buffer bound fails to draw
+
+On success, you will see a series of "PASS" messages, followed by "TEST COMPLETE".
+
+PASS getError was expected value: NO_ERROR : 
+PASS getError was expected value: INVALID_OPERATION : 
+PASS successfullyParsed is true
+
+TEST COMPLETE
+

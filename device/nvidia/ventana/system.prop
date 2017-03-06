@@ -1,0 +1,8 @@
+ro.opengles.version = 131072
+wifi.interface=wlan0
+ro.ethernet.interface=eth0
+ro.ethernet.autoEnable=yes
+rild.libpath=/system/lib/libmbm-ril.so
+rild.libargs=-d /dev/ttyACM0 -i wwan0
+
+ro.ril.wake_lock_timeout=200000

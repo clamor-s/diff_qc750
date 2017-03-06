@@ -1,0 +1,12 @@
+ 
+Tests that resources can not be shared.
+
+On success, you will see a series of "PASS" messages, followed by "TEST COMPLETE".
+
+
+PASS Got 3d context.
+PASS attempt to use a resource from the wrong context should fail with INVALID_OPERATION
+PASS successfullyParsed is true
+
+TEST COMPLETE
+

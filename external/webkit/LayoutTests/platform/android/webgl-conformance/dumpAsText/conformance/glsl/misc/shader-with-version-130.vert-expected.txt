@@ -1,0 +1,13 @@
+CONSOLE MESSAGE: line 24: *** Error compiling shader '[object WebGLShader]':ERROR: 0:2: '' : Version number not supported by ESSL 
+
+vertex shader uses the #version not 100 directive should fail
+
+On success, you will see a series of "PASS" messages, followed by "TEST COMPLETE".
+
+test: vertex shader uses the #version not 100 directive should fail
+test vertex shader
+default fragment shaderPASS vertex shader uses the #version not 100 directive should fail
+PASS successfullyParsed is true
+
+TEST COMPLETE
+

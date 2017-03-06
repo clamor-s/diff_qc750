@@ -1,0 +1,212 @@
+/*
+ * Copyright (c) 2009 NVIDIA Corporation.  All rights reserved.
+ *
+ * NVIDIA Corporation and its licensors retain all intellectual property
+ * and proprietary rights in and to this software, related documentation
+ * and any modifications thereto.  Any use, reproduction, disclosure or
+ * distribution of this software and related documentation without an express
+ * license agreement from NVIDIA Corporation is strictly prohibited.
+ */
+ 
+/!
+/** @file
+ * @brief <b>NVIDIA Driver Development Kit:  Resource Manager API for OWR driver </b>
+ *
+ * @b Description: Defines interfaces for the One Wire (OWR) driver.
+ */
+!/
+import nvrm_init.idl;
+import nvrm_module.idl;
+import nvrm_pinmux.idl;
+
+package NvRm;
+
+/!
+/**
+ * @defgroup nvrm_owr OWR Controller API
+ * 
+ * One wire (OWR) is a device communications bus system designed by
+ * Dallas Semicondutor Corp.
+ *
+ * It uses single wire (plus ground) to accomplish both communication and power transmission.
+ * A single bus master can feed multiple slave devices over a twisted-pair cable. The master
+ * calls slave by its unique 64-bit address. Out of the 64-bits, last eight bits are the CRC of the
+ * first 56 bits. The network requires one master and at least one slave. Standard allows
+ * connecting any number of slaves on the bus.
+ * 
+ * The following APIs define the OWR interface. These interfaces
+ * are synchronous and provide clients to read/write data to the One Wire devices.
+ * 
+ * @ingroup nvrm_modules
+ * @{
+ */
+!/
+
+interface nvrm_owr {
+
+/!
+#include "nvos.h"
+#include "nvcommon.h"
+!/
+
+/!
+/**
+ * NvRmOwrHandle is an opaque handle for the RM OWR driver.
+ */
+ !/
+    handle NvRmOwrHandle;
+
+/!
+/**
+ * @brief Open the OWR driver. This function allocates the
+ * RM OWR handle.
+ *
+ * Assert encountered in debug mode if passed parameter is invalid.
+ *
+ * @param hDevice Handle to the Rm device which is required by Rm to acquire
+ * the resources from RM.
+ * @param instance Instance of the OWR controller to be opened. Starts from 0.
+ * @param phOwr Points to the location where the OWR handle shall be stored.
+ *
+ * @retval NvSuccess OWR driver opened successfully.
+ * @retval NvError_InsufficientMemory Indicates that function fails to allocate
+ * the memory.
+ */
+!/
+NvError
+NvRmOwrOpen(
+     [in] NvRmDeviceHandle hDevice,
+     [in] NvU32 instance,
+     [out] NvRmOwrHandle hOwr );
+     
+/!
+/** 
+ * @brief Closes the OWR driver. Disables the clock and invalidates the OWR handle.
+ * This API never fails.
+ *
+ * @param hOwr A handle from NvRmOwrOpen().  If hOwr is NULL, this API does
+ *     nothing.
+ */
+!/
+void NvRmOwrClose([in] NvRmOwrHandle hOwr);
+
+/!
+/**
+ * Defines OWR transaction flags.
+ */
+!/
+enum NvRmOwrTransactionFlags
+{
+      /!
+      /// OWR read the unique address of the device.
+      !/
+      NvRmOwr_ReadAddress = 1,
+
+      /!
+      /// OWR memory read transaction.
+      !/
+      NvRmOwr_MemRead,
+
+      /!
+      /// OWR memory write transaction.
+      !/
+      NvRmOwr_MemWrite,
+
+      /!
+      /// OWR memory readbyte transaction.
+      /// Reads single byte on the OWR bus from the device.
+      !/
+      NvRmOwr_ReadByte,
+
+      /!
+      /// OWR writebyte transaction.
+      /// Writes single byte on the OWR bus to the device.
+      !/
+      NvRmOwr_WriteByte,
+
+      /!
+      /// OWR memory Check Presence.
+      /// Sends Reset Presence Pulse to the deivce on the OWR bus.
+      !/
+      NvRmOwr_CheckPresence,
+
+      /!
+      /// OWR readbit transaction.
+      /// Reads single bit on the OWR bus from the device.
+      /// The LSB will be received first.
+      !/
+      NvRmOwr_ReadBit,
+
+      /!
+      /// OWR writebit transaction.
+      /// Writes single bit on the OWR bus to the device.
+      /// The LSB will be transmitted first.
+      !/
+      NvRmOwr_WriteBit,
+      
+}
+
+/!
+/**
+ * Defines OWR transaction info structure. Contains details of the transaction.
+ */
+!/
+struct  NvRmOwrTransactionInfo
+{
+    /!
+    /// Transaction type flags. See @NvRmOwrTransactionFlags
+    !/
+    NvU32 Flags;
+
+    /!
+    /// Offset in the OWR device where Memory read/write operations need to be performed.
+    !/
+    NvU32 Offset;
+
+    /!
+    /// Number of bytes to read/write.
+    !/
+    NvU32 NumBytes;
+
+    /!
+    /// OWR device ROM Id. This can be zero, if there is a single OWR device on the bus.
+    !/
+    NvU32 Address;
+}
+
+/!
+/** 
+ * @brief Does multiple OWR transactions. Each transaction can be a read or write.
+ * 
+ * @param hOwr Handle to the OWR channel.
+ * @param OwrPinMap for OWR controllers which are being multiplexed across
+ *        multiple pin mux configurations, this specifies which pin mux configuration
+ *        should be used for the transaction.  Must be 0 when the ODM pin mux query
+ *        specifies a non-multiplexed configuration for the controller.
+ * @param Data Pointer to the buffer for all the required read, write transactions.
+ * @param DataLength Length of the data buffer.
+ * @param Transcations Pointer to the NvRmOwrTransactionInfo structure. 
+ * See @NvRmOwrTransactionInfo
+ * @param NumOfTransactions Number of transcations
+ *
+ *
+ * @retval NvSuccess OWR Transaction succeeded.
+ * @retval NvError_NotSupported Indicates assumption on parameter values violated.
+ * @retval NvError_InvalidState Indicates that the last read or write call is not
+ * completed.
+ * @retval NvError_ControllerBusy Indicates controller is presently busy with an
+ * OWR transaction.
+ */
+!/
+
+NvError
+NvRmOwrTransaction(
+    [in] NvRmOwrHandle hOwr,
+    [in] NvU32 OwrPinMap,    
+    [inout, count(DataLen)] NvU8 Data, 
+    [in] NvU32 DataLen,
+    [in, count(NumOfTransactions)] NvRmOwrTransactionInfo Transaction,
+    [in] NvU32 NumOfTransactions); 
+
+}
+

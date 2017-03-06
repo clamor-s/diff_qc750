@@ -1,0 +1,13 @@
+CONSOLE MESSAGE: line 24: *** Error compiling shader '[object WebGLShader]':ERROR: 0:2: '_webgl_' : reserved built-in name 
+
+use of reserved _webgl prefix as structure name should fail
+
+On success, you will see a series of "PASS" messages, followed by "TEST COMPLETE".
+
+test: use of reserved _webgl prefix as structure name should fail
+test vertex shader
+default fragment shaderPASS use of reserved _webgl prefix as structure name should fail
+PASS successfullyParsed is true
+
+TEST COMPLETE
+

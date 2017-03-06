@@ -1,0 +1,56 @@
+#
+# U-boot environment for network boot.
+#
+#
+# Static env:
+#
+board=ventana
+mmcname=mmcblk
+loadaddr=0x00408000
+baudrate=115200
+bootdelay=3
+bootfile=vmlinux.uimg
+console=ttyS0,115200n8
+stderr=serial,lcd
+stdin=serial,tegra-kbc
+stdout=serial,lcd
+user=user
+videospec=tegrafb
+serial#=1
+#
+# All CAP nfs info tokens needs to be replaced with proper values as follow:
+# IPADDR ----- 172.17.187.71
+# SERVERIP --- 172.17.186.62
+# GATEWAYIP -- 172.17.186.62
+# NETMASK ---- 255.255.252.0
+# NFSARGS ---- ip=:::::eth0:on or ip=cip:sip:gip:mask::eth0:off
+# NFSROOT ---- 172.17.187.62:/ventana_nfsroot
+#
+ipaddr=IPADDR
+serverip=SERVERIP
+gatewayip=GATEWAYIP
+netmask=NETMASK
+tftppath=TFTPPATH
+nfsbootargs=root=/dev/nfs NFSARGS nfsroot=NFSROOT
+#
+# Board Specific variable env:
+#
+# tegra_fbmem: handled by u-boot runtime.
+lp0_vec=0x00002000@0x1C406000
+#
+# Multi purpose env containers:
+#
+platform_extras=vmalloc=128M mem=1024M@0M
+extra_bootargs=usbcore.old_scheme_first=1 panel=lvds tegraid=20.1.2.0.0 debug_uartport=lsport,3 smp
+#
+# Local Storage Boot Scripts:
+#
+regen_all=setenv common_bootargs console=${console} console=tty1 lp0_vec=${lp0_vec} video=${videospec} ${platform_extras} ${dev_extras} noinitrd; setenv bootargs ${common_bootargs} ${extra_bootargs} ${bootdev_bootargs}
+
+regen_net_bootargs=setenv bootdev_bootargs rw ${nfsbootargs} ; run regen_all
+
+nfs_setup=setenv autoload n; run regen_net_bootargs
+#JCK: STASH: nfs_boot=run nfs_setup; if test "x${ipaddr}" != "x"; then echo "ipaddr=${ipaddr}; else dhcp; fi; tftpboot ${loadaddr} ${tftppath}; bootm ${loadaddr}
+nfs_boot=run nfs_setup; dhcp; tftpboot ${loadaddr} ${tftppath}; bootm ${loadaddr}
+
+bootcmd=usb start; run nfs_boot

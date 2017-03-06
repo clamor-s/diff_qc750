@@ -1,0 +1,212 @@
+################################### tell Emacs this is a -*- makefile-gmake -*-
+#
+# Copyright (c) 2011-2012, NVIDIA CORPORATION.  All rights reserved.
+#
+# NVIDIA CORPORATION and its licensors retain all intellectual property
+# and proprietary rights in and to this software, related documentation
+# and any modifications thereto.  Any use, reproduction, disclosure or
+# distribution of this software and related documentation without an express
+# license agreement from NVIDIA CORPORATION is strictly prohibited.
+#
+# tmake for SW Mobile component makefile
+#
+# bootloader
+#
+###############################################################################
+#
+# Sanity checks: board & SoC
+#
+$(call NV_BUILD_VARIABLES_SANITY_CHECK, NV_TARGET_SOC)
+
+ifdef NV_COMPONENT_FLAG_STATIC_EXECUTABLE_SECTION
+
+include $(NV_BUILD_START_COMPONENT)
+
+NV_COMPONENT_NAME     := bootloader
+NV_COMPONENT_MAP_FILE := $(NV_COMPONENT_NAME).map
+
+NV_COMPONENT_SOURCES  := \
+	main.c \
+	prettyprint.c \
+	gui.c \
+	linux_cmdline.c \
+	usb.c \
+	jingle.c \
+	recovery_utils.c
+
+NV_COMPONENT_SOURCES  += \
+	libfdt/fdt.c \
+	libfdt/fdt_ro.c \
+	libfdt/fdt_rw.c \
+	libfdt/fdt_strerror.c \
+	libfdt/fdt_sw.c \
+	libfdt/fdt_wip.c
+
+
+NV_COMPONENT_HAS_BROKEN_CODE := ignore-all
+
+NV_COMPONENT_INCLUDES  := \
+	../../drivers/hwinc \
+	../../drivers/hwinc/$(NV_TARGET_SOC_FAMILY) \
+	../../drivers/nvrm/nvrmkernel/core/common \
+	../../utils/nvos/aos \
+	../nvaboot
+
+NV_COMPONENT_INCLUDES  += \
+	libfdt
+
+NV_COMPONENT_NEEDED_STATIC_INTERFACE_DIRS := \
+	../nv3p \
+	../nv3pserver \
+	../nvaboot \
+	../nvbct \
+	../nvbootupdate \
+	../nvcrypto \
+	../nvdiagnostics \
+	../nvfs \
+	../nvfsmgr \
+	../nvpartmgr \
+	../nvstormgr \
+	../utils \
+	../../drivers/nvavpgpio \
+	../../drivers/nvavp/uart \
+	../../drivers/nvddk/aes \
+	../../drivers/nvddk/blockdev \
+	../../drivers/nvddk/disp \
+	../../drivers/nvddk/i2s \
+	../../drivers/nvddk/kbc \
+	../../drivers/nvddk/nand \
+	../../drivers/nvddk/sdio \
+	../../drivers/nvddk/snor \
+	../../drivers/nvddk/spi_flash \
+	../../drivers/nvodm/services \
+	../../drivers/nvrm \
+	../../drivers/nvrm/graphics \
+	../../utils/nvfxmath \
+	../../utils/nvappmain \
+	../../utils/nvintr \
+	../../utils/nvos/aos \
+	../../utils/nvos/aos/nvap \
+	$(NV_SOURCE)/core-private/drivers/nvddk/fuse
+
+
+#
+# Board specific components
+#
+NV_COMPONENT_ODM_STATIC       := \
+	audiocodec \
+	disp \
+	extfs \
+	extfsmgr \
+	fuelgaugefwupgrade \
+	gpio_ext \
+	keyboard \
+	misc \
+	pmu \
+	query \
+	scrollwheel \
+	system_update \
+	tmon
+
+ifeq ($(NV_TARGET_BOOTLOADER_PINMUX),kernel)
+NV_COMPONENT_NEEDED_STATIC_INTERFACE_DIRS += \
+	../../drivers/nvpinmux
+endif
+
+ifneq ($(NV_BUILD_CONFIGURATION_IS_EMULATION),1)
+NV_COMPONENT_NEEDED_STATIC_INTERFACE_DIRS += \
+	../../utils/nvos/aos/libgcc
+# C startup code provided by utils/nvos/aos/nvap/nvos_aos_gcc.c
+NV_COMPONENT_FLAG_C_INIT_PROVIDED_BY_NVOS := 1
+ifeq ($(NV_BUILD_CONFIGURATION_IS_EMBEDDED),1)
+NV_COMPONENT_NEEDED_STATIC_INTERFACE_DIRS += \
+	../nvsku
+NV_COMPONENT_CFLAGS                       += \
+	-DNV_EMBEDDED_BUILD
+else
+# Embedded, FPGA and simulation platforms can never support USB changing
+NV_COMPONENT_CFLAGS                       += \
+	-DLPM_BATTERY_CHARGING=1
+NV_COMPONENT_ODM_STATIC                   += \
+	charging
+endif
+endif
+
+# fastboot doesn't wholly link in any ODM components
+NV_COMPONENT_ODM_WHOLE_STATIC :=
+include $(NV_SOURCE)/customers/nvidia-partner/Makefile.odm.tmk
+
+ifneq ($(filter ap20, $(NV_TARGET_SOC)),)
+NV_COMPONENT_CFLAGS       += \
+	-DNV_AOS_ENTRY_POINT=0x00108000 \
+	-DNV_AOS_LOAD_ADDRESS=0x00108000
+NV_COMPONENT_NEEDED_STATIC_INTERFACE_DIRS += \
+	$(NV_SOURCE)/core-private/utils/aes_keysched_lock
+ifeq ($(NV_BUILD_CONFIGURATION_IS_EMULATION),1)
+NV_COMPONENT_SCATTER_FILE := \
+	../../utils/nvos/aos/nvap/ap15_cpu.ldscript
+else
+NV_COMPONENT_SCATTER_FILE := \
+	../../utils/nvos/aos/nvap/ap15_cpu.x
+endif
+else
+NV_COMPONENT_CFLAGS       += \
+	-DNV_AOS_ENTRY_POINT=0x80108000 \
+	-DNV_AOS_LOAD_ADDRESS=0x80108000
+NV_COMPONENT_NEEDED_STATIC_INTERFACE_DIRS += \
+	../../drivers/nvddk/se \
+	../../utils/aes_keysched_lock
+ifeq ($(NV_BUILD_CONFIGURATION_IS_EMULATION),1)
+NV_COMPONENT_SCATTER_FILE := \
+	../../utils/nvos/aos/nvap/t30_cpu.ldscript
+else
+NV_COMPONENT_SCATTER_FILE := \
+	../../utils/nvos/aos/nvap/t30_cpu.x
+endif
+endif
+
+ifeq ($(NV_BUILD_CONFIGURATION_IS_EMULATION),1)
+NV_COMPONENT_LDFLAGS                      += \
+	--nodebug \
+	--entry _start \
+	--keep nvaosGetCommandLine \
+	--keep nvaosRegisterSemiRvice
+endif
+
+ifeq ($(NV_BUILD_CONFIGURATION_IS_ANDROID),1)
+
+NV_COMPONENT_NEEDED_STATIC_INTERFACE_DIRS += \
+	$(NV_SOURCE)/core-private/utils/nvsecureblob
+
+NV_COMPONENT_FLAG_USES_GENERATED_FILES := 1
+
+# generate the publickey.h file based on signkey.pk8
+publickey.h: $(NV_TOOLS_OUTDIR)/nvdumppublickey $(NV_ANDROID_TOP)/device/nvidia/common/security/signkey.pk8
+	$^ $@
+
+ifeq ($(NV_BUILD_CONFIGURATION_IS_SECURE_OS),1)
+NV_COMPONENT_CFLAGS       += \
+	-DCONFIG_TRUSTED_FOUNDATIONS
+NV_COMPONENT_INCLUDES     += \
+	$(NV_ANDROID_TOP)/3rdparty/trustedlogic/sdk/include/$(NV_TARGET_REFERENCE_BOARD)
+endif
+
+else
+NV_COMPONENT_CFLAGS  += -DNV_LDK_BUILD
+endif
+
+build:: $(NV_COMPONENT_NAME).bin
+
+$(NV_COMPONENT_NAME).bin: $(NV_COMPONENT_NAME)$(STATIC_EXECUTABLE_SUFFIX)
+	$(call NV_BUILD_MACRO_ELF2BIN)
+
+NV_COMPONENT_FLAG_SYSTEMIMAGE_SKIP := 1
+
+include $(NV_BUILD_STATIC_EXECUTABLE)
+endif
+
+# Local Variables:
+# indent-tabs-mode: t
+# tab-width: 8
+# End:
+# vi: set tabstop=8 noexpandtab:

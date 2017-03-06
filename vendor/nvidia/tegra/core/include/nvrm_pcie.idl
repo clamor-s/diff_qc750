@@ -1,0 +1,166 @@
+/*
+ * Copyright (c) 2007 NVIDIA Corporation.  All rights reserved.
+ *
+ * NVIDIA Corporation and its licensors retain all intellectual property
+ * and proprietary rights in and to this software, related documentation
+ * and any modifications thereto.  Any use, reproduction, disclosure or
+ * distribution of this software and related documentation without an express
+ * license agreement from NVIDIA Corporation is strictly prohibited.
+ */
+
+/!
+/** @file
+ * @brief <b>NVIDIA Driver Development Kit:
+ *           Resource Manager %PCIe APIs</b>
+ *
+ * @b Description: Declares the APIs used for accessing the PCIe devices attached
+ * to the PCIe root-port
+ *
+ */
+
+
+/**
+ *  @defgroup nvrm_pcie RM PCI services
+ *
+ *  @ingroup nvddk_rm
+ *
+ *  @{
+ */
+!/
+
+import nvrm.idl;
+import nvrm_init.idl;
+import nvrm_module.idl;
+
+package NvRm;
+
+interface nvrm_pcie
+{
+
+enum NvRmPcieAccessType
+{
+    /!
+    // NvRm PCIE access type read
+    !/
+    NvRmPcieAccessType_Read,
+
+    /!
+    // NvRm PCIE access type write
+    !/
+    NvRmPcieAccessType_Write,
+}
+
+/!
+
+/** Reads or writes the config space of the PCI device. 
+ * 
+ * @param hRmDeviceHandle The Rm device handle
+ * @param bus_number Bus number on on which the device is present.
+ * @param type   Specifies the access type
+ * @param offset Start offset to read the configuration data
+ * @param Data   Data in bytes used to read/write from/to device config space,
+ * depending on the access type.
+ * @param DataLen Sepcifies the length of Data Array.
+ *
+ *  Returns NvSuccess or the appropriate error code.
+ */
+!/
+
+NvError NvRmReadWriteConfigSpace(
+    [in] NvRmDeviceHandle hDeviceHandle,
+    [in] NvU32 bus_number,
+    [in] NvRmPcieAccessType type,
+    [in] NvU32 offset,
+    [inout, count(DataLen)] NvU8 Data, 
+    [in] NvU32 DataLen);
+
+
+/!
+
+/** Registers a MSI handler for the device at an index.
+ *
+ * @param hRmDeviceHandle The Rm device handle
+ * @param function_device_bus function/device/bus tuple.
+ * @param index Msi index. Some devices support more than 1 MSI. For those
+ * devices, index value is from (0 to max-1)
+ * @param sem Semaphore which will be signalled when the MSI interrupt is
+ * triggered.
+ * @param InterruptEnable To enable or disable interrupt.
+ *
+ *  Returns NvSuccess or the appropriate error code.
+ */
+
+!/
+
+NvError NvRmRegisterPcieMSIHandler(
+    [in] NvRmDeviceHandle hDeviceHandle, 
+    [in] NvU32 function_device_bus, 
+    [in] NvU32 index,
+    [in] NvOsSemaphoreHandle sem,
+    [in] NvBool InterruptEnable);
+
+
+
+/** Registers a Legacy handler for the device
+ *
+ * @param hRmDeviceHandle The Rm device handle
+ * @param function_device_bus function/device/bus tuple.
+ * @param sem Semaphore which will be signalled when the MSI interrupt is
+ * triggered.
+ * @param InterruptEnable To enable or disable interrupt.
+ *
+ *  Returns NvSuccess or the appropriate error code.
+ */
+!/
+NvError NvRmRegisterPcieLegacyHandler(
+    [in] NvRmDeviceHandle hDeviceHandle, 
+    [in] NvU32 function_device_bus, 
+    [in] NvOsSemaphoreHandle sem,
+    [in] NvBool InterruptEnable);
+
+
+
+/!
+//  PCIE address map supports 64-bit addressing. But, RM driver only supports
+//  32-addressing. In the future, if the device supports 64-bit addressing, one
+//  can change this typedef.
+!/
+typedef NvU32 NvRmPciPhysAddr;
+
+/!
+/**
+ * Attemtps to map the Pcie memory to the 32-bit AXI address region.
+ * Ap20 reserves only 1GB PCIe aperture. Out of that 1GB, some region is reserved for
+ * the register/config/msi access. Only 768MB is left out for the PCIe memory aperture. 
+ * 
+ * @param hRmDeviceHandle   Rm device handle
+ * @param mem               "Base address registers" of a PCI device.
+ * 
+ * Returns the mapped AXI address. If the mapping fails, it returns 0.
+ */
+!/
+
+NvRmPhysAddr NvRmMapPciMemory(
+    [in] NvRmDeviceHandle hDeviceHandle,
+    [in] NvRmPciPhysAddr mem,
+    [in] NvU32 size);
+
+/!
+/** Unmaps the PCI to AXI address mapping
+ *  
+ * @param hRmDeviceHandle Rm device handle
+ * @param mem               AXI addresses mapped by calling NvRmMapPcieMemory
+ * API.
+ */
+!/
+void NvRmUnmapPciMemory(
+    [in] NvRmDeviceHandle hDeviceHandle,
+    [in] NvRmPhysAddr mem,
+    [in] NvU32 size);
+
+/!
+/** @} */
+!/
+
+}
+

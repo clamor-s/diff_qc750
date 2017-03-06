@@ -1,0 +1,13 @@
+CONSOLE MESSAGE: line 24: *** Error compiling shader '[object WebGLShader]':ERROR: 0:4: '!=' :  wrong operand types  no operation '!=' exists that takes a left-hand operand of type 'const mediump 3-component vector of float' and a right operand of type 'const mediump 3-component vector of int' (or there is no acceptable conversion)
+
+implicit cast of ivec3 to vec3 in not equal comparison should fail
+
+On success, you will see a series of "PASS" messages, followed by "TEST COMPLETE".
+
+test: implicit cast of ivec3 to vec3 in not equal comparison should fail
+test vertex shader
+default fragment shaderPASS implicit cast of ivec3 to vec3 in not equal comparison should fail
+PASS successfullyParsed is true
+
+TEST COMPLETE
+

@@ -1,0 +1,7 @@
+#  Client uuid
+sm.client.id: 9937EEAA-C88E-4817-9218-2B8947D5B0E2
+
+#  When the property example_drm.allow_decrypt_content is set to true, 
+#  and the client is authentified, the client is authorized to decrypt contents.
+#  Else opening decryption session failed.
+example_drm.allow_decrypt_content: true 

@@ -1,0 +1,23 @@
+    
+This test checks that drawImage and readPixels are not effected by gl.Pixelstorei(gl.PACK_ALIGNMENT) and visa versa
+
+On success, you will see a series of "PASS" messages, followed by "TEST COMPLETE".
+
+There should be 5 red triangles on 5 black squares above
+
+PASS drawing is correct in 3d context
+PASS drawing is correct in 2d context
+PASS PACK_ALIGNMENT is 1
+PASS drawing is correct in 3d context
+PASS drawing is correct in 2d context
+PASS PACK_ALIGNMENT is 2
+PASS drawing is correct in 3d context
+PASS drawing is correct in 2d context
+PASS PACK_ALIGNMENT is 4
+PASS drawing is correct in 3d context
+PASS drawing is correct in 2d context
+PASS PACK_ALIGNMENT is 8
+PASS successfullyParsed is true
+
+TEST COMPLETE
+

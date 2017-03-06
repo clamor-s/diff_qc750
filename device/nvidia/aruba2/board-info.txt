@@ -1,0 +1,2 @@
+require mid=001
+require product=aruba2

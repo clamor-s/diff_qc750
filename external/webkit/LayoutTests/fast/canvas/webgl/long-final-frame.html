@@ -1,0 +1,30 @@
+<!-- Ensures the final frame of a canvas gets displayed, even with a long shader. -->
+
+<style>
+body {
+    background-color: black;
+    color: white;
+    font-size: 14px
+}
+</style>
+
+<canvas id='c' width='512' height='512'></canvas>
+
+<script>
+    if (window.layoutTestController)
+        layoutTestController.dumpAsText(true);
+
+    var seed = 67;
+    var rand = function() {
+        seed = ((1664525 * seed + 1013904223) & 255);
+        return seed / 255;
+    };
+
+    var gl = document.getElementById('c').getContext('experimental-webgl');
+    gl.enable(gl.SCISSOR_TEST);
+    for (var i = 0; i < 512; i++) {
+        gl.scissor(0, 0, 512 - i, 512 - i);
+        gl.clearColor(rand(), rand(), rand(), 1);
+        gl.clear(gl.COLOR_BUFFER_BIT);
+    }
+</script>

@@ -1,0 +1,1 @@
+tegra-16r10-android-4.2

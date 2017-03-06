@@ -1,0 +1,55 @@
+################################### tell Emacs this is a -*- makefile-gmake -*-
+#
+# Copyright (c) 2011-2012, NVIDIA CORPORATION.  All rights reserved.
+#
+# NVIDIA CORPORATION and its licensors retain all intellectual property
+# and proprietary rights in and to this software, related documentation
+# and any modifications thereto.  Any use, reproduction, disclosure or
+# distribution of this software and related documentation without an express
+# license agreement from NVIDIA CORPORATION is strictly prohibited.
+#
+# tmake for SW Mobile component makefile
+#
+# libnvddk_onenand static library component makefile
+#
+###############################################################################
+
+_common_sources                        := \
+        nvddk_one_nand.c \
+        one_nand_priv_driver.c
+
+_common_includes                := \
+        ../../hwinc/$(NV_TARGET_SOC)
+
+_common_interfaces              := \
+        ../../nvrm
+
+_common_cflags                  := \
+        -DNV_USE_FUSE_CLOCK_ENABLE=0 \
+        -DNV_IS_AVP=0
+
+ifeq ($(NV_TARGET_BOOTLOADER_PINMUX),kernel)
+_common_cflags += -DSET_KERNEL_PINMUX
+endif
+ifneq ($(TARGET_TEGRA_VERSION),ap20)
+_common_cflags += -DNV_IF_NOT_AP20
+endif
+
+_common_has_broken_code         := \
+        cast-align \
+        missing-field-initializers
+
+# Begin static library section
+ifdef NV_COMPONENT_FLAG_STATIC_LIBRARY_SECTION
+include $(NV_BUILD_START_COMPONENT)
+
+NV_COMPONENT_NAME                  := libnvddk_onenand
+NV_COMPONENT_OWN_INTERFACE_DIR     := .
+NV_COMPONENT_SOURCES               := $(_common_sources)
+NV_COMPONENT_INCLUDES              := $(_common_includes)
+NV_COMPONENT_CFLAGS                += $(_common_cflags)
+NV_COMPONENT_NEEDED_INTERFACE_DIRS := $(_common_interfaces)
+NV_COMPONENT_HAS_BROKEN_CODE       := $(_common_has_broken_code)
+
+include $(NV_BUILD_STATIC_LIBRARY)
+endif

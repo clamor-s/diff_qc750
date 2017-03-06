@@ -1,0 +1,93 @@
+/*
+ * Copyright (c) 2007, 2009 NVIDIA Corporation.  All rights reserved.
+ *
+ * NVIDIA Corporation and its licensors retain all intellectual property
+ * and proprietary rights in and to this software, related documentation
+ * and any modifications thereto.  Any use, reproduction, disclosure or
+ * distribution of this software and related documentation without an express
+ * license agreement from NVIDIA Corporation is strictly prohibited.
+ */
+
+/**
+ * @file test.idl - fake example interface.
+ */
+import othertest.idl;
+
+package IdlTest;
+
+interface Test {
+    /** a comment
+     */
+    
+    define DEF_A 0x123
+    define DEF_B 123
+
+    /!
+     #define MACRO( a ) do { } while(0);
+     !/
+
+    enum E {
+        X_A = 1,
+        define X_A_VALUE0 0x0
+        define X_A_VALUE1 1
+
+        X_B = 2,
+        X_C,
+    }
+
+    typedef struct Z;
+    typedef enum E;
+    handle MyHandle;
+    typedef NvU32 CustomU32;
+
+    struct P
+    {
+        NvU32 p;
+    }
+
+    // a line comment
+    struct Z {
+        NvU32 x;
+        NvU8 y;
+        NvU32 z;
+        P p;
+    }
+
+    struct A {
+        Z z;
+        define A_A 0x456
+        MyHandle s;
+        CustomU32 c;
+    }
+
+    struct Q {
+        NvS32 array[256];
+    }
+
+    NvError function1( [in] NvU8 x, [inout] NvU32 y, [out] NvU16 z );
+    define FUNCTION1_FLAGS 0x1
+
+    /* another comment
+     * across a couple lines.
+     */
+
+    NvU16 function2( [in] Z z, [in] E e, [in] T t );
+
+    void function3( void );
+
+    void function4( [inout] A a, [in] MyHandle h, [inout] CustomU32 c,
+        [out] Q q );
+
+    void function5( [in, count(len)] NvU8 ptr, [in] NvU32 len );
+
+    void function6( [in] string str, [inout, count(len)] E ptr,
+        [in] NvU32 len );
+
+    void function7( [in] NvOsSemaphoreHandle sem,
+        [in, count(len)] const voidptr ptr, [in] NvU32 len );
+
+    void function8( [out, count(len)] voidptr ptr,
+        [out, count(len)] NvU32 o, [in] NvU32 len );
+
+    debug A function9( [in] E e, [in] const A a );
+}

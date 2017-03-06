@@ -1,0 +1,9 @@
+NvBctInit
+NvBctDeinit
+NvBctGetData
+NvBctSetData
+NvBitInit
+NvBitDeinit
+NvBitGetData
+NvFuseGetOperatingMode
+NvFuseGetSecondaryBootDevice

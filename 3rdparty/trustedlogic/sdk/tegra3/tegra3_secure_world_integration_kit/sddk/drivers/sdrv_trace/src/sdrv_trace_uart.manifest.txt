@@ -1,0 +1,76 @@
+#
+#
+# This driver implements trace output.
+
+# ============================================================================
+#
+# Driver identifier
+#
+# ============================================================================
+config.s.serviceID: e85b1505-67ac-4d14-8680-4d97c019942d
+config.s.driverType: trace
+
+
+# ============================================================================
+#
+# Configuration Properties
+#
+# ============================================================================
+
+# --callgraph option of the linker gives 40 bytes for the maximum stack usage
+config.s.default_stack_size: 40
+
+
+# ============================================================================
+#
+# Memory Segments
+#
+# ============================================================================
+
+# Integrator must define the property of the memory segment used by this driver.
+
+# Segment1 : uartA device
+config.s.mem.1.address: 0x70006000
+config.s.mem.1.size: 1024
+
+# Segment2 : uartB device
+config.s.mem.2.address: 0x70006040
+config.s.mem.2.size: 1024
+
+# Segment3 : uartC device
+config.s.mem.3.address: 0x70006200
+config.s.mem.3.size: 1024
+
+# Segment4 : uartD device
+config.s.mem.4.address: 0x70006300
+config.s.mem.4.size: 1024
+
+# Segment5 : uartE device
+config.s.mem.5.address: 0x70006400
+config.s.mem.5.size: 1024
+
+# Segment6 : clock device
+config.s.mem.6.address: 0x60006000
+config.s.mem.6.size: 1024
+config.s.heap_size: 64
+
+
+# ============================================================================
+#
+# Interrupts
+#
+# ============================================================================
+
+# This driver don't use interrupt.
+
+
+# ============================================================================
+#
+# Driver-specific properties
+#
+# ============================================================================
+
+
+smx.name: TL TEGRA TRACE
+smx.vendor: TRUSTED LOGIC
+smx.description: Secure Driver in charge of Secure World traces on Tegra platform (UART).

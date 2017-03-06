@@ -1,0 +1,75 @@
+# Copyright (c) 2012 NVIDIA Corporation.  All Rights Reserved.
+#
+# NVIDIA Corporation and its licensors retain all intellectual property and
+# proprietary rights in and to this software and related documentation.  Any
+# use, reproduction, disclosure or distribution of this software and related
+# documentation without an express license agreement from NVIDIA Corporation
+# is strictly prohibited.
+
+import init.icera_${ro.hardware}.rc
+
+on init
+# rild properties
+    setprop rild.libpath /system/lib/libril-icera.so
+
+    stop ril-daemon
+
+on fs
+   mkdir /mnt/modem 0770 root radio
+   mount ext4 /dev/block/platform/sdhci-tegra.3/by-name/MDM /mnt/modem wait rw
+   mkdir /mnt/modem/data 0770 root radio
+   mkdir /mnt/modem/data/factory 0770 root radio
+
+on boot
+
+# BB remote file system
+    mkdir /data/rfs
+    mkdir /data/rfs/data
+    mkdir /data/rfs/data/modem
+    mkdir /data/rfs/data/debug
+    chown radio system /data/rfs/data
+    chown radio system /data/rfs/data/modem
+    chown radio log /data/rfs/data/debug
+    symlink /system/vendor/firmware/data/config /data/rfs/data/config
+    symlink /system/vendor/firmware/app /data/rfs/app
+    symlink /mnt/modem/data/factory /data/rfs/data/factory
+
+    chmod 775 /data/rfs/data/debug
+
+
+# Start FIL daemon
+service fil-daemon /system/bin/fild
+    class late_start
+    user radio
+    group radio log
+
+# test mode for RIL: Should probably be removed from production phones
+service ril-daemon-test /system/bin/rild
+    socket rild-testmode stream 666 root radio
+    socket rild-debug stream 660 radio system
+    user root
+    group radio cache inet misc audio sdcard_rw sdcard_r
+    disabled
+
+on property:ril.testmode=1
+    stop ril-daemon
+    start ril-daemon-test
+
+on property:ril.testmode=0
+    stop ril-daemon-test
+    start ril-daemon
+
+on property:modem.ril.enabled=0
+    stop ril-daemon
+
+on property:modem.ril.enabled=1
+    stop ril-daemon
+    start ril-daemon
+
+on property:modem.fild.mode=ift
+    stop fil-daemon
+    start fil-daemon
+
+on property:modem.fild.mode=mdm
+    stop fil-daemon
+    start fil-daemon

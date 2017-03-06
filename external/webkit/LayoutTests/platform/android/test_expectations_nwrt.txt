@@ -1,0 +1,280 @@
+// Copyright (C) 2010 The Android Open Source Project
+// Copyright (c) 2011-2012, NVIDIA CORPORATION.  All rights reserved.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+// http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+// ----------------------------------------------------------------------------
+//
+// This file consists of lines with specifications of what
+// to do with layout tests in Dump Render Tree.
+// The lines can be either specific tests or whole directories
+// in which case the options apply to all test cases in that directory
+// and any subdirectory.
+
+// See also: $TOP/frameworks/base/tests/DumpRenderTree/src/com/android/dumprendertree/FileFilter.java
+// See also: $TOP/external/webkit/LayoutTests/platform/android/test_expectations.txt
+WONTFIX : fast/cookies/local-file-can-set-cookies.html = FAIL
+WONTFIX : fast/dom/HTMLKeygenElement/keygen.html = FAIL
+WONTFIX : fast/encoding/char-decoding-mac.html = FAIL
+WONTFIX : fast/encoding/idn-security.html = FAIL
+WONTFIX : fast/encoding/mailto-always-utf-8.html = FAIL
+WONTFIX : fast/events/touch/basic-multi-touch-events.html = FAIL
+WONTFIX : http/tests/appcache/fallback.html = FAIL
+WONTFIX : http/tests/appcache/origin-delete.html = FAIL
+WONTFIX : http/tests/appcache/origin-quota.html = FAIL
+WONTFIX : http/tests/appcache/origins-with-appcache.html = FAIL
+WONTFIX : http/tests/cookies/third-party-cookie-relaxing.html = FAIL
+WONTFIX : storage/domstorage/localstorage/private-browsing-affects-storage.html = FAIL
+WONTFIX : storage/domstorage/sessionstorage/private-browsing-affects-storage.html = FAIL
+WONTFIX : storage/private-browsing-noread-nowrite.html = FAIL
+WONTFIX : storage/storageinfo-query-usage.html = FAIL
+WONTFIX SKIP : fast/dom/Geolocation/page-reload-cancel-permission-requests.html = TIMEOUT
+WONTFIX SKIP : fast/dom/Geolocation/window-close-crash.html = TIMEOUT
+WONTFIX SKIP : fast/dom/HTMLLinkElement/link-and-subresource-test.html = TIMEOUT
+WONTFIX SKIP : fast/dom/HTMLLinkElement/prefetch.html = TIMEOUT
+WONTFIX SKIP : fast/dom/HTMLLinkElement/subresource.html = TIMEOUT
+WONTFIX SKIP : fast/encoding/char-encoding-mac.html = TIMEOUT
+WONTFIX SKIP : fast/events/touch/multi-touch-grouped-targets.html = TIMEOUT
+WONTFIX SKIP : fast/events/touch/touch-coords-in-zoom-and-scroll.html = TIMEOUT
+WONTFIX SKIP : fast/events/touch/touch-target.html = TIMEOUT
+WONTFIX SKIP : storage/domstorage/localstorage/storagetracker/storage-tracker-1-prepare.html = TIMEOUT
+WONTFIX SKIP : storage/domstorage/localstorage/storagetracker/storage-tracker-2-create.html = TIMEOUT
+WONTFIX SKIP : storage/domstorage/localstorage/storagetracker/storage-tracker-3-delete-all.html = TIMEOUT
+WONTFIX SKIP : storage/domstorage/localstorage/storagetracker/storage-tracker-4-create.html = TIMEOUT
+WONTFIX SKIP : storage/domstorage/localstorage/storagetracker/storage-tracker-5-delete-one.html = TIMEOUT
+WONTFIX SKIP : storage/indexeddb = TIMEOUT
+WONTFIX SKIP : storage/open-database-creation-callback-isolated-world.html = TIMEOUT
+WONTFIX SKIP : storage/statement-error-callback-isolated-world.html = TIMEOUT
+WONTFIX SKIP : storage/statement-success-callback-isolated-world.html = TIMEOUT
+WONTFIX SKIP : storage/transaction-callback-isolated-world.html = TIMEOUT
+WONTFIX SKIP : storage/transaction-error-callback-isolated-world.html = TIMEOUT
+WONTFIX SKIP : storage/transaction-success-callback-isolated-world.html = TIMEOUT
+
+// FIXME: These are regressions from the DRT behaving differently to
+// Google's DRTs.
+BUGNV899432 : fast/events/touch/basic-multi-touch-events-limited.html = TEXT
+BUGNV899432 SKIP : fast/events/touch/touch-target-limited.html = TIMEOUT
+BUGNV899432 : fast/canvas/fill-stroke-clip-reset-path.html = MISSING // Not correct pixel test output, so MISSING
+BUGNV899432 : fast/canvas/canvas-gradient-addStop-error.html = TEXT
+
+// WebGL bugs
+BUGNV969023 SKIP: fast/canvas/webgl/oom-crash.html = TIMEOUT
+BUGNV998804 SKIP: fast/canvas/webgl/robustness-context-lost.html = TIMEOUT
+
+// Video cannot be played without user gesture.
+BUGNV1023177 SKIP : http/tests/canvas/webgl/origin-clean-conformance.html = TIMEOUT
+
+// This is non-deterministic on V8. Just expect failure and pass it
+// for now.  If this ever would reveal a real bug OR if we expect the
+// testcase to pass consistently, remove this line.
+BUGNV979605 : webgl-conformance/dumpAsText/conformance/context/methods.html = TEXT PASS
+
+// SECURITY_ERR: DOM Exception 18
+BUGNV944874 SKIP : fast/canvas/webgl/tex-image-and-sub-image-2d-with-video.html = TIMEOUT
+BUGNV944874 SKIP : webgl-conformance/dumpAsText/conformance/textures/tex-image-and-sub-image-2d-with-video.html  = TIMEOUT
+BUGNV944874 SKIP : webgl-conformance/dumpAsText/conformance/textures/texture-npot-video.html = TIMEOUT
+
+// Flaky, usually a failure
+BUGNV1012299 : webgl-conformance/dumpAsText/conformance/context/context-attribute-preserve-drawing-buffer.html = TEXT PASS
+
+// Fail both in Chrome 15.0.874.106 and DRT.
+BUGNV899431 : canvas/philip/tests/2d.composite.operation.clear.html = TEXT
+BUGNV899431 : canvas/philip/tests/2d.composite.operation.darker.html = TEXT
+BUGNV899431 : canvas/philip/tests/2d.composite.uncovered.image.copy.html = TEXT
+BUGNV899431 : canvas/philip/tests/2d.composite.uncovered.image.destination-atop.html = TEXT
+BUGNV899431 : canvas/philip/tests/2d.composite.uncovered.image.destination-in.html = TEXT
+BUGNV899431 : canvas/philip/tests/2d.composite.uncovered.image.source-in.html = TEXT
+BUGNV899431 : canvas/philip/tests/2d.composite.uncovered.image.source-out.html = TEXT
+BUGNV899431 : canvas/philip/tests/2d.drawImage.broken.html = TEXT
+BUGNV899431 : canvas/philip/tests/2d.drawImage.image.incomplete.omitted.html = TEXT
+BUGNV899431 : canvas/philip/tests/2d.fillStyle.parse.invalid.rgba-6.html = TEXT
+BUGNV899431 : canvas/philip/tests/2d.fillStyle.parse.rgb-eof.html = TEXT
+BUGNV899431 : canvas/philip/tests/2d.fillStyle.parse.rgba-eof.html = TEXT
+BUGNV899431 : canvas/philip/tests/2d.gradient.radial.cone.beside.html = TEXT
+BUGNV899431 : canvas/philip/tests/2d.gradient.radial.cone.cylinder.html = TEXT
+BUGNV899431 : canvas/philip/tests/2d.gradient.radial.cone.shape2.html = TEXT
+BUGNV899431 : canvas/philip/tests/2d.gradient.radial.cone.top.html = TEXT
+BUGNV899431 : canvas/philip/tests/2d.gradient.radial.outside3.html = TEXT
+BUGNV899431 : canvas/philip/tests/2d.gradient.radial.touch1.html = TEXT
+BUGNV899431 : canvas/philip/tests/2d.gradient.radial.touch3.html = TEXT
+BUGNV899431 : canvas/philip/tests/2d.imageData.create1.type.html = TEXT
+BUGNV899431 : canvas/philip/tests/2d.imageData.create2.type.html = TEXT
+BUGNV899431 : canvas/philip/tests/2d.imageData.get.type.html = TEXT
+BUGNV899431 : canvas/philip/tests/2d.imageData.object.round.html = TEXT
+BUGNV899431 : canvas/philip/tests/2d.imageData.object.wrap.html = TEXT
+BUGNV899431 : canvas/philip/tests/2d.imageData.put.wrongtype.html = TEXT
+BUGNV899431 : canvas/philip/tests/2d.line.width.basic.html = TEXT
+BUGNV899431 : canvas/philip/tests/2d.line.width.transformed.html = TEXT
+BUGNV899431 : canvas/philip/tests/2d.missingargs.html = TEXT
+BUGNV899431 : canvas/philip/tests/2d.path.arcTo.shape.curve1.html = TEXT
+BUGNV899431 : canvas/philip/tests/2d.path.arcTo.shape.curve2.html = TEXT
+BUGNV899431 : canvas/philip/tests/2d.pattern.image.broken.html = TEXT
+BUGNV899431 : canvas/philip/tests/2d.pattern.image.incomplete.empty.html = TEXT
+BUGNV899431 : canvas/philip/tests/2d.pattern.image.incomplete.omitted.html = TEXT
+BUGNV899431 : canvas/philip/tests/2d.pattern.image.string.html = TEXT
+BUGNV899431 : canvas/philip/tests/2d.pattern.image.undefined.html = TEXT
+BUGNV899431 : canvas/philip/tests/2d.pattern.paint.norepeat.coord3.html = TEXT
+BUGNV899431 : canvas/philip/tests/2d.pattern.paint.repeatx.coord1.html = TEXT
+BUGNV899431 : canvas/philip/tests/2d.pattern.paint.repeaty.coord1.html = TEXT
+BUGNV899431 : canvas/philip/tests/2d.text.draw.baseline.bottom.html = TEXT
+BUGNV899431 : canvas/philip/tests/2d.text.draw.baseline.hanging.html = TEXT
+BUGNV899431 : canvas/philip/tests/2d.text.draw.baseline.ideographic.html = TEXT
+BUGNV899431 : canvas/philip/tests/2d.text.draw.baseline.middle.html = TEXT
+BUGNV899431 : canvas/philip/tests/2d.text.draw.baseline.top.html = TEXT
+BUGNV899431 : canvas/philip/tests/2d.text.draw.fill.maxWidth.fontface.html = TEXT
+BUGNV899431 : canvas/philip/tests/2d.text.draw.space.collapse.end.html = TEXT
+BUGNV899431 : canvas/philip/tests/2d.text.draw.space.collapse.nonspace.html = TEXT
+BUGNV899431 : canvas/philip/tests/2d.text.draw.space.collapse.other.html = TEXT
+BUGNV899431 : canvas/philip/tests/2d.text.draw.space.collapse.space.html = TEXT
+BUGNV899431 : canvas/philip/tests/2d.text.draw.space.collapse.start.html = TEXT
+BUGNV899431 : canvas/philip/tests/2d.text.font.parse.basic.html = TEXT
+BUGNV899431 : canvas/philip/tests/2d.text.font.parse.complex.html = TEXT
+BUGNV899431 : canvas/philip/tests/2d.text.font.parse.invalid.html = TEXT
+BUGNV899431 : canvas/philip/tests/2d.text.font.parse.size.percentage.default.html = TEXT
+BUGNV899431 : canvas/philip/tests/2d.text.font.parse.size.percentage.html = TEXT
+BUGNV899431 : canvas/philip/tests/2d.text.font.parse.system.html = TEXT
+BUGNV899431 : canvas/philip/tests/2d.text.measure.width.space.html = TEXT
+BUGNV899431 : canvas/philip/tests/2d.transformation.setTransform.skewed.html = TEXT
+BUGNV899431 : canvas/philip/tests/2d.transformation.transform.skewed.html = TEXT
+BUGNV899431 : canvas/philip/tests/type.prototype.html = TEXT
+BUGNV899431 : fast/canvas/canvas-currentColor.html = TEXT
+BUGNV899431 : fast/canvas/canvas-draw-canvas-on-canvas-shadow.html = TEXT
+BUGNV899431 : fast/canvas/canvas-shadow.html = TEXT
+BUGNV899431 : fast/canvas/fillText-shadow.html = TEXT
+BUGNV899431 : fast/canvas/set-colors.html = TEXT
+
+// Canvas shadow bug.
+BUGNV899452 : fast/canvas/canvas-fillPath-alpha-shadow.html = TEXT
+BUGNV899452 : fast/canvas/canvas-fillPath-gradient-shadow.html = TEXT
+BUGNV899452 : fast/canvas/canvas-fillPath-pattern-shadow.html = TEXT
+BUGNV899452 : fast/canvas/canvas-strokePath-alpha-shadow.html = TEXT
+BUGNV899452 : fast/canvas/canvas-strokeRect-alpha-shadow.html = TEXT
+
+// Need layoutTestController.display().
+BUGNV899405 : fast/canvas/canvas-incremental-repaint.html = MISSING
+
+// Global composite bug.
+BUGNV899410 : canvas/philip/tests/2d.composite.operation.highlight.html = TEXT
+BUGNV899410 : canvas/philip/tests/2d.composite.uncovered.fill.copy.html = TEXT
+BUGNV899410 : canvas/philip/tests/2d.composite.uncovered.fill.destination-atop.html = TEXT
+BUGNV899410 : canvas/philip/tests/2d.composite.uncovered.fill.destination-in.html = TEXT
+BUGNV899410 : canvas/philip/tests/2d.composite.uncovered.fill.source-in.html = TEXT
+BUGNV899410 : canvas/philip/tests/2d.composite.uncovered.fill.source-out.html = TEXT
+BUGNV899410 : canvas/philip/tests/2d.composite.uncovered.pattern.copy.html = TEXT
+BUGNV899410 : canvas/philip/tests/2d.composite.uncovered.pattern.destination-atop.html = TEXT
+BUGNV899410 : canvas/philip/tests/2d.composite.uncovered.pattern.destination-in.html = TEXT
+BUGNV899410 : canvas/philip/tests/2d.composite.uncovered.pattern.source-in.html = TEXT
+BUGNV899410 : canvas/philip/tests/2d.composite.uncovered.pattern.source-out.html = TEXT
+
+
+// Uncategorized failures.
+BUGNV899457 : canvas/philip/tests/2d.drawImage.floatsource.html = TEXT
+BUGNV899457 : canvas/philip/tests/2d.fillStyle.parse.system.html = TEXT
+BUGNV899457 : canvas/philip/tests/2d.gradient.radial.transform.1.html = TEXT
+BUGNV899457 : canvas/philip/tests/2d.gradient.radial.transform.2.html = TEXT
+BUGNV899457 : canvas/philip/tests/2d.gradient.radial.transform.3.html = TEXT
+BUGNV899457 : canvas/philip/tests/2d.path.arc.angle.6.html = TEXT
+BUGNV899457 : canvas/philip/tests/2d.path.isPointInPath.edge.html = TEXT
+BUGNV899457 : canvas/philip/tests/2d.pattern.paint.repeatx.outside.html = TEXT
+BUGNV899457 : canvas/philip/tests/2d.pattern.paint.repeaty.outside.html = TEXT
+BUGNV899457 : canvas/philip/tests/2d.shadow.alpha.4.html = TEXT
+BUGNV899457 : canvas/philip/tests/2d.shadow.enable.off.2.html = TEXT
+BUGNV899457 : canvas/philip/tests/2d.strokeRect.zero.4.html = TEXT
+BUGNV899457 : canvas/philip/tests/2d.text-custom-font-load-crash.html = TEXT
+BUGNV899457 : canvas/philip/tests/2d.text.draw.fontface.notinpage.html = TEXT
+BUGNV899457 : canvas/philip/tests/initial.reset.gradient.html = TEXT
+BUGNV899457 : fast/canvas/canvas-arc-360-winding.html = TEXT
+BUGNV899457 : fast/canvas/canvas-composite-alpha.html = TEXT
+BUGNV899457 : fast/canvas/drawImage-with-invalid-args.html = TEXT
+BUGNV899457 : fast/canvas/drawImage-with-negative-source-destination.html = TEXT
+BUGNV899457 : fast/canvas/pointInPath.html = TEXT
+BUGNV899457 : fast/canvas/patternfill-repeat.html = MISSING // there are artifacts outside the x boundary of the pattern, thus can't get correct pixel test baseline
+BUGNV1029120 : fast/canvas/canvas-lineWidth.html = TEXT // visually correct, but get pixel comparison failures (hw precision issue?)
+BUGNV1055289 : fast/text/text-vertical.html = IMAGE
+
+// Unknown cause.
+BUGNV931165 : fast/dom/NodeList/nodelist-item-call-as-function.html = TEXT
+BUGNV931165 : fast/encoding/char-decoding.html = TEXT
+BUGNV931165 : fast/events/touch/document-create-touch-list.html = TEXT
+BUGNV931165 : fast/events/touch/document-create-touch.html = TEXT
+BUGNV931165 : fast/dom/Geolocation/argument-types.html = FAIL PASS // somewhat flaky, seems to fail on first run after boot and succeed on consecutive runs.
+BUGNV931165 : fast/dom/Geolocation/callback-to-remote-context2.html = TIMEOUT PASS // flaky
+
+// Fuzzy layer boundaries bug
+BUGNV1021548 : compositing/layer-clipping/clipped-by-parent-zoomed-in.html = IMAGE
+
+BUGNV931165 : fast/dom/HTMLLinkElement/prerender.html = TEXT // dumpResourceResponseMIMETypes() missing
+
+// Slow on debug build.
+SLOW BUGNV : fast/js/dfg-uint8clampedarray.html = PASS
+
+// Apple specific test.
+WONTFIX SKIP : plugins/application-plugin-plugins-disabled.html = MISSING
+WONTFIX SKIP : plugins/clicking-missing-plugin-fires-delegate.html = TEXT
+WONTFIX SKIP : plugins/plugin-document-load-prevented-userscript.html = TEXT
+WONTFIX SKIP : plugins/plugin-document-willSendRequest-null.html = TEXT
+WONTFIX SKIP : compositing/plugins/composited-plugin.html = MISSING
+// Status text not important for Android ATM
+WONTFIX SKIP : plugins/set-status.html = MISSING
+
+// These plugin tests typically use new windows to do the test. DRT
+// does not support windows enough to run these tests.
+BUGNV931165 SKIP : plugins/access-after-page-destroyed.html = TIMEOUT
+BUGNV931165 SKIP : plugins/destroy-during-npp-new.html = TIMEOUT
+BUGNV931165 SKIP : plugins/destroy-on-setwindow.html = TIMEOUT
+BUGNV931165 SKIP : plugins/document-open.html = TIMEOUT
+BUGNV931165 SKIP : plugins/geturlnotify-during-document-teardown.html = TIMEOUT
+BUGNV931165 SKIP : plugins/open-and-close-window-with-plugin.html = TIMEOUT
+BUGNV931165 SKIP : http/tests/plugins/plugin-document-has-focus.html = TIMEOUT
+// Popup blocking not controlled by DRT
+BUGNV931165 : plugins/plugin-initiate-popup-window.html = MISSING
+
+// The eventSender sends events asynchronous, test expects synchronous.
+// Also the events don't seem to reach the plugin, even if the test would
+// be fixed.
+BUGNV931165 : plugins/keyboard-events.html = TEXT
+BUGNV931165 : plugins/mouse-events-fixedpos.html = TEXT
+BUGNV931165 : plugins/mouse-events.html = TEXT
+BUGNV931165 : plugins/mouse-click-iframe-to-plugin.html = TEXT
+// Flakey due to eventSender not being synchronous
+BUGNV931165 SKIP : plugins/resize-from-plugin.html = TEXT
+
+// WebView cannot control private browsing with WebSettings.
+BUGNV931165 : plugins/private-browsing-mode-2.html = TEXT
+BUGNV931165 : plugins/private-browsing-mode.html = TEXT
+
+// Corresponding WebView API cannot be used to disable loads.
+BUGNV931165 : plugins/get-url-that-the-resource-load-delegate-will-disallow.html = TEXT
+
+// Failure to propagate call properly back to PluginView::getValue()
+BUGNV931165 : plugins/pass-different-npp-struct.html = TEXT
+
+// Bug while deleting. CRASHES!
+BUGNV931165 SKIP : plugins/evaluate-js-after-removing-plugin-element.html = TIMEOUT
+
+// Unknown cause.
+BUGNV931165 : http/tests/plugins/npapi-response-headers.html = TEXT
+BUGNV931165 : http/tests/plugins/third-party-cookie-accept-policy.html = TEXT
+BUGNV931165 : plugins/destroy-reentry.html = TEXT
+BUGNV931165 : plugins/embed-attributes-setting.html = TEXT
+BUGNV931165 : plugins/get-url-with-blank-target.html = TEXT
+BUGNV931165 : plugins/iframe-shims.html = TEXT
+BUGNV931165 : plugins/invalidate_rect.html = TEXT
+BUGNV931165 : plugins/netscape-plugin-property-access-exception.html = TEXT
+BUGNV931165 : plugins/npruntime/browser-object-identity.html = TEXT
+BUGNV931165 : plugins/npruntime/enumerate.html = TEXT
+BUGNV931165 : plugins/npruntime/plugin-scriptable-object-invoke-default.html = TEXT
+BUGNV931165 : plugins/npruntime/remove-property.html = TEXT
+BUGNV931165 : plugins/refcount-leaks.html = TEXT
+BUGNV931165 : http/tests/plugins/post-url-file.html = TEXT
+
+BUGNV1035848 :  fast/animation/request-animation-frame-missing-arguments.html = TEXT

@@ -1,0 +1,65 @@
+<html>
+<head>
+<style type="text/css">
+div.container {
+  width: 140px;
+  height: 150px;
+  border: solid 1px black;
+  float: left;
+}
+div.container > div {
+  width: 30px;
+  height: 30px;
+  margin: 5px;
+  background-color: green;
+  -webkit-transform: translateZ(0px);
+}
+
+.moving1 {
+  -webkit-animation: move 0s linear forwards;
+}
+
+
+@-webkit-keyframes move {
+  from { -webkit-transform: translate3d(50px, 0px, 0px); }
+  to   { -webkit-transform: translate3d(100px,0px,0px); }
+}
+#result {
+  color: white;
+}
+</style>
+</head>
+<body>
+<!-- Success if:
+  * layout test runner finishes the test and doesn't hang
+  * the resulting picture is as described below in the html comments
+ -->
+
+<!-- stationary, end left -->
+<div class="container">
+<div style="-webkit-animation: move 0.2s linear 10s 0 backwards"></div>
+<div style="-webkit-animation: move 0.2s linear 10s 0 both"></div>
+</div>
+
+<!-- start middle -->
+<div class="container">
+<div style="-webkit-animation: move 0.2s linear 10s 1 backwards"></div>
+<div style="-webkit-animation: move 0.2s linear 10s 2 alternate backwards"></div>
+<div style="-webkit-animation: move 0.2s linear 10s 2 alternate both"></div>
+</div>
+
+<pre id="result"></pre>
+<script type="text/javascript">
+if (window.layoutTestController) {
+    layoutTestController.dumpAsText(true);
+    layoutTestController.waitUntilDone();
+}
+//FIXME: android layoutTestController doesn't support animation callbacks.
+window.setTimeout(function() {
+document.getElementById("result").innerHTML = "DONE.";
+    if (window.layoutTestController)
+        layoutTestController.notifyDone();
+}, 500);
+
+</script>
+</body>

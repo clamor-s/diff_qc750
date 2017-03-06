@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+
+<head>
+<link REL="stylesheet" TYPE="text/css" HREF="./docs/html_style/style.css"/>
+<meta HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=ISO-8859-1"/>
+<title>Trusted Foundations Tegra2 Android</title>
+</head>
+<body>
+
+<!-- ======================================================================= -->
+
+<div CLASS="tl-headerbar">
+
+<p CLASS="tl-copyright">
+   &copy; Copyright 2004-2011 Trusted Logic S.A. - all rights reserved
+</p>
+
+<p CLASS="tl-copyright">
+<a href="./docs/html_style/disclaimer.html">
+<span>Disclaimer</span>
+</a>
+</p>
+
+</div>
+
+<!-- ======================================================================= -->
+
+<h1 style="text-align: center">Trusted Foundations Tegra2 Android / Version AA01.09.34784 - Release</h1>
+
+<h2>Overview</h2>
+
+<p>The Trusted Foundations provides a highly portable environment
+for running security-sensitive code in a service-oriented fashion; client
+applications executing in the Normal World make use of functionality provided by
+security services executing in the Secure World.
+These services are all exposed using the Trusted Foundations Client API (TF Client API), but this is hidden
+underneath a more application programmer friendly API exposed by a stub library.</p>
+
+<p>The Trusted Foundations includes a built-in Core Secure Service that provides standard security
+functionalities, such as secure data storage, a cryptographic provider and a monotonic counter, but also
+allows deployment of more complex custom services which could, for example,
+implement the heart of a Digital Rights Management scheme.</p>
+
+<p>This version of the Trusted Foundations is designed to run on Nvidia Tegra2 processors,
+which is based on a Cortex-A9 processor.
+This architecture provides isolation between Normal World and Secure World memory and
+devices. Secure service code and data executing on top of the Trusted Foundations in the Secure
+World is protected from malicious applications and rogue device drivers in the
+Normal World OS.</p>
+
+<p>The Trusted Foundations supports secure services developed via the TF SDK (Trusted Foundations Software Development Kit) and using the SSDI (Secure Service
+Development Interface). These services developed using C and compiled to native machine code.
+</p>
+
+<p>The following picture gives a high-level architecture overview of the Trusted Foundations with its different components:
+<img align="middle" src="./docs/html_style/TF_Tegra2_Architecture.png"/>
+<br/>
+
+<h2>Terminology</h2>
+<p>Through the documentation within this release, different terms may be used for the same entity. Hereafter are the equivalent of
+	some common terms that may be called differently.
+	<ul>
+		<li><b>Trusted Foundations (TF)</b> is the Trusted Logic product name.</li>
+	        <li>The <b>Trusted Foundations Client API (TF Client API)</b> is an implementation of the <b>Global Platform' Trusted Eexecution Environment API (TEE API)</b>.</li>
+		<li>The <b>Normal World APIs</b> are also called <b>External APIs</b>. They are the APIs implemented by the built-in secure service and that are directly accessible
+			by the client applications residing in the Normal World: Cryptography, Secure Storage and Monotonic Counter. </li>
+		<li>The <b>TF Cryptographic API</b>, exposed in the Normal World (and qualified as "External API" in this case) and also in the SSDI (for the Secure Services) is also called <b>PKCS#11 API</b> and <b>cryptoki</b>.</li>
+		<li><b>SST</b> is the <b>Secure Storage</b> functionality of the Trusted Foundations. </li>
+		<li><b>MTC</b> is the <b>Monotonic Counter</b> functionality of the Trusted Foundations. </li>
+		<li>The <b>Core Secure Service</b> or <b>built-in service</b> is the secure service that is part of the core Trusted Foundations.
+			It is used to expose the crypto, SST and MTC functionality in the Normal World. </li>
+		<li><b>Secure Services</b> can be developed in C (they are called just <b>Secure Services</b> or <b>Native Services</b>). </li>
+	</ul>
+
+<a name="contents" />
+<h2>Content of this release</h2>
+
+<p>The structure of the Trusted Foundations can be defined as a number
+of components targeted at different types of users who may be developing or
+performing integration using the framework. These developers include platform
+integrators, Secure World service developers, or developers of Normal World
+client applications wishing to use security services running on the TF.</p>
+
+
+<p>This release includes the following components:</p>
+
+<a name="documentation" />
+<h3>Documentation</h3>
+
+<p>This release includes the following documentation:</p>
+
+<dl>
+<dt><a href="./docs/Developer_Reference_Manual.pdf" target="_blank">Developer Reference Manual</a><img src="./docs/html_style/pdf.gif"></dt>
+<dd>This is the Developer Reference Manual that contains the specifications of all the APIs of the TF and that explains how 
+to use the examples and the simulators.</dd>
+</dl>
+
+<dl>
+<dt><a href="./docs/Product_Reference_Manual.pdf" target="_blank">Product Reference Manual</a><img src="./docs/html_style/pdf.gif"></dt>
+<dd>The Product Reference Manual gives relevant informations to this specific product. 
+It details all the integration steps needed to have a TF running on an Android/Tegra2 platform. 
+It also contains all the Implementations note of the Tursted Foundations product provided in this package.</dd>
+<dd>Please also refer to <a href="./docs/Release_Notes.pdf" target="_blank">Release Notes</a><img src="./docs/html_style/pdf.gif"> for
+other specificites and known issues.
+</dd>
+</dl>
+
+<h3>TF Tegra2 Android OS porting Kit</h3>
+<dd><a href="./os_porting_kit"><code>/os_porting_kit</code></a></dd>
+<dd>This porting kit contains the sources, the binaries, the libraries and the driver that must be integrated to Android.
+</dd>
+
+<h3>TF Tegra2 Secure World Integration Kit</h3>
+<dd><a href="./tegra2_secure_world_integration_kit"><code>/tegra2_secure_world_integration_kit</code></a></dd>
+<dd>This integration kit provides the TF core binary to be executed in the secure world and tools for optionally post-linking custom secure services. The components in this
+integration kit are independent of the OS running in the Normal World. It also contains the Secure Driver Development Kit (SDDK) that enables 
+the development of custom drivers for the Tegra2 target.	</dd>
+   
+
+<h3>Trusted Foundations Software Development Kit</h3>
+<dd><a href="./tf_sdk"><code>/tf_sdk</code></a></dd>
+<dd>This software development kit contains the tools, libraries and header files for developing Secure Services or Normal-World components for the TF. 
+This kit also provides many examples in source code as well as TF simulator for Windows PC.</dd>
+
+<h3>Unsupported Material</h3>
+<dd><a href="./unsupported/tegra2_ref_integration"><code>/unsupported/tegra2_ref_integration</code></a></dd>
+<dd>This directory contains the complete binary of the reference Trusted  Foundations.</dd>
+<dd><a href="./unsupported/python"><code>/unsupported/python</code></a></dd>
+<dd><a href="./unsupported/openssl"><code>/unsupported/openssl</code></a></dd>
+<dd>These directories contain open source third party tools which are used for the reference implementation of the client authentication signature tool.
+The python and openssl directories contain binary versions of these two tools for Win32 and Linux (ix86).</dd>
+
+<h3></h3>
+
+<!-- ======================================================================= -->
+
+<div CLASS="tl-footerbar">
+
+<p CLASS="tl-copyright">
+   &copy; Copyright 2004-2011 Trusted Logic S.A. - All rights reserved
+</p>
+
+</div>
+
+</body>
+</html>

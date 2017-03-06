@@ -1,0 +1,11 @@
+config.s.serviceID: ABBE557C-0EA3-4FCC-829F-B06EF98AE72D
+config.s.lazy_instantiation: true
+config.s.multi_instance: false
+config.s.multi_session: true
+config.s.multi_command: true
+config.s.heap_size: 4096
+config.s.default_stack_size: 512
+smx.name: AES EXAMPLE
+smx.vendor: Trusted Logic S.A.
+smx.description: An example of service functions usage
+

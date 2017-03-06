@@ -1,0 +1,205 @@
+; Lauterbach TRACE32 debugger script to set user-specific parameters:
+;
+; For NVIDIA internal use only. Customers should not use this script
+; unless NVIDIA explicitly directs them to do so.
+;
+; Change the following parameters to match your particular development system:
+;
+;   TOP                 Case-sensitive path to the root of your android tree (e.g., "~/mytree")
+;   TEGRA_TOP           Case-sensitive path to the root of your tegra tree (e.g., "~/mytree/vendor/nvidia/tegra")
+;   BUILDTOP            Case-sensitive path to the directory contain the sw and tegra directories on the machine where the source code was built (e.g., "<some_path>/full_tree/android")
+;   BUILD_FLAVOR        "debug" or "release"
+;   TARGET_OS           operating system (android, gnu_linux)
+;   TARGET_CONFIG       Configuration used for memory & clock initialization
+;   TARGET_BOARD        For AP20: whistler, harmony, or ventana
+;                       For T30: aruba, cardhu, kai, or enterprise
+;   TARGET_SOC          AP20 or T30
+;   TRANSLATE_SRC_PATH  If TRUE, translate symbol paths from BUILDTOP to TOP.
+;                       NOTE: Paths are case-sensitive.
+;   LOAD_SAVED_WINDOWS  If TRUE, load saved window configuration from $T32SYS/windows.cmm (which must already exist)
+;
+; The following global parameter should only be changed if you are an experienced
+; user and you know what you're doing. If you don't leave these alone.
+; You've been warned.
+;
+;   QUERY_CORE_COUNT    Ask for number of running cores (leave FALSE if you don't know what you're doing).
+;-------------------------------------------------------------------------------
+
+; Set global variable TEGRA_TOP to root of the tegra tree
+GLOBAL &TEGRA_TOP
+&TEGRA_TOP=os.env(TEGRA_TOP)
+
+; Set global variable TOP to root of android repository.
+GLOBAL &TOP
+&TOP=os.env(TOP)
+
+GLOBAL &LOAD_SAVED_WINDOWS
+&LOAD_SAVED_WINDOWS="FALSE"
+
+GLOBAL &LOAD_SAVED_AVP_WINDOWS
+&LOAD_SAVED_AVP_WINDOWS="FALSE"
+
+GLOBAL &TRANSLATE_SRC_PATH
+&TRANSLATE_SRC_PATH="FALSE"
+
+GLOBAL &BUILDTOP
+&BUILDTOP=os.env(BUILDTOP)
+
+GLOBAL &BUILD_FLAVOR
+GLOBAL &TARGET_BOARD
+GLOBAL &TARGET_OS
+
+LOCAL &TARGET_OS_SUBTYPE
+&TARGET_OS_SUBTYPE=os.env(TARGET_OS_SUBTYPE)
+
+LOCAL &TARGET_PRODUCT
+&TARGET_PRODUCT=os.env(TARGET_PRODUCT)
+
+; Attempt to establish if JackBuild was used or not by checking TARGET_PRODUCT and TARGET_OS_SUBTYPE
+; If TARGET_PRODUCT, assume JackBuild. If TARGET_OS_SUBTYPE, assume LDK. Both cannot be set at once.
+IF "&TARGET_PRODUCT"==""
+(
+  IF "&TARGET_OS_SUBTYPE"==""
+  (
+    PRINT "Either TARGET_PRODUCT or TARGET_OS_SUBTYPE must be set, but not both."
+    STOP
+  )
+  ELSE IF "&TARGET_OS_SUBTYPE"=="gnu_linux"
+  (
+    ; Do nothing
+  )
+  ELSE IF "&TARGET_OS_SUBTYPE"=="rvds"
+  (
+    ; Do nothing
+  )
+  ELSE
+  (
+    PRINT "TARGET_OS_SUBTYPE=&(TARGET_OS_SUBTYPE) is not supported"
+    STOP
+  )
+  &TARGET_OS="&TARGET_OS_SUBTYPE"
+  &BUILD_FLAVOR=os.env(BUILD_FLAVOR)
+  ; LDK uses TARGET_BOARD rather than TARGET_PRODUCT but it needs to be sanitized
+  &TARGET_PRODUCT=os.env(TARGET_BOARD)
+)
+ELSE IF "&TARGET_PRODUCT"!=""
+(
+  IF "&TARGET_OS_SUBTYPE"!=""
+  (
+    PRINT "Either TARGET_PRODUCT or TARGET_OS_SUBTYPE must be set, but not both."
+    STOP
+  )
+  &TARGET_OS="android"
+  ; BUILD_FLAVOR is called TARGET_BUILD_TYPE under JackBuild.
+  &BUILD_FLAVOR=os.env(TARGET_BUILD_TYPE)
+)
+
+; Under JackBuild, TARGET_BOARD is derived from TARGET_PRODUCT.
+; For LDK, make sure TARGET_BOARD is valid by checking TARGET_PRODUCT
+IF "&TARGET_PRODUCT"=="whistler_e1109_nand"
+(
+  &TARGET_BOARD="whistler"
+)
+ELSE IF "&TARGET_PRODUCT"=="whistler_e1108"
+(
+  &TARGET_BOARD="whistler"
+)
+ELSE IF "&TARGET_PRODUCT"=="whistler_e1109"
+(
+  &TARGET_BOARD="whistler"
+)
+ELSE IF "&TARGET_PRODUCT"=="harmony"
+(
+  &TARGET_BOARD="harmony"
+)
+ELSE IF "&TARGET_PRODUCT"=="ventana"
+(
+  &TARGET_BOARD="ventana"
+)
+ELSE IF "&TARGET_PRODUCT"=="aruba2"
+(
+  &TARGET_BOARD="aruba2"
+)
+ELSE IF "&TARGET_PRODUCT"=="cardhu"
+(
+  &TARGET_BOARD="cardhu"
+)
+ELSE IF "&TARGET_PRODUCT"=="kai"
+(
+  &TARGET_BOARD="kai"
+)
+ELSE IF "&TARGET_PRODUCT"=="enterprise"
+(
+  &TARGET_BOARD="enterprise"
+)
+ELSE IF "&TARGET_PRODUCT"=="p1852"
+(
+  &TARGET_BOARD="p1852"
+)
+ELSE
+(
+  PRINT "TARGET_PRODUCT=&(TARGET_PRODUCT) is not supported"
+  STOP
+)
+
+GLOBAL &TARGET_CONFIG
+GLOBAL &TARGET_SOC
+GLOBAL &QUERY_CORE_COUNT
+
+IF "&TARGET_BOARD"=="whistler"
+(
+  &TARGET_SOC="ap20"
+  &TARGET_CONFIG="ap20_hynix_ddr2_533"
+)
+ELSE IF "&TARGET_BOARD"=="harmony"
+(
+  &TARGET_SOC="ap20"
+  &TARGET_CONFIG="ap20_hynix_ddr2_533"
+)
+ELSE IF "&TARGET_BOARD"=="ventana"
+(
+  &TARGET_SOC="ap20"
+  &TARGET_CONFIG="ap20_hynix_ddr2_533"
+)
+ELSE IF "&TARGET_BOARD"=="aruba2"
+(
+  &TARGET_SOC="t30"
+  &TARGET_CONFIG="t30_fpga_net11_13mhz_ddr3"
+  ;&TARGET_CONFIG="t30_fpga_net11_13mhz_lpddr2"
+  &QUERY_CORE_COUNT="TRUE"
+)
+ELSE IF "&TARGET_BOARD"=="cardhu"
+(
+  &TARGET_SOC="t30"
+  &TARGET_CONFIG="t30_E1186_Hynix_2GB_H5TC2G83BFR-PBA_300MHz_110306"
+  &QUERY_CORE_COUNT="TRUE"
+)
+ELSE IF "&TARGET_BOARD"=="kai"
+(
+  &TARGET_SOC="t30"
+  &TARGET_CONFIG="t30_Kai_Hynix_1GB_H5TC4G63MFR-H9A_667MHz_111231"
+  &QUERY_CORE_COUNT="TRUE"
+)
+ELSE IF "&TARGET_BOARD"=="enterprise"
+(
+  &TARGET_SOC="t30"
+  &TARGET_CONFIG="NONE"  ; Debugger loading not supported
+  &QUERY_CORE_COUNT="TRUE"
+)
+ELSE IF "&TARGET_BOARD"=="p1852"
+(
+  &TARGET_SOC="t30"
+  &TARGET_CONFIG="t30_E1888_Hynix_2GB_H5TQ4G83MFR_625MHz_110519"
+  &QUERY_CORE_COUNT="TRUE"
+)
+ELSE
+(
+  PRINT "TARGET_BOARD=&TARGET_BOARD not supported"
+  STOP
+)
+
+path + &TEGRA_TOP/core/mobile_linux/lauterbachscripts
+path + &TEGRA_TOP/core/mobile_linux/lauterbachscripts/&(TARGET_SOC)
+
+enddo
+

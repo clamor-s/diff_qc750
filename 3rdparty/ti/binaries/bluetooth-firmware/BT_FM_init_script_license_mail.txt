@@ -1,0 +1,184 @@
+From: Chua, Alex [mailto:chua@ti.com] 
+Sent: 14 January 2012 05:23
+To: Rakesh Kumar; Frankel, Moish; Rakesh Goyal
+Cc: Zigman, Eran; Uday Raval
+Subject: RE: regarding kfmapp folder in hardware/ti/wpan/tools
+
+Hi Rakesh,
+
+The BT/FM init scripts are under TSPA license. No problem with distributing it.
+
+Thanks,
+Alex
+
+From: Rakesh Kumar [mailto:krakesh@nvidia.com] 
+Sent: Thursday, January 12, 2012 10:36 PM
+To: Frankel, Moish; Rakesh Goyal; Chua, Alex
+Cc: Zigman, Eran; Uday Raval
+Subject: RE: regarding kfmapp folder in hardware/ti/wpan/tools
+
+Thanks frank for providing the initscripts. 
+
+Hi Eran/Alex,
+                Please clarify BT/FM initscripts license since we are not taking from git anymore.
+
+Regards,
+Rakesh
+
+From: Rakesh Kumar 
+Sent: 12 January 2012 14:00
+To: 'Frankel, Moish'; Rakesh Goyal
+Cc: Zigman, Eran; Uday Raval
+Subject: RE: regarding kfmapp folder in hardware/ti/wpan/tools
+
+Hi Frank,
+                I do understand your point. But due to Nvidia audit policy, I can’t put any code in git without stating public URL or support website link or email from vendor. Please re-send the files.
+
+Regards,
+Rakesh
+
+From: Frankel, Moish [mailto:moish@ti.com] 
+Sent: 12 January 2012 13:51
+To: Rakesh Kumar; Rakesh Goyal
+Cc: Zigman, Eran; Uday Raval
+Subject: RE: regarding kfmapp folder in hardware/ti/wpan/tools
+
+Hi Rakesh,
+The proper InitScript are already in your hands from the integration camp
+If it is required I can re-send to you, but I’ll also take them from the same place (i.e. NVIDIA patches package)
+Please advice if you need me to re-send
+
+Regards,
+
+Moish Frankel
+MCS SolDel - BT SW
+Texas Instruments Israel
++972-54-2077644 (mobile)
++972-9-7906150 (desk)
+
+From: Rakesh Kumar [mailto:krakesh@nvidia.com] 
+Sent: Thursday, January 12, 2012 10:02 AM
+To: Frankel, Moish; Rakesh Goyal
+Cc: Zigman, Eran; Uday Raval
+Subject: RE: regarding kfmapp folder in hardware/ti/wpan/tools
+
+Hi Frank,
+                Please send the Initscripts through email. We need originating source of each component documented for internal audit purpose.
+
+Regards,
+Rakesh
+
+From: Frankel, Moish [mailto:moish@ti.com] 
+Sent: 12 January 2012 13:14
+To: Rakesh Goyal
+Cc: Zigman, Eran; Rakesh Kumar; Uday Raval
+Subject: RE: regarding kfmapp folder in hardware/ti/wpan/tools
+
+Hi Rakesh,
+As I’ve mentioned in my previous mail, until OMAP will put it again on GIT, I have no GIT for this
+Anyway, this is fine since InitScripts are not part of SW release but TI CHIP ROM patches, which should be handed over manually in the first place
+
+Regards,
+
+
+Moish Frankel
+MCS SolDel - BT SW
+Texas Instruments Israel
++972-54-2077644 (mobile)
++972-9-7906150 (desk)
+
+From: Rakesh Goyal [mailto:rgoyal@nvidia.com] 
+Sent: Wednesday, January 11, 2012 11:38 AM
+To: Frankel, Moish
+Cc: Zigman, Eran; Rakesh Kumar; Uday Raval
+Subject: RE: regarding kfmapp folder in hardware/ti/wpan/tools
+
+Hi Frank, 
+In this case please suggest us the git link which we should use as office release to Nvidia for firmware/init scripts files for BT/FW.
+~Rakesh G
+
+From: Frankel, Moish [mailto:moish@ti.com] 
+Sent: Wednesday, January 11, 2012 3:04 PM
+To: Rakesh Goyal
+Cc: Zigman, Eran; Rakesh Kumar; Uday Raval
+Subject: RE: regarding kfmapp folder in hardware/ti/wpan/tools
+
+It is fine as Scripts haven’t changed, but notice that this is not the official release
+The commit ID that I’ve provided is for the TI OMAP L27.IS.1 official release, and as I’ve explained they removed the scripts from this release for some legal issues
+
+
+Moish Frankel
+MCS SolDel - BT SW
+Texas Instruments Israel
++972-54-2077644 (mobile)
++972-9-7906150 (desk)
+
+From: Rakesh Goyal [mailto:rgoyal@nvidia.com] 
+Sent: Wednesday, January 11, 2012 10:48 AM
+To: Frankel, Moish
+Cc: Zigman, Eran; Rakesh Kumar; Uday Raval
+Subject: RE: regarding kfmapp folder in hardware/ti/wpan/tools
+
+HI Moish, 
+Thanks. Yes we are missing these firmware files only.
+Now, as I mentioned, if I use commit id I3fee8e64474e1575cd02fd6e36fcf543adde6de9, we are getting firmware with firmware license. 
+Is it fine to use these firmware/init scripts? I have tested and BT is working with it.
+
+Regards,
+Rakesh G
+
+From: Frankel, Moish [mailto:moish@ti.com] 
+Sent: Wednesday, January 11, 2012 1:39 PM
+To: Rakesh Goyal
+Cc: Zigman, Eran; Rakesh Kumar; Uday Raval
+Subject: RE: regarding kfmapp folder in hardware/ti/wpan/tools
+
+You’re right
+This is the part that you’re missing, correct?
+
+
+Moish Frankel
+MCS SolDel - BT SW
+Texas Instruments Israel
++972-54-2077644 (mobile)
++972-9-7906150 (desk)
+
+From: Rakesh Goyal [mailto:rgoyal@nvidia.com] 
+Sent: Wednesday, January 11, 2012 9:50 AM
+To: Frankel, Moish
+Cc: Zigman, Eran; Rakesh Kumar; Uday Raval
+Subject: RE: regarding kfmapp folder in hardware/ti/wpan/tools
+
+Hi Moish, 
+What is initscript? As per my understanding Init script is same firmware (contain of the wpan/firmware folder). Please correct me if I am wrong?
+
+Regards,
+Rakesh G
+
+From: Frankel, Moish [mailto:moish@ti.com] 
+Sent: Wednesday, January 11, 2012 1:04 PM
+To: Rakesh Goyal
+Cc: Zigman, Eran; Rakesh Kumar; Uday Raval
+Subject: RE: regarding kfmapp folder in hardware/ti/wpan/tools
+
+Hi Rakesh,
+
+Sorry for my delayed respond
+
+For some legal issues, that I’m not fully aware about, TI OMAP removed the Init Scripts from the GIT repository.
+As far as I understand they will put it back in coming releases
+
+Anyway, InitScripts are not really part of the open source, they are patches for TI CHIP ROM. Usually, TI provide its customer with InitScripts (and updates for InitScripts) separately and independently from the SW releases, and this is what we should do here as well.
+
+NOTE: In general InitScripts updates and SW updates are independent
+
+InitScripts can be share via email, CDP, FTP or any other communication means
+
+Regards,
+
+
+Moish Frankel
+MCS SolDel - BT SW
+Texas Instruments Israel
++972-54-2077644 (mobile)
++972-9-7906150 (desk)

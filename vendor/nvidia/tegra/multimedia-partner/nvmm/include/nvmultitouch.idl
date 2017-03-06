@@ -1,0 +1,459 @@
+/*
+ * Copyright (c) 2007 NVIDIA Corporation.  All rights reserved.
+ *
+ * NVIDIA Corporation and its licensors retain all intellectual property
+ * and proprietary rights in and to this software, related documentation
+ * and any modifications thereto.  Any use, reproduction, disclosure or
+ * distribution of this software and related documentation without an express
+ * license agreement from NVIDIA Corporation is strictly prohibited.
+ */
+
+/!
+/** @file
+ * @brief <b>NVIDIA Multi-Touch API</b>
+ *
+ * @b Description: Declares the Multi-Touch API to be used by applications to
+ *                 interact with the Multi-Touch HW.
+ */
+!/
+
+/* used to generate the dispatcher */
+package NvMltTch
+{
+    nvmultitouch,
+}
+
+package NvMltTch;
+
+interface nvmultitouch {
+
+/!
+#include "nvcommon.h"
+#include "nvos.h"
+!/
+
+/!
+/*
+ * @ingroup nvmultitouch
+ * @{
+ */
+!/
+
+
+/!
+/*
+ * NVMLTTCH_MAX_INPUT_COORDS: Maximum number of input points or fingers
+ * allowed by the driver
+ */
+!/
+define NVMLTTCH_MAX_INPUT_COORDS 5
+
+/!
+/**
+ * @brief Defines the gesture Type.
+ */
+typedef enum
+{
+    /// Indicates the gesture is not supported.
+    NvMltTchGestureType_NO_GESTURE  = 0x0000,
+
+    /// Indicates the "tap" gesture: one rapid finger press and release.
+    NvMltTchGestureType_Tap = 0x0001,
+
+    /// Indicates the "double tap" gesture: two taps in rapid succession.
+    NvMltTchGestureType_Double_Tap = 0x0002,
+
+    /// Indicates the "tap and hold" gesture: a tap event rapidly followed by press-and-hold.
+    NvMltTchGestureType_Tap_and_Hold = 0x0004,
+
+    /// Indicates the "press" gesture: a finger that presses down and stays on the panel.
+    NvMltTchGestureType_Press = 0x0008,
+
+    /**
+     * Indicates the "press and drag" gesture: a finger that presses down, stays
+     * on the panel and then moves
+     */
+    NvMltTchGestureType_Press_Drag = 0x0010,
+
+    /**
+     * Indicates the "zoom" gesture: a simultaneous two-fingered gesture, where
+     * the two fingers are either moving towards each other, or moving away from
+     * each other.
+     */
+    NvMltTchGestureType_Zoom = 0x0020,
+
+    /**
+     * Indicates the "Flick" gesture: a "tap and drag" gesture or a fast
+     * "press and drag" where the finger stays on the panel only for a short time.
+     */
+    NvMltTchGestureType_Flick = 0x0040,
+
+    NvMltTchGestureType_Force32 = 0x7fffffffUL
+} NvMltTchGestureType;
+!/
+
+/!
+/**
+ * @brief Bitmask for the different possible touchpanel coordinate layouts
+ */
+typedef enum
+{
+    /// Touchpanel X/Y coords are swapped in relation to LCD screen.
+    NvMltTch_Panel_XY_Swap = 0x01,
+    /// Touchpanel X/Y coords are horizontally flipped (or mirrored) in relation to LCD screen.
+    NvMltTch_Panel_H_Flip = 0x02,
+    /// Touchpanel X/Y coords are vertically flipped in relation to LCD screen.
+    NvMltTch_Panel_V_Flip = 0x04,
+
+    NvMltTchPanelLayout_Force32 = 0x7FFFFFFF
+} NvMltTchPanelLayout;
+!/
+
+/!
+/**
+ * @brief Max length of the message Q name
+ */
+enum{ NV_MLTTCH_MAX_Q_NAME_LEN = 50 };
+!/
+
+/!
+/**
+ * NvMltTchDeviceHandle is an opaque handle to a Multi-Touch device.
+ */
+!/
+handle NvMltTchDeviceHandle;
+
+/!
+/**
+ * @brief Context structure containing the device handle and the client
+ * specific message Q name.
+ */!/
+struct NvMltTchContext
+{
+/!
+    /** Multi-Touch device handle */
+!/
+NvMltTchDeviceHandle hMltTchDevice;
+
+/!
+    /** Client specific message Q name */
+    wchar_t ClientMsgQName[NV_MLTTCH_MAX_Q_NAME_LEN];
+!/
+
+}
+
+typedef struct NvMltTchContext;
+
+/!
+/**
+ * @brief Touch Device Capability Information
+ */!/
+struct NvMltTchCapabilities
+{
+/!
+    /// multi-touch : 1 single touch : 0
+!/
+    NvBool IsMultiTouchSupported;
+
+/!
+    /// maximum number of finger coordinates the HW can report
+!/
+    NvU32 MaxNumberOfFingerCoordReported;
+
+/!
+    /// support relative data for X/Y : 1  no support : 0
+!/
+    NvBool IsRelativeDataSupported;
+
+/!
+    /// maximum value for relative coords that can be reported.
+!/
+    NvU32 MaxNumberOfRelativeCoordReported;
+
+/!
+    /// maximum width value that can be reported
+!/
+    NvU32 MaxNumberOfWidthReported;
+
+/!
+    /// maximum pressure value that can be reported
+!/
+    NvU32 MaxNumberOfPressureReported;
+
+/!
+    /// bitmask specifying the supported gestures
+!/
+    NvU32 Gesture;
+
+/!
+    /// specifies if the HW supports width information at all
+!/
+    NvBool IsWidthSupported;
+
+/!
+    /// specifies if the HW supports pressure information at all
+    /// or only contact information
+!/
+    NvBool IsPressureSupported;
+
+/!
+    /// specifies whether or not fingers on the panel are supported.
+!/
+    NvBool IsFingersSupported;
+
+/!
+    /// Min X position
+!/
+    NvU32 XMinPosition;
+
+/!
+    /// Min Y position
+!/
+    NvU32 YMinPosition;
+
+/!
+    /// Max X position
+!/
+    NvU32 XMaxPosition;
+
+/!
+    /// Max Y position
+!/
+    NvU32 YMaxPosition;
+
+/!
+    /// specifies the transformation of coordinate system of the touch panel
+    /// in relation to a standard coordinate system with (0,0) at top-left
+    /// and x as the horizontal axis.
+!/
+    NvU32 TouchPanelLayout;
+}
+
+typedef struct NvMltTchCapabilities;
+
+/!
+/**
+ * @brief Defines the possible touch status.
+ */
+ !/
+enum NvMltTchSampleFlags
+{
+/!
+    /// Flag for a valid reading.
+!/
+    NvMltTchSampleValidFlag = 0x1,
+
+/!
+    /// Flag to ignore the sample.
+!/
+    NvMltTchSampleIgnore = 0x2,
+
+/!
+    /// Indicate the state of the finger.
+!/
+    NvMltTchSampleDownFlag = 0x4,
+}
+
+/!
+/**
+ * Defines the ODM touch specific functionality info.
+ */
+!/
+struct NvMltTchAdditionalInfo
+{
+/!
+    /// x,y-coordinates for multiple input coordinates (fingers)
+    NvU32 multi_XYCoords[NVMLTTCH_MAX_INPUT_COORDS][2];
+!/
+
+/!
+    /// Approximate finger width on the touch panel.
+    NvU8 Width[NVMLTTCH_MAX_INPUT_COORDS];
+!/
+
+/!
+    /// Bitmask describing the gesture recognized.
+!/
+    NvU32 Gesture;
+
+/!
+    /// This tells if the gesture was valid or not.
+!/
+    NvU8 Confirmed;
+
+/!
+    /// Number of fingers on the touch panel.
+!/
+    NvU8 Fingers;
+
+/!
+    /// Approximate finger pressure.
+    NvU8 Pressure[NVMLTTCH_MAX_INPUT_COORDS];
+!/
+
+/!
+    /// Relative coordinate information
+    NvS8 XYDelta[NVMLTTCH_MAX_INPUT_COORDS][2];
+!/
+}
+
+typedef struct NvMltTchAdditionalInfo;
+/!
+/**
+ * @brief The message structure used between applications and shims
+ */
+!/
+struct NvMltTchCoordinateData
+{
+/!
+    /**
+     * X Co-ordinate
+     */
+!/
+    NvU32 xcoord;
+
+/!
+    /**
+     * Y Co-ordinate
+     */
+!/
+    NvU32 ycoord;
+
+/!
+    /// sample state information
+!/
+    NvU32 fingerstate;
+
+/!
+    /// specifc functionality info
+!/
+    NvMltTchAdditionalInfo additionalInfo;
+
+/!
+    /// customer additional information
+    void *pextrainfo;
+!/
+
+/!
+    /// the size of customer additional information
+!/
+    NvU32 extrainfosize;
+}
+
+typedef struct NvMltTchCoordinateData;
+
+/!
+/**
+ * @brief The attributes that the applications should use to communicate
+ *  with the Multi-Touch device
+ */
+!/
+enum NvMltTchAttribute
+{
+/!
+    /** Invalid attribute */
+!/
+NvMltTchAttribute_Invalid = 0,
+
+/!
+    /** Send the Coordinate data to the client */
+!/
+NvMltTchAttribute_SendDataToClient,
+
+/!
+    /** Get/Set the HW capabilities */
+!/
+NvMltTchAttribute_Capabilities,
+
+}
+
+/!
+/**
+ * Opens the Multi-Touch device and gets a handle to the device. The message Q
+ * name is returned in the context structure to be used by clients.
+ *
+ * Can be called multiple times for a given device. Subsequent
+ * calls will not necessarily return the same handle. Each call to
+ * NvMltTchOpen() must be paired with a corresponding call to NvMltTchClose().
+ *
+ * This call will perform all the significant hardware
+ * initialization of the device and will initialize internal data
+ * structures that are involved in managing the device.
+ *
+ * Assert encountered in debug mode if pContext is NULL.
+ *
+ * @param pContext the Multi-Touch device context is stored here.
+ * @param NeedMsgQ check whether Msg Q is needed or not (needed in the case of call from an Application).
+ *
+ * @retval NvSuccess Indicates that device was successfully opened.
+ * @retval NvError_InsufficientMemory Indicates that shim was unable to allocate
+ *     memory for its internal data structures.
+ */
+NvError NvMltTchOpen(NvMltTchContext *pContext, NvBool NeedMsgQ);
+!/
+
+/!
+/**
+ * Closes the Multi-Touch device.
+ *
+ * Each call to NvMltTchOpen() must be paired with a corresponding call
+ * to NvMltTchClose().
+ *
+ * @param pContext the Multi-Touch device context. If pContext is NULL, this API has no effect.
+ * @param UsingMsgQ check whether Msg Q was used to destroy it.
+ *
+ */
+void NvMltTchClose(NvMltTchContext *pContext, NvBool UsingMsgQ);
+!/
+
+/!
+/**
+ * Sets attributes to the Multi-Touch device.
+ *
+ * Assert encountered in debug mode if pAttribData/pContext is NULL.
+ *
+ * @param pContext The Multi-Touch device context. If pContext is NULL, this API has no effect.
+ * @param Attribute The attribute that you want to use.
+ * @param Length The length of the attribute value data
+ * @param pAttribData Any supporting data value that you want to use with the attributes.
+ *
+ * @retval NvSuccess Indicates that the settings were done successfully.
+ * @retval NvError_InsufficientMemory Indicates that shim was unable to allocate
+ *     memory for its internal data structures.
+ */
+!/
+NvError
+NvMltTchSetAttributes(
+    [in] NvMltTchContext pContext,
+    [in] NvMltTchAttribute Attribute,
+    [in] NvU32 Length,
+    [in, count(Length)] NvU32 pAttribData);
+
+/!
+/**
+ * Gets attributes as specified in NvMltTchCoordinateData structure from the Multi-Touch device.
+ *
+ * Assert encountered in debug mode if pAttribValue/pContext is NULL.
+ *
+ * @param pContext The Multi-Touch device context. If pContext is NULL, this API has no effect.
+ * @param Attribute The attribute that the application needs.
+ * @param Length The length of the attribute value data
+ * @param pAttributeValue The value of the attribute queried from the device
+ *
+ * @retval NvSuccess Indicates that the data was successfully retrieved.
+ * @retval NvError_InsufficientMemory Indicates that shim was unable to allocate
+ *     memory for its internal data structures.
+ */
+!/
+NvError
+NvMltTchGetAttributes(
+    [in] NvMltTchContext pContext,
+    [in] NvMltTchAttribute Attribute,
+    [in] NvU32 Length,
+    [out, count(Length)] NvU32 pAttributeValue);
+
+/!
+/** @} */
+!/
+
+} // interface

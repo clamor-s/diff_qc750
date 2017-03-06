@@ -1,0 +1,83 @@
+Checks gl_PointCoord and gl_PointSize
+
+On success, you will see a series of "PASS" messages, followed by "TEST COMPLETE".
+
+
+PASS gl is non-null.
+PASS gl.getError() is gl.NO_ERROR
+PASS width is height
+PASS maxPointSize >= 1 is true
+PASS maxPointSize % 1 == 0 is true
+PASS gl.getError() is gl.NO_ERROR
+
+PASS pixel 32,32 should be 1,253,0
+PASS pixel 48,32 should be 65,253,0
+PASS pixel 64,32 should be 129,253,0
+PASS pixel 80,32 should be 193,253,0
+PASS pixel 32,48 should be 1,189,0
+PASS pixel 48,48 should be 65,189,0
+PASS pixel 64,48 should be 129,189,0
+PASS pixel 80,48 should be 193,189,0
+PASS pixel 32,64 should be 1,125,0
+PASS pixel 48,64 should be 65,125,0
+PASS pixel 64,64 should be 129,125,0
+PASS pixel 80,64 should be 193,125,0
+PASS pixel 32,80 should be 1,61,0
+PASS pixel 48,80 should be 65,61,0
+PASS pixel 64,80 should be 129,61,0
+PASS pixel 80,80 should be 193,61,0
+
+PASS pixel 160,32 should be 1,253,0
+PASS pixel 176,32 should be 65,253,0
+PASS pixel 192,32 should be 129,253,0
+PASS pixel 208,32 should be 193,253,0
+PASS pixel 160,48 should be 1,189,0
+PASS pixel 176,48 should be 65,189,0
+PASS pixel 192,48 should be 129,189,0
+PASS pixel 208,48 should be 193,189,0
+PASS pixel 160,64 should be 1,125,0
+PASS pixel 176,64 should be 65,125,0
+PASS pixel 192,64 should be 129,125,0
+PASS pixel 208,64 should be 193,125,0
+PASS pixel 160,80 should be 1,61,0
+PASS pixel 176,80 should be 65,61,0
+PASS pixel 192,80 should be 129,61,0
+PASS pixel 208,80 should be 193,61,0
+
+PASS pixel 32,160 should be 1,253,0
+PASS pixel 48,160 should be 65,253,0
+PASS pixel 64,160 should be 129,253,0
+PASS pixel 80,160 should be 193,253,0
+PASS pixel 32,176 should be 1,189,0
+PASS pixel 48,176 should be 65,189,0
+PASS pixel 64,176 should be 129,189,0
+PASS pixel 80,176 should be 193,189,0
+PASS pixel 32,192 should be 1,125,0
+PASS pixel 48,192 should be 65,125,0
+PASS pixel 64,192 should be 129,125,0
+PASS pixel 80,192 should be 193,125,0
+PASS pixel 32,208 should be 1,61,0
+PASS pixel 48,208 should be 65,61,0
+PASS pixel 64,208 should be 129,61,0
+PASS pixel 80,208 should be 193,61,0
+
+PASS pixel 160,160 should be 1,253,0
+PASS pixel 176,160 should be 65,253,0
+PASS pixel 192,160 should be 129,253,0
+PASS pixel 208,160 should be 193,253,0
+PASS pixel 160,176 should be 1,189,0
+PASS pixel 176,176 should be 65,189,0
+PASS pixel 192,176 should be 129,189,0
+PASS pixel 208,176 should be 193,189,0
+PASS pixel 160,192 should be 1,125,0
+PASS pixel 176,192 should be 65,125,0
+PASS pixel 192,192 should be 129,125,0
+PASS pixel 208,192 should be 193,125,0
+PASS pixel 160,208 should be 1,61,0
+PASS pixel 176,208 should be 65,61,0
+PASS pixel 192,208 should be 129,61,0
+PASS pixel 208,208 should be 193,61,0
+PASS successfullyParsed is true
+
+TEST COMPLETE
+

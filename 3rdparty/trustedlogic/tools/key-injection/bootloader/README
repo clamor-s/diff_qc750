@@ -1,0 +1,18 @@
+
+"OTA_encrypt_certs.py" is for generating encrypted keys. The script creates "encrypted_data.txt" file which has encrypted keys.
+"OTA_address_finder.py" is for finding key slots in bootloader. The script find and set the addresses of slots in bootloader.
+"OTA_inject_certs.py" is for injecting the keys to the bootloader. The script reads out keys from "encrypted_data.txt" and injects the keys to the bootloder.
+
+== Example 1. Encrypt hdcp and widevine keys using sbk and inject the keys to bootloader ==
+1. python OTA_encrypt_certs.py --sbk=00000000000000000000000000000000 --hdcp_key=../../secure_hdcp/tools/struct.txt --widevine_key=./wv_good_key.dat
+
+2. python OTA_address_finder.py --input=bootloader.bin
+
+3. python OTA_inject_certs.py --input=bootloader.bin
+
+== Example 2. Encrypt wmdrm, playready, hdcp and widevine keys and inject the keys to bootloader ==
+1. python OTA_encrypt_certs.py --wmdrmpd_cert=../data/wmdrm_model_certificate.der --wmdrmpd_key=../data/wmdrm_model_key.dat --prdy_cert=../data/NvTegra3ModelCert.dat --prdy_key=../data/NvTegra3ModelKey.dat --sbk=00000000000000000000000000000000 --hdcp_key=../../secure_hdcp/tools/struct.txt --widevine_key=./wv_good_key.dat
+
+2. python OTA_address_finder.py --input=bootloader.bin
+
+3. python OTA_inject_certs.py --input=bootloader.bin

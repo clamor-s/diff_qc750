@@ -1,0 +1,13 @@
+CONSOLE MESSAGE: line 24: *** Error compiling shader '[object WebGLShader]':ERROR: 0:5: 'gl_ProjectionMatrix' : undeclared identifier 
+
+vertex shader that uses gl_ProjectionMatrix should fail
+
+On success, you will see a series of "PASS" messages, followed by "TEST COMPLETE".
+
+test: vertex shader that uses gl_ProjectionMatrix should fail
+test vertex shader
+default fragment shaderPASS vertex shader that uses gl_ProjectionMatrix should fail
+PASS successfullyParsed is true
+
+TEST COMPLETE
+

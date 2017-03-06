@@ -1,0 +1,61 @@
+################################### tell Emacs this is a -*- makefile-gmake -*-
+#
+# Copyright (c) 2011 NVIDIA CORPORATION.  All Rights Reserved.
+#
+# NVIDIA CORPORATION and its licensors retain all intellectual property
+# and proprietary rights in and to this software, related documentation
+# and any modifications thereto.  Any use, reproduction, disclosure or
+# distribution of this software and related documentation without an express
+# license agreement from NVIDIA CORPORATION is strictly prohibited.
+#
+# tmake for SW Mobile component makefile
+#
+# libnvrm interface makefile fragment
+#
+###############################################################################
+
+ifdef NV_INTERFACE_FLAG_IDL_SECTION
+NV_INTERFACE_IDL_FILES := \
+	nvrm_analog \
+	nvrm_channel \
+	nvrm_diag \
+	nvrm_dma \
+	nvrm_gpio \
+	nvrm_i2c \
+	nvrm_init \
+	nvrm_interrupt \
+	nvrm_keylist \
+	nvrm_memctrl \
+	nvrm_memmgr \
+	nvrm_module \
+	nvrm_moduleloader \
+	nvrm_owr \
+	nvrm_pcie \
+	nvrm_pinmux \
+	nvrm_pmu \
+	nvrm_power \
+	nvrm_pwm \
+	nvrm_spi \
+	nvrm_transport \
+	nvrm_xpc
+endif
+
+ifdef NV_INTERFACE_FLAG_STATIC_LIBRARY_SECTION
+NV_INTERFACE_NAME             := libnvrm_impl
+NV_INTERFACE_COMPONENT_DIR    := nvrmkernel
+# NV_INTERFACE_PUBLIC_INCLUDES :=
+endif
+
+ifdef NV_INTERFACE_FLAG_SHARED_LIBRARY_SECTION
+NV_INTERFACE_NAME             := nvrm
+NV_INTERFACE_EXPORTS          := \
+	libnvrm \
+	libnvrm_stub \
+	libnvrm_transport
+# NV_INTERFACE_PUBLIC_INCLUDES :=
+endif
+
+# Local Variables:
+# indent-tabs-mode: t
+# tab-width: 8
+# End:

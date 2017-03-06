@@ -1,0 +1,69 @@
+#
+# Copyright (c) 2012, NVIDIA CORPORATION.  All rights reserved.
+#
+
+NV_MAKEFILE_LIST += $(TEGRA_TOP)/core/mobile_linux/make/Makefile.rules.modules
+
+ATHEROS_WIFI_PATH     ?= $(TEGRA_TOP)/3rdparty/atheros/ar6k_sdk/host
+SHARED_MODS_FILES_DIR ?= $(P4ROOT)/sw/mods
+
+wlan_ar6002_dir := $(ATHEROS_WIFI_PATH)
+wlan_env := ATH_CROSS_COMPILE_TYPE=$(CROSSBIN) ATH_LINUXPATH=$(KERN_OUTDIR)
+
+KERNEL_SPACE_TESTS := $(TEGRA_TOP)/tests/linux/kernel_space_tests/
+
+ath_kernel:
+	$(MAKE) -C $(wlan_ar6002_dir) $(wlan_env)
+
+ath_kernel_clean:
+	$(MAKE) -C $(wlan_ar6002_dir) $(wlan_env) clean
+
+tests_kernel:
+	$(MAKE) -C $(KERN_DIR) $(KERN_ENV) M=$(KERNEL_SPACE_TESTS) modules
+
+tests_kernel_clean:
+	test -d $(KERN_OUTDIR) && $(MAKE) -C $(KERN_DIR) $(KERN_ENV) M=$(KERNEL_SPACE_TESTS) clean || echo Skipping $(MAKE) -C $(KERN_DIR) $(KERN_ENV) M=$(KERNEL_SPACE_TESTS) clean as $(KERN_OUTDIR) does not exist
+
+MODS_DIR := $(SHARED_MODS_FILES_DIR)/linuxdrv/v3.2/
+mods_kernel:
+	$(MAKE) -C $(KERN_OUTDIR) $(KERN_ENV) M=$(MODS_DIR) modules
+
+mods_kernel_clean:
+	test -d $(KERN_OUTDIR) && $(MAKE) -C $(KERN_OUTDIR) $(KERN_ENV) M=$(MODS_DIR) clean || echo Skipping $(MAKE) -C $(KERN_OUTDIR) $(KERN_ENV) M=$(MODS_DIR) clean as $(KERN_OUTDIR) does not exist
+
+CAIF_MOD_DIR := $(PWD)/../3rdparty/baseband/emp/caif
+emp_kernel:
+	$(MAKE) -C $(KERN_OUTDIR) $(KERN_ENV) M=$(CAIF_MOD_DIR)/net/caif \
+	    CONFIG_CAIF='m' CONFIG_CAIF_CHARDEV='m' CONFIG_CAIF_NETDEV='m' \
+	    CONFIG_CAIF_DEBUG='1' \
+	    CAIF_FLAGS='-I$(CAIF_MOD_DIR)/include' modules
+	$(MAKE) -C $(KERN_OUTDIR) $(KERN_ENV) M=$(CAIF_MOD_DIR)/drivers/net/caif \
+	    CONFIG_CAIF_TTY='m' CONFIG_CAIF_LOOPBACK='m' CONFIG_CAIF_PHYIF_SSPI='m' \
+	    CONFIG_CAIF_DEBUG='1' \
+	    CAIF_DIR='$(CAIF_MOD_DIR)' \
+	    CAIF_FLAGS='-I$(CAIF_MOD_DIR)/include' modules
+
+emp_kernel_clean:
+	$(MAKE) -C $(KERN_OUTDIR) $(KERN_ENV) M=$(CAIF_MOD_DIR)/net/caif \
+	    CONFIG_CAIF='m' CONFIG_CAIF_CHARDEV='m' CONFIG_CAIF_NETDEV='m' \
+	    CONFIG_CAIF_DEBUG='1' \
+	    CAIF_FLAGS='-I$(CAIF_MOD_DIR)/include' clean
+	$(MAKE) -C $(KERN_OUTDIR) $(KERN_ENV) M=$(CAIF_MOD_DIR)/drivers/net/caif \
+	    CONFIG_CAIF_TTY='m' CONFIG_CAIF_LOOPBACK='m' CONFIG_CAIF_PHYIF_SSPI='m' \
+	    CONFIG_CAIF_DEBUG='1' \
+	    CAIF_DIR='$(CAIF_MOD_DIR)' \
+	    CAIF_FLAGS='-I$(CAIF_MOD_DIR)/include' clean
+
+IFX_MOD_DIR := $(PWD)/../3rdparty/baseband/ifx
+ifx_kernel:
+	$(MAKE) -C $(KERN_OUTDIR) $(KERN_ENV) M=$(IFX_MOD_DIR)/ipc \
+	    IFX_FLAGS='-I$(IFX_MOD_DIR)/ipc' modules
+
+ifx_kernel_clean:
+	$(MAKE) -C $(KERN_OUTDIR) $(KERN_ENV) M=$(IFX_MOD_DIR)/ipc \
+	    IFX_FLAGS='-I$(IFX_MOD_DIR)/ipc' clean
+
+.PHONY: tests_kernel tests_kernel_clean
+.PHONY: ath_kernel ath_kernel_clean
+.PHONY: emp_kernel emp_kernel_clean
+.PHONY: ifx_kernel ifx_kernel_clean

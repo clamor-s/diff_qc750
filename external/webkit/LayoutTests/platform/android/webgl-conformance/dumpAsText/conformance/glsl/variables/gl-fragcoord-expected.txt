@@ -1,0 +1,73 @@
+tests gl_FragCoord
+
+On success, you will see a series of "PASS" messages, followed by "TEST COMPLETE".
+
+PASS getError was expected value: NO_ERROR : no errors from draw
+PASS should be 0,0,0
+PASS should be 0,0,0
+PASS should be 0,64,0
+PASS should be 0,64,0
+PASS should be 0,128,64
+PASS should be 0,128,64
+PASS should be 0,192,64
+PASS should be 0,192,64
+PASS should be 0,0,0
+PASS should be 0,0,0
+PASS should be 0,64,0
+PASS should be 0,64,64
+PASS should be 0,128,64
+PASS should be 0,128,64
+PASS should be 0,192,64
+PASS should be 0,192,128
+PASS should be 64,0,0
+PASS should be 64,0,0
+PASS should be 64,64,64
+PASS should be 64,64,64
+PASS should be 64,128,64
+PASS should be 64,128,64
+PASS should be 64,192,128
+PASS should be 64,192,128
+PASS should be 64,0,0
+PASS should be 64,0,64
+PASS should be 64,64,64
+PASS should be 64,64,64
+PASS should be 64,128,64
+PASS should be 64,128,128
+PASS should be 64,192,128
+PASS should be 64,192,128
+PASS should be 128,0,64
+PASS should be 128,0,64
+PASS should be 128,64,64
+PASS should be 128,64,64
+PASS should be 128,128,128
+PASS should be 128,128,128
+PASS should be 128,192,128
+PASS should be 128,192,128
+PASS should be 128,0,64
+PASS should be 128,0,64
+PASS should be 128,64,64
+PASS should be 128,64,128
+PASS should be 128,128,128
+PASS should be 128,128,128
+PASS should be 128,192,128
+PASS should be 128,192,192
+PASS should be 192,0,64
+PASS should be 192,0,64
+PASS should be 192,64,128
+PASS should be 192,64,128
+PASS should be 192,128,128
+PASS should be 192,128,128
+PASS should be 192,192,192
+PASS should be 192,192,192
+PASS should be 192,0,64
+PASS should be 192,0,128
+PASS should be 192,64,128
+PASS should be 192,64,128
+PASS should be 192,128,128
+PASS should be 192,128,192
+PASS should be 192,192,192
+PASS should be 192,192,192
+PASS successfullyParsed is true
+
+TEST COMPLETE
+

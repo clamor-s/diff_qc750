@@ -1,0 +1,49 @@
+<html>
+<head>
+<meta name="viewport" content="width=480"/>
+<style>
+div {
+  margin: 10px;
+  height: 200px;
+  border: 1px dashed black;
+}
+p {
+   height: 10px;
+}
+</style>
+</head>
+<body>
+<div style="overflow:scroll">
+<p>
+<p>
+<p>
+<p>
+<p>
+<p>
+<p>
+<p>
+<p>
+<p>
+<p>find this in overflow
+<p>find this in overflow
+<p>find this in overflow
+</div>
+<script>
+if (window.layoutTestController) {
+    layoutTestController.dumpAsText(true);
+    layoutTestController.waitUntilDone();
+}
+
+window.onload = function() {
+    window.setTimeout(function() {
+        layoutTestController.showFindDialog("find");
+        layoutTestController.findNext(true);
+        window.setTimeout(function() {
+            layoutTestController.notifyDone();
+        }, 300);
+    }, 100);
+};
+
+</script>
+</body>
+</html>

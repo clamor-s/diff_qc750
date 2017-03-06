@@ -1,0 +1,37 @@
+/*
+ * Copyright (c) 2007-2008 NVIDIA Corporation.  All rights reserved.
+ *
+ * NVIDIA Corporation and its licensors retain all intellectual property
+ * and proprietary rights in and to this software, related documentation
+ * and any modifications thereto.  Any use, reproduction, disclosure or
+ * distribution of this software and related documentation without an express
+ * license agreement from NVIDIA Corporation is strictly prohibited.
+ */
+  
+/* used to generate the global dispatcher */
+
+package NvRm
+{
+    nvrm_init,
+    nvrm_memmgr,
+    nvrm_module,
+    nvrm_gpio,
+    nvrm_power,
+    nvrm_dma,
+    nvrm_interrupt,
+    nvrm_spi,
+    nvrm_i2c,
+    nvrm_owr,
+    nvrm_analog,
+    nvrm_pinmux,
+    nvrm_diag,
+    nvrm_pmu,
+    nvrm_keylist,
+    nvrm_pwm,
+    nvrm_pcie,
+    nvrm_memctrl,
+    nvrm_transport,
+    nvrm_xpc,
+}
+
+package NvRm;

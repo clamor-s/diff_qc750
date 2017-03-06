@@ -1,0 +1,7 @@
+MODULE_NAME := libnvodm_hdmi
+
+MODULE_SUFFIX := $(DLL_OR_LIB_SUFFIX)
+
+MODULE_IN_EBOOT :=
+
+include $(TEGRA_TOP)/core/drivers/nvodm/makefiles/Makefile.odm_common

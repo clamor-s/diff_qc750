@@ -1,0 +1,56 @@
+################################### tell Emacs this is a -*- makefile-gmake -*-
+#
+# Copyright (c) 2011-2012 NVIDIA CORPORATION.  All Rights Reserved.
+#
+# NVIDIA CORPORATION and its licensors retain all intellectual property
+# and proprietary rights in and to this software, related documentation
+# and any modifications thereto.  Any use, reproduction, disclosure or
+# distribution of this software and related documentation without an express
+# license agreement from NVIDIA CORPORATION is strictly prohibited.
+#
+# tmake for SW Mobile component makefile
+#
+# libnvbct static library component makefile
+#
+###############################################################################
+
+ifdef NV_COMPONENT_FLAG_STATIC_LIBRARY_SECTION
+include $(NV_BUILD_START_COMPONENT)
+
+NV_COMPONENT_NAME              := libnvbct
+NV_COMPONENT_OWN_INTERFACE_DIR := .
+NV_COMPONENT_SOURCES           := \
+	nvbct.c \
+	nvbit.c \
+	nvfuse.c \
+	nvbct_private_ap20.c \
+	nvbit_private_ap20.c \
+	nvfuse_ap20.c \
+	nvbct_private_t30.c \
+	nvbit_private_t30.c \
+	nvfuse_t30.c
+
+ifneq ($(NV_BUILD_CONFIGURATION_IS_EMULATION),1)
+NV_COMPONENT_CFLAGS            += \
+	-DNV_USE_FUSE_CLOCK_ENABLE=0
+endif
+ifeq ($(NV_BUILD_CONFIGURATION_IS_EMBEDDED),1)
+NV_COMPONENT_CFLAGS            += \
+	-DNV_EMBEDDED_BUILD
+endif
+NV_COMPONENT_CFLAGS            += \
+	-DNVODM_BOARD_IS_SIMULATION=0
+
+NV_COMPONENT_INCLUDES          := \
+	../../drivers/hwinc \
+	../../drivers/hwinc/$(NV_TARGET_SOC_FAMILY)
+
+NV_COMPONENT_HAS_BROKEN_CODE := ignore-all
+
+include $(NV_BUILD_STATIC_LIBRARY)
+endif #NV_COMPONENT_FLAG_STATIC_LIBRARY_SECTION
+
+# Local Variables:
+# indent-tabs-mode: t
+# tab-width: 8
+# End:

@@ -1,0 +1,13 @@
+ 
+Tests that using 2 types of textures on the same texture unitand referencing them both in the same program fails as perOpenGL ES 2.0.24 spec section 2.10.4, Samplers subsection.
+
+On success, you will see a series of "PASS" messages, followed by "TEST COMPLETE".
+
+PASS getError was expected value: INVALID_OPERATION : drawing with 2 different targets on the same texture unit should generate INVALID_VALUE
+PASS getError was expected value: INVALID_OPERATION : drawing with 2 different targets on the same texture unit should generate INVALID_VALUE
+PASS getError was expected value: INVALID_OPERATION : drawing with 2 different targets on the same texture unit should generate INVALID_VALUE
+PASS getError was expected value: INVALID_OPERATION : drawing with 2 different targets on the same texture unit should generate INVALID_VALUE
+PASS successfullyParsed is true
+
+TEST COMPLETE
+

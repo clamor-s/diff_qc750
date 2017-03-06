@@ -1,0 +1,94 @@
+;------------------------------------------------------------------------------
+; These registry values configure the interval of time the Power Manager allows
+; to pass during periods of inactivity before updating the system power state.
+; The sample implementation of the power manager uses them as follows:
+;   On AC power, the system will be in the "On" system power state as ;
+;       long as the UserActivity activity timer has not expired.
+;   Once the UserActivity timer expires, the PM will transition to the
+;       "UserIdle" system power state after ACUserIdle seconds of user
+;       inactivity.
+;   After ACSystemIdle seconds of continued user inactivity, the PM will
+;       transition to the "SystemIdle" system power state.
+;   The PM will keep the system in the SystemIdle power state for as long
+;       as the SystemActivity activity timer has not expired.  Once it expires,
+;       the PM will wait ACSuspend seconds before transitioning to the "Suspend"
+;       system power state.
+; Resetting the UserActivity activity timer at any time prior to entering
+; the Suspend system power state will cause the system to go back to the "On"
+; system power state.  The PM implements a similar algorithm on battery power
+; using the BattUserIdle, BattSystemIdle, and BattSuspend timeouts.
+;
+; OEMs can change this state machine by customizing the PM for their platform.
+;
+; To remove these timeout definitions from the configuration for a platform,
+; include the line:
+
+[-HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power\Timeouts]
+
+[HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power\Timeouts]
+; @CESYSGEN IF PM_PM_DEFAULT_PDD
+    "ACUserIdle"=dword:0                ; disabled
+    "ACSystemIdle"=dword:0              ; disabled
+    "ACSuspend"=dword:0                 ; disabled
+    "BattUserIdle"=dword:0              ; disabled
+    "BattSystemIdle"=dword:0            ; disabled
+    "BattSuspend"=dword:0               ; disabled
+; @CESYSGEN ENDIF ; PM_PM_DEFAULT_PDD
+;------------------------------------------------------------------------------
+; Override SystemIdle power state for the display.
+
+[-HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power\State\SystemIdle\{EB91C7C9-8BF6-4a2d-9AB8-69724EED97D1}]
+
+[HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power\State\SystemIdle\{EB91C7C9-8BF6-4a2d-9AB8-69724EED97D1}]
+    "Default"=dword:0           ; D0 = always on
+
+;------------------------------------------------------------------------------
+; Override desktop resolution for QVGA.
+
+[-HKEY_LOCAL_MACHINE\SOFTWARE\NVIDIA Corporation\NVDDI]
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\NVIDIA Corporation\NVDDI]
+; Enable 2D in display driver
+   "Enable2D"=dword:1
+
+; Disable USB mouse
+   "UsbMouse"=dword:0
+
+; Set (1) to enable cursor. Make sure that SYSGEN_CURSOR is set in the image
+   "HwCursor"=dword:0
+
+; Set Main Panel BPP (Value in HEX)
+; supports only 16 and 32 bpp depths. Others are not supported.
+; If you set bit depth 16 and less it will force to 16 and
+; greater than 16 will be forced to 32 bpp
+   "MainPanelBpp"=dword:10
+   "BootupStyle"=dword:0
+
+; This registry will decide the desktop resolution
+; 240 X 320
+   "DesktopWidth"=dword:0F0
+   "DesktopHeight"=dword:140
+   "DisplayGuid"="ffa_lcd0"
+   "DisableDesktopScaling"=dword:0
+;------------------------------------------------------------------------------
+
+;------------------------------------------------------------------------------
+; Override the touch proxy registry keys to speed up boot times. Without
+; this tchproxy.dll will wait 2 minutes for the touch driver to load.
+
+[-HKEY_LOCAL_MACHINE\System\GWE\TouchProxy]
+
+; touch calibration dll used by touchproxy. Can omit only if touch driver has its own calibration routines
+[HKEY_LOCAL_MACHINE\System\GWE\TouchProxy]
+    "tchcaldll"="tchcaldll.dll"
+; Don't wait more than 1 sec for the touch driver to load.
+    "DriverLoadTimeoutMs"=dword:1000
+
+; @CESYSGEN IF CE_MODULES_DEVICE
+; @CESYSGEN IF COREDLL_BATTERY
+IF BSP_NV_BATTERY
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\Battery]
+   "UseECI"=dword:0 ; Use EC Interface for battery if present
+ENDIF
+; @CESYSGEN ENDIF COREDLL_BATTERY
+; @CESYSGEN ENDIF CE_MODULES_DEVICE

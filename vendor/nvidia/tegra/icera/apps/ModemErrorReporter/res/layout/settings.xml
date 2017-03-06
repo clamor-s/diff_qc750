@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<LinearLayout android:id="@+id/LinearLayout01"
+android:layout_width="fill_parent"
+android:layout_height="fill_parent"
+xmlns:android="http://schemas.android.com/apk/res/android">
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:padding="5dp"
+    android:background="#7cb73c"
+    android:fadeScrollbars="true"
+    android:isScrollContainer="true"
+    android:scrollbars="vertical">
+
+    <TextView android:id="@+id/TextShowSettings"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/TextShowSettings"
+        android:textColor="#000000"
+        android:textSize="37dp"
+        android:paddingTop="6dp"
+        android:paddingBottom="20dp">
+    </TextView>
+
+    <ToggleButton
+        android:id="@+id/ButtonBoot"
+        android:layout_alignTop="@+id/TextBooting"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:enabled="true"
+        android:clickable="true"
+        android:onClick="LaunchSwitch"/>
+
+    <TextView
+        android:id="@+id/TextBooting"
+        android:layout_below="@+id/TextShowSettings"
+        android:text="@string/TextBooting"
+        android:layout_width="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_height="wrap_content"
+        android:paddingTop="7dp"
+        android:textColor="#000000"
+        android:textSize="20dp"/>
+
+    <ToggleButton android:id="@+id/ButtonLog"
+        android:layout_alignTop="@+id/TextLogging"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:enabled="true"
+        android:clickable="true"
+        android:onClick="LoggingSwitch">
+    </ToggleButton>
+
+    <TextView android:text="@string/TextLogging"
+        android:layout_below="@+id/TextBooting"
+        android:id="@+id/TextLogging"
+        android:layout_width="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        android:textColor="#000000"
+        android:textSize="20dp">
+    </TextView>
+
+    <ToggleButton android:id="@+id/ButtonLogcat"
+        android:layout_alignTop="@+id/TextLogcat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:enabled="true"
+        android:clickable="true"
+        android:onClick="LogcatSwitch">
+    </ToggleButton>
+
+    <TextView android:text="@string/TextLogcat"
+        android:layout_below="@+id/TextLogging"
+        android:id="@+id/TextLogcat"
+        android:layout_width="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        android:textColor="#000000"
+        android:textSize="20dp">
+    </TextView>
+
+    <TextView
+        android:id="@+id/TextLoggingSize"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/TextLogcat"
+        android:textColor="#000000"
+        android:textSize="20dp"
+        android:layout_marginTop="25dp"
+        android:text="@string/TextLoggingSize"
+        android:paddingBottom="20dp"/>
+
+    <Spinner
+        android:id="@+id/SpinnerLogSize"
+        android:layout_alignTop="@+id/TextLoggingSize"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:prompt="@string/LogSize"
+        android:layout_centerInParent="true"/>
+
+        <ToggleButton android:id="@+id/ButtonAutoSave"
+        android:layout_alignTop="@+id/TextAutoSave"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:enabled="true"
+        android:clickable="true"
+        android:onClick="AutomaticLogSaving">
+    </ToggleButton>
+
+    <TextView android:text="@string/TextAutoSave"
+        android:layout_below="@+id/TextLoggingSize"
+        android:id="@+id/TextAutoSave"
+        android:layout_width="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        android:textColor="#000000"
+        android:textSize="20dp">
+    </TextView>
+
+</RelativeLayout>
+</LinearLayout>

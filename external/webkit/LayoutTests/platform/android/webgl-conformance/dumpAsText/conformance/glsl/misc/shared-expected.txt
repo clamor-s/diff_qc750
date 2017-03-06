@@ -1,0 +1,10 @@
+test: shared fragment shader should succeed
+test vertex shader
+test fragment shaderPASS shared fragment shader should succeed
+test: shared fragment shader should succeed
+test vertex shader
+test fragment shaderPASS shared fragment shader should succeed
+PASS successfullyParsed is true
+
+TEST COMPLETE
+

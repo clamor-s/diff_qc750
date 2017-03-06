@@ -1,0 +1,8 @@
+This test ensures WebGL implementations correctly clear the drawing buffer on composite if preserveDrawingBuffer is false.
+
+On success, you will see a series of "PASS" messages, followed by "TEST COMPLETE".
+
+
+PASS gl1 != null is true
+PASS gl1.getContextAttributes().preserveDrawingBuffer == false is true
+

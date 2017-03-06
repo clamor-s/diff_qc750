@@ -1,0 +1,12 @@
+package IdlTest {
+    Test,
+    OtherTest
+}
+
+package IdlTest;
+
+interface OtherTest {
+    struct T {
+        NvU32 x;
+    }
+}

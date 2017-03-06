@@ -1,0 +1,285 @@
+#!/usr/bin/env python
+
+"""
+tegra/core/utils/grabtrace/grabtrace
+
+Copyright (c) 2011, NVIDIA CORPORATION, All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are
+met:
+
+Redistributions of source code must retain the above copyright notice,
+this list of conditions and the following disclaimer.
+
+All redistributions of the software (with or without modification),
+whether in source code or binary form, must be made exclusively subject
+to these terms and conditions of this license, and the software
+(with or without modification) may not be redistributed or re-licensed
+under the terms of any other license.
+
+Redistributions in binary form must reproduce the above copyright
+notice, this list of conditions, and the following disclaimer in the
+documenation and/or other materials provided with the disclaimer.
+
+Neither the name of NVIDIA CORPORATION nor the names of its contributors
+may be used to endorse or promote products derived from this software
+without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS
+IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED
+TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
+PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED
+TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+"""
+
+import os
+import sys
+import subprocess
+import zlib
+import re
+import argparse
+
+ADB = "adb "
+DEFAULT_OUTPUT = 'trace.dat'
+TMP_FILE = "." + os.path.basename(__file__)
+
+TRACING_D = "/d/tracing/"
+EVENTS_D = TRACING_D + "events/"
+MAGIC_NUMBER = chr(23) + chr(8) + chr(68) + "tracing"
+VERSION = "6" + chr(0)
+ENDIAN = chr(0)
+LONG = chr(4)
+PAGE_SIZE = 0x1000
+HEADER_PAGE = "header_page"
+HEADER_EVENT = "header_event"
+
+MAGIC = "TRACEDUMP"
+
+def set_commands() :
+    global ADB_SHELL, ADB_LS, ADB_CAT, ADB_PULL
+    ADB_SHELL = ADB + "shell "
+    ADB_LS = ADB_SHELL + "/system/bin/ls -d "
+    ADB_CAT = ADB_SHELL + "cat "
+    ADB_PULL = ADB + "pull "
+
+def percent(percent) :
+    if percent >= 100 :
+        sys.stderr.write("\rdone.\n")
+    else :
+        sys.stderr.write("\r%d%%" % percent)
+
+def echo(x, y) :
+    return get_cmd(ADB_SHELL + '"echo ' + x + ' > ' + y + '"')
+
+def extract_z(data) :
+    # Find chunck of binary
+    mag = re.escape(MAGIC)
+    data = re.search(mag + r'(.*?)' + mag,
+                     data, re.DOTALL)
+    if data == None :
+        sys.exit("ERROR: Could not locate dump data.\n")
+
+    data = data.group(1)
+
+    # Remove statements that appeared while printing compression
+    data = re.sub(r'\[[ \.\d]{12}\](.*?)\n', '', data)
+
+    try :
+        data = zlib.decompress(data)
+    except Exception as e:
+        sys.exit("ERROR: Failed to extract data:\n" + str(e))
+    return data
+
+def extract_cpus(data) :
+    data = extract_z(data)
+    return data.split("CPU_END")[:-1]
+
+def extract_cmdlines(data) :
+    pids = extract_z(data).split("CPU_END")[-1]
+    pids = [" ".join(x.split(" ")[::-1]) for x in pids.split('|')]
+
+    return "\n".join(pids)
+
+def get_cmd(cmd) :
+    p = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE,
+                         universal_newlines=True)
+    result = p.communicate()
+    return result[0]
+
+def pull(filename) :
+    os.system(ADB_PULL + filename + ' ' + TMP_FILE)
+    try :
+        data = open(TMP_FILE).read()
+    except :
+        sys.exit("ERROR: failed to pull file from device using: \n %s" %
+                 ADB_PULL + filename + ' ' + TMP_FILE)
+    os.system('rm ' + TMP_FILE)
+    return data
+
+def cat(filename) :
+    return get_cmd(ADB_CAT + filename)
+
+def ls(directory) :
+    result = get_cmd(ADB_LS + directory + "/")
+    result = re.findall(r'\/[\/\.\w\d]+', result)
+    result = [x[:-1] for x in result]
+    return result
+
+def pr4(x) :
+    mask = 0xff
+    return (chr(x & mask) +
+            chr((x >> 8) & mask) +
+            chr((x >> 16) & mask) +
+            chr((x >> 24) & mask))
+
+def pr8(x) :
+    return pr4(x) + pr4(x >> 32)
+
+def pr_header() :
+    ret = ""
+    ret += MAGIC_NUMBER
+    ret += VERSION
+    ret += ENDIAN
+    ret += LONG
+    ret += pr4(PAGE_SIZE)
+
+    ret += HEADER_PAGE + chr(0)
+    s = cat(EVENTS_D + HEADER_PAGE)
+    ret += pr8(len(s)) + s
+
+    ret += HEADER_EVENT + chr(0)
+    s = cat(EVENTS_D + HEADER_EVENT)
+    ret += pr8(len(s)) + s
+    return ret;
+
+def pr_event(event_dir) :
+    ret = ""
+    events = ls(event_dir + "/*")
+    events.reverse()
+    formats = [x + "/format" for x in events]
+
+    ret += pr4(len(events))
+    cats = [cat(x) for x in formats]
+    ret += "".join([pr8(len(x)) + x for x in cats])
+    return ret
+
+def pr_ftrace() :
+    return pr_event(EVENTS_D + 'ftrace')
+
+def pr_events() :
+    event_dirs = ls(EVENTS_D + "*")
+    event_dirs.remove(EVENTS_D + 'ftrace')
+    event_dirs.remove(EVENTS_D + 'scsi')
+
+    ret = pr4(len(event_dirs))
+    cnt = 10
+    for event_dir in event_dirs :
+        ret += os.path.basename(event_dir) + chr(0)
+        ret += pr_event(event_dir)
+        cnt += int(85 / len(event_dirs))
+        percent(cnt)
+    return ret
+
+def pr_kallsyms() :
+    s = cat("/proc/kallsyms")
+    return pr4(len(s)) + s
+
+def pr_printk_formats() :
+    s = cat(TRACING_D + "printk_formats")
+    return pr4(len(s)) + s
+
+def pr_cmdlines(cmdlines) :
+    return pr8(len(cmdlines)) + cmdlines
+
+def pr_cpus(cpus, start) :
+    ret = ""
+    ret += pr4(len(cpus))
+
+    ret += "options  "
+    # Options here?
+    ret += chr(0) * 3
+
+    ret += "flyrecord" + chr(0)
+    off = start + len(cpus) * 16 # 16 bytes for size + off
+
+    offsets = []
+    for i in range(len(cpus)) :
+        off = (off + PAGE_SIZE-1) & ~(PAGE_SIZE-1)
+        offsets.append(off)
+        ret += pr8(off)
+        ret += pr8(len(cpus[i]))
+        off += len(cpus[i])
+
+    for i in range(len(cpus)) :
+        ret += chr(0) * (offsets[i] - len(ret) - start)
+        ret += cpus[i]
+
+    return ret
+
+def tracedat(data) :
+    cpus = extract_cpus(data)
+    cmdlines = extract_cmdlines(data)
+
+    print >> sys.stderr, "Pulling necessary files from device..."
+    percent(0)
+    buf = ""
+    buf += pr_header()
+    percent(5)
+    buf += pr_ftrace()
+    percent(10)
+    buf += pr_events()
+    percent(95)
+    buf += pr_kallsyms()
+    buf += pr_printk_formats()
+    percent(100)
+    buf += pr_cmdlines(cmdlines)
+    buf += pr_cpus(cpus, len(buf))
+    return buf
+
+def main() :
+
+    desc = "Extract tracing data from device."
+    parser = argparse.ArgumentParser(description=desc)
+
+    parser.add_argument('source', type=str, help='Input file')
+    parser.add_argument('-s', dest='serial', type=str, nargs=1,
+                        help='serial number of device')
+    parser.add_argument('-o', dest='dest', type=str, nargs=1,
+                        default=['trace.dat'],
+                        help='Output file, default: trace.dat')
+    parser.add_argument('-a', '--ascii', action='store_true',
+                        help='''Extract data in ascii format.
+                                Without this, data is extracted
+                                in trace-cmd format''')
+    parser.add_argument('-p', '--pull', action='store_true',
+                        help='Pull source file from device')
+
+    args = parser.parse_args()
+
+    if args.serial :
+        global ADB
+        ADB = ADB + '-s ' + args.serial[0] + ' '
+
+    print "Using adb command: %s" % ADB
+    set_commands()
+
+    if args.pull :
+        data = pull(args.source);
+    else :
+        data = open(args.source).read()
+
+    out = open(args.dest[0], 'w')
+    if args.ascii :
+        out.write(extract_z(data))
+    else :
+        out.write(tracedat(data))
+
+if __name__ == "__main__" :
+    main()

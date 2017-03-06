@@ -1,0 +1,88 @@
+config MRVLSD8787_MLAN
+	tristate "Mrvlsd8787 wireless cards support"
+	depends on MMC
+	select WIRELESS_EXT
+	select WEXT_SPY
+	select WEXT_PRIV
+	---help---
+	  This module adds support for wireless adapters based on
+	  Mrvlsd8787 chipset.
+
+	  This driver uses the kernel's wireless extensions subsystem.
+
+	  If you choose to build a module, it'll be called dhd. Say M if
+	  unsure.
+
+#config MRVLSD8787_SD8XXX
+#	tristate "MRVLSD8787 sd8xxx.ko"
+#	depends on MRVLSD8787_MLAN	
+#	---help---
+#	Initiate broadcast scan (active scan) just after
+#	initializing with network interface.
+
+#if MRVLSD8787_SD8XXX
+if MRVLSD8787_MLAN
+
+config MRVLSD8787_PROC_DEBUG
+	bool "Proc debug file"
+	depends on MRVLSD8787_MLAN
+	default y
+	---help---
+	   Use out of band interrupt for wake on wireless.
+
+config MRVLSD8787_STA_SUPPORT
+	bool "ENABLE STA mode support"
+	depends on MRVLSD8787_MLAN
+	default y
+	---help---
+	   Use out of band interrupt for wake on wireless.
+
+config MRVLSD8787_REASSOCIATION
+	bool "Re-association in driver"
+	depends on MRVLSD8787_MLAN
+	default y
+	---help---
+	   Use out of band interrupt for wake on wireless.
+
+config MRVLSD8787_UAP_SUPPORT
+	bool "Enable AP mode support"
+	depends on MRVLSD8787_MLAN
+	default n
+	---help---
+	   Use out of band interrupt for wake on wireless.
+
+config MRVLSD8787_MFG_CMD_SUPPORT
+	bool "Manufacturing firmware support"
+	depends on MRVLSD8787_MLAN
+	default y
+	---help---
+	   Use out of band interrupt for wake on wireless.
+
+config MRVLSD8787_BIG_ENDIAN
+	bool "Big-endian platform"
+	depends on MRVLSD8787_MLAN
+	default n
+	---help---
+	   Use out of band interrupt for wake on wireless.
+
+config MRVLSD8787_SDIO_MULTI_PORT_TX_AGGR
+	bool "Enable SDIO multi-port Tx aggregation"
+	depends on MRVLSD8787_MLAN
+	default y
+	---help---
+	   Use out of band interrupt for wake on wireless.
+
+config MRVLSD8787_SDIO_MULTI_PORT_RX_AGGR
+	bool "Enable SDIO multi-port Rx aggregation"
+	depends on MRVLSD8787_MLAN
+	default y
+	---help---
+	   Use out of band interrupt for wake on wireless.
+
+config MRVLSD8787_SDIO_SUSPEND_RESUME
+	bool "SDIO suspend/resume"
+	depends on MRVLSD8787_MLAN
+	default y
+	---help---
+	   Use out of band interrupt for wake on wireless.
+endif

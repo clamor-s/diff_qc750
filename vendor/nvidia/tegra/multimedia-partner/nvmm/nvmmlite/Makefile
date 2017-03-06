@@ -1,0 +1,48 @@
+TOPDIR := $(TEGRA_TOP)/core
+include $(TEGRA_TOP)/core-private/make/Makefile.defs
+
+LCDEFS += -DNV_IS_AVP=$(IS_AVP)
+ifeq ($(NV_LOGGER_ENABLED),1)
+  LCDEFS += -DNV_LOGGER_ENABLED=1
+endif
+
+LCDEFS += -DNVMMLITE_BUILT_DYNAMIC=$(NV_DEF_USE_DLL)
+
+SUBDIRS += utils
+
+MODULE_NAME := libnvmmlite
+
+LIB := $(OUTDIR)/$(MODULE_NAME)$(DLL_OR_LIB_SUFFIX)
+TARGETS := $(addprefix $(OUTDIR)/$(MODULE_NAME),$(DLL_OR_LIB_SUFFIXES))
+
+EXPORT_FILES := $(MODULE_NAME).export
+
+LCINCS += $(NVLIB_COMMON_INCLUDES)
+
+ifeq ($(TARGET_OS),winxp)
+  SYSTEM_LDLIBS_DLL += winmm.lib
+endif
+
+C_FILES :=
+C_FILES += nvmmlite.c
+
+OBJS := $(patsubst %.c,$(OUTDIR)/%$(OBJ_SUFFIX),$(notdir $(C_FILES)))
+
+default:
+	$(MAKE) $(LIB)
+	$(NV_INSTALL) -l $(TARGETS) $(INSTALL_TARGET)
+
+$(TARGETS): $(OBJS)
+$(TARGETS): $(OUTDIR)/$(MODULE_NAME).def
+
+ifeq ($(NV_DEF_USE_DLL),1)
+  $(TARGETS): $(NVLIB_NVOS)
+  $(TARGETS): $(NVLIB_NVRM)
+  $(TARGETS): $(NVLIB_NVMM_UTILS)
+  $(TARGETS): $(NVLIB_NVMMLITE_UTILS)
+endif
+
+RELEASE_PACKAGE_TARGETS := $(TARGETS)
+RELEASE_PACKAGE_FILES := $(RELEASE_PACKAGE_TARGETS)
+
+include $(TEGRA_TOP)/core-private/make/Makefile.rules

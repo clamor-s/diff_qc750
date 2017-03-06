@@ -1,0 +1,83 @@
+<html>
+<head>
+<style type="text/css">
+.moving {
+  position: absolute;
+  -webkit-animation: move 0.2s linear forwards;
+  -webkit-transform: translateZ(0px);
+}
+
+@-webkit-keyframes move {
+  from { -webkit-transform: translate3d(0px, 0px, 0px); }
+  to   { -webkit-transform: translate3d(0px, 100px,0px); }
+}
+
+pre {
+  color: white;
+}
+</style>
+</head>
+<body>
+<!-- Tests that changing from non-accelerated to accelerated canvas doesn't lose
+     the animation -->
+<!-- You should see an animation that ends with just a green rectangle visible. -->
+<div style="position: absolute; background-color: red; -webkit-transform: translate3d(0px, 100px, 0px); width: 300px; height: 300px;"></div>
+<script type="text/javascript">
+if (window.layoutTestController) {
+    layoutTestController.waitUntilDone();
+    layoutTestController.dumpAsText(true);
+}
+
+function runTest() {
+    var body = document.getElementsByTagName("body")[0];
+    // Canvases need to be big so that accelerated implementation
+    // is used.
+    var r = document.createElement("canvas");
+    r.width = "300";
+    r.height = "300";
+    r.className = "moving";
+    body.appendChild(r);
+    var rctx = r.getContext("2d");
+    rctx.fillStyle = "#f00";
+    rctx.fillRect(0, 0, r.width, r.height);
+
+    var t = document.createElement("canvas");
+    t.width = "10";
+    t.height = "10";
+    t.className = "moving";
+    var tctx = t.getContext("2d");
+    tctx.fillStyle = "#0f0";
+    tctx.fillRect(0, 0, t.width, t.height);
+    body.appendChild(t);
+    // Change the canvas size of the t canvas.
+    // Use setInterval so that we create multiple frames, which makes
+    // sure that the canvas turns accelerated.
+    var id2 = setInterval(function () {
+        if (t.width != 300) {
+            // Change the size on first iteration.
+            t.width = 300;
+            t.height = 300;
+        }
+        tctx.fillStyle = "#0f0";
+        tctx.fillRect(0, 0, t.width, t.height);
+        rctx.fillStyle = "#f00";
+        rctx.fillRect(0, 0, r.width, r.height);
+    }, 30);
+
+    // FIXME: android doesn't support animation notifications.
+    setTimeout(function () {
+        clearInterval(id2);
+        if (window.layoutTestController) {
+            var layerTree = layoutTestController.layerTreeAsText();
+            document.getElementById("layerTree").innerHTML = "<pre>" + layerTree + "</pre>";
+            layoutTestController.notifyDone();
+        }
+    }, 300);
+}
+runTest();
+
+</script>
+<pre id="layerTree">
+</pre>
+</body>
+</html>

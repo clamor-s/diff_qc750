@@ -1,0 +1,51 @@
+#!/bin/sh
+
+#
+# Copyright (c) 2005-2008 Trusted Logic S.A.
+# All Rights Reserved.
+#
+# This software is the confidential and proprietary information of
+# Trusted Logic S.A. ("Confidential Information"). You shall not
+# disclose such Confidential Information and shall use it only in
+# accordance with the terms of the license agreement you entered
+# into with Trusted Logic S.A.
+#
+# TRUSTED LOGIC S.A. MAKES NO REPRESENTATIONS OR WARRANTIES ABOUT THE
+# SUITABILITY OF THE SOFTWARE, EITHER EXPRESS OR IMPLIED, INCLUDING
+# BUT NOT LIMITED TO THE IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS
+# FOR A PARTICULAR PURPOSE, OR NON-INFRINGEMENT. TRUSTED LOGIC S.A. SHALL
+# NOT BE LIABLE FOR ANY DAMAGES SUFFERED BY LICENSEE AS A RESULT OF USING,
+# MODIFYING OR DISTRIBUTING THIS SOFTWARE OR ITS DERIVATIVES.
+#
+
+SCRIPT_FILENAME=`which $0`
+SCRIPT_DIR=`dirname $SCRIPT_FILENAME`
+#
+# Search for Python version 2.5
+#
+
+PYTHONTESTDIR=$SCRIPT_DIR
+
+while true; do
+   if [ -f "$PYTHONTESTDIR/python/lib/python25.zip" ]; then
+      export PYTHONHOME="$PYTHONTESTDIR/python/ix86_linux"
+      break;
+   elif [ -f "$PYTHONTESTDIR/externals/python/lib/python25.zip" ]; then
+      export PYTHONHOME="$PYTHONTESTDIR/externals/python/ix86_linux"
+      break;
+   elif [ -f "$PYTHONTESTDIR/unsupported/python/lib/python25.zip" ]; then
+      export PYTHONHOME="$PYTHONTESTDIR/unsupported/python/ix86_linux"
+      break;
+   fi
+   if [ `ls -i -d $PYTHONTESTDIR/.. | cut -d " " -f 1` -eq `ls -i -d $PYTHONTESTDIR | cut -d " " -f 1` ]; then
+      # We are at the top of the file-system...
+      echo Cannot find suitable copy of Python 2.5
+      exit 3
+   fi
+      
+   PYTHONTESTDIR=$PYTHONTESTDIR/..
+done
+
+export PYTHONPATH=$PYTHONHOME/../lib/python25.zip
+$PYTHONHOME/python $SCRIPT_DIR/tf_client_sign.py $@
+ 

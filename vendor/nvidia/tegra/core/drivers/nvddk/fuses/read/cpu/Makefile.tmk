@@ -1,0 +1,55 @@
+################################### tell Emacs this is a -*- makefile-gmake -*-
+#
+# Copyright (c) 2012, NVIDIA CORPORATION.  All Rights Reserved.
+#
+# NVIDIA CORPORATION and its licensors retain all intellectual property
+# and proprietary rights in and to this software, related documentation
+# and any modifications thereto.  Any use, reproduction, disclosure or
+# distribution of this software and related documentation without an express
+# license agreement from NVIDIA CORPORATION is strictly prohibited.
+#
+# tmake for SW Mobile component makefile
+#
+# libnvddk_fuse_read_cpu library component makefile
+#
+###############################################################################
+
+ifdef NV_COMPONENT_FLAG_STATIC_LIBRARY_SECTION
+include $(NV_BUILD_START_COMPONENT)
+
+NV_COMPONENT_NAME              := libnvddk_fuse_read_cpu
+NV_COMPONENT_OWN_INTERFACE_DIR := .
+NV_COMPONENT_SOURCES           := \
+	../nvddk_fuse_read.c \
+	../ap20/nvddk_ap20_fuse_priv.c \
+	../t30/nvddk_t30_fuse_priv.c
+NV_COMPONENT_INCLUDES          := \
+	../../../../hwinc \
+	../../common \
+	../../../../nvboot/fuses
+
+ifeq ($(NV_BUILD_CONFIGURATION_IS_CSIM),1)
+    NV_COMPONENT_CFLAGS += -DNVODM_BOARD_IS_SIMULATION=1
+else
+    NV_COMPONENT_CFLAGS += -DNVODM_BOARD_IS_SIMULATION=0
+endif
+
+NV_COMPONENT_CFLAGS += -DADDITIONAL_FUNCTIONALITY=1
+
+NV_COMPONENT_HAS_BROKEN_CODE := \
+	cast-align \
+	missing-field-initializers
+
+#
+# Generating the code compatible with CPU
+#
+NV_COMPONENT_CODE_GENERATION   :=
+
+include $(NV_BUILD_STATIC_LIBRARY)
+endif
+
+# Local Variables:
+# indent-tabs-mode: t
+# tab-width: 8
+# End:
+# vi: set tabstop=8 noexpandtab:

@@ -1,0 +1,111 @@
+################################### tell Emacs this is a -*- makefile-gmake -*-
+#
+# Copyright (c) 2012 NVIDIA CORPORATION.  All Rights Reserved.
+#
+# NVIDIA CORPORATION and its licensors retain all intellectual property
+# and proprietary rights in and to this software, related documentation
+# and any modifications thereto.  Any use, reproduction, disclosure or
+# distribution of this software and related documentation without an express
+# license agreement from NVIDIA CORPORATION is strictly prohibited.
+#
+# tmake for SW Mobile component makefile
+#
+# libnvodm_imager shared library
+#
+###############################################################################
+
+ifdef NV_COMPONENT_FLAG_SHARED_LIBRARY_SECTION
+include $(NV_BUILD_START_COMPONENT)
+
+NV_COMPONENT_NAME                  := nvodm_imager
+NV_COMPONENT_OWN_INTERFACE_DIR     := .
+NV_COMPONENT_SOURCES               := \
+	../imager_hal.c \
+	../imager_util.c \
+	../sensor_yuv_ov5640.c \
+	../sensor_yuv_soc380.c \
+	../sensor_bayer_ov5630.c \
+	../sensor_bayer_ov5650.c \
+	../sensor_bayer_ov9726.c \
+	../sensor_bayer_ov14810.c \
+	../sensor_bayer_ov2710.c \
+	../sensor_bayer_ar0832.c \
+	../sensor_null.c \
+	../sensor_host.c \
+	../focuser_ad5820.c \
+	../focuser_sh532u.c \
+	../focuser_ar0832.c \
+	../focuser_nvc.c \
+	../flash_ltc3216.c \
+	../flash_ssl3250a.c \
+	../flash_tps61050.c \
+	../torch_nvc.c
+
+# Note that we have added core/include below to make sure its included before
+# kernel/include which also contains same headers with diffrent content
+NV_COMPONENT_INCLUDES              := \
+	../configs \
+	../include \
+	$(NV_SOURCE)/core/include \
+	$(NV_SOURCE)/camera/core/include \
+	$(NV_SOURCE)/customers/nvidia-partner/template/odm_kit/query/include
+
+ifneq ($(NV_BUILD_CONFIGURATION_IS_ANDROID),1)
+NV_COMPONENT_INCLUDES              += \
+	$(NV_SOURCE)/kernel/include \
+	$(NV_SOURCE)/kernel/arch/arm/include
+endif
+
+NV_COMPONENT_NEEDED_INTERFACE_DIRS := \
+	$(NV_SOURCE)/core/drivers/nvodm/query \
+	$(NV_SOURCE)/core/utils/nvos \
+	$(NV_SOURCE)/core/drivers/nvrm \
+	$(NV_SOURCE)/core/drivers/nvrm/graphics
+
+NV_COMPONENT_NEEDED_STATIC_INTERFACE_DIRS := \
+	$(NV_SOURCE)/core/drivers/nvodm/services
+
+ifeq ($(NV_TARGET_REFERENCE_BOARD),cardhu)
+NV_COMPONENT_NEEDED_STATIC_INTERFACE_DIRS += \
+	$(NV_SOURCE)/core-private/drivers/nvddk/fuse
+endif
+
+NV_COMPONENT_CFLAGS                += \
+	-DBUILD_FOR_AOS=0
+
+ifeq ($(NV_TARGET_REFERENCE_BOARD),aruba2)
+NV_COMPONENT_CFLAGS            += -DBUILD_FOR_ARUBA=1
+else ifeq ($(NV_TARGET_REFERENCE_BOARD),cardhu)
+NV_COMPONENT_CFLAGS            += -DBUILD_FOR_CARDHU=1
+else ifeq ($(NV_TARGET_REFERENCE_BOARD),e1853)
+# nothing
+else ifeq ($(NV_TARGET_REFERENCE_BOARD),enterprise)
+# nothing
+else ifeq ($(NV_TARGET_REFERENCE_BOARD),harmony)
+NV_COMPONENT_CFLAGS            += -DBUILD_FOR_HARMONY=1
+else ifeq ($(NV_TARGET_REFERENCE_BOARD),kai)
+NV_COMPONENT_CFLAGS            += -DBUILD_FOR_KAI=1
+else ifeq ($(NV_TARGET_REFERENCE_BOARD),p852)
+# nothing
+else ifeq ($(NV_TARGET_REFERENCE_BOARD),p1852)
+NV_COMPONENT_CFLAGS            += -DBUILD_FOR_P1852=1
+else ifeq ($(NV_TARGET_REFERENCE_BOARD),e1853)
+NV_COMPONENT_CFLAGS            += -DBUILD_FOR_E1853=1
+else ifeq ($(NV_TARGET_REFERENCE_BOARD),ventana)
+NV_COMPONENT_CFLAGS            += -DBUILD_FOR_VENTANA=1
+else ifeq ($(NV_TARGET_REFERENCE_BOARD),whistler)
+NV_COMPONENT_CFLAGS            += -DBUILD_FOR_WHISTLER=1
+else
+$(error unsupported board configuration '$(NV_TARGET_REFERENCE_BOARD)' for nvodm_imager)
+endif
+
+NV_COMPONENT_HAS_BROKEN_CODE   := ignore-all
+
+include $(NV_BUILD_SHARED_LIBRARY)
+endif
+
+# Local Variables:
+# indent-tabs-mode: t
+# tab-width: 8
+# End:
+# vi: set tabstop=8 noexpandtab:

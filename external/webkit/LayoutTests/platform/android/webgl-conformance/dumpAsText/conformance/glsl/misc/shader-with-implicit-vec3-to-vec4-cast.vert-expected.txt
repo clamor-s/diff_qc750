@@ -1,0 +1,13 @@
+CONSOLE MESSAGE: line 24: *** Error compiling shader '[object WebGLShader]':ERROR: 0:6: 'assign' :  cannot convert from '3-component vector of float' to 'Position highp 4-component vector of float'
+
+vertex shader that implicit vec3 to vec4 cast should fail
+
+On success, you will see a series of "PASS" messages, followed by "TEST COMPLETE".
+
+test: vertex shader that implicit vec3 to vec4 cast should fail
+test vertex shader
+default fragment shaderPASS vertex shader that implicit vec3 to vec4 cast should fail
+PASS successfullyParsed is true
+
+TEST COMPLETE
+

@@ -1,0 +1,22 @@
+texImage2D and texSubImage2D tests with invalid data
+
+On success, you will see a series of "PASS" messages, followed by "TEST COMPLETE".
+
+PASS Context created.
+Passing a buffer not large enough to texImage2D should generate an INVALID_OPERATION
+PASS getError was expected value: INVALID_OPERATION : 
+Passing texImage2D parameter data of Number type should throw an exception
+PASS threw exception
+Passing texImage2D parameter data of String type should throw a TypeError
+PASS threw exception
+Passing a buffer not large enough to texSubImage2D should generate an INVALID_OPERATION
+PASS getError was expected value: INVALID_OPERATION : 
+Passing texSubImage2D parameter data of Number type should throw a TypeError
+PASS threw exception
+Passing texSubImage2D parameter data of String type should throw a TypeError
+PASS threw exception
+
+PASS successfullyParsed is true
+
+TEST COMPLETE
+

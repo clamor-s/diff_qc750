@@ -1,0 +1,132 @@
+NvMMUtilAllocateBuffer@1
+NvMMUtilDeallocateBuffer@2
+NvMMUtilDeallocateBlockSideBuffer@3
+NvMMUtilAllocateVideoBuffer@4
+NvMMUtilDeallocateVideoBuffer@5
+NvmmSetOffsetListStatus@17
+NvmmPushToOffsetList@18
+NvmmPopFromOffsetList@19
+NvmmUpdateOffsetList@20
+NvmmSetBaseAddress@21
+NvmmGetBaseAddress@22
+NvmmSetMaxOffsets@23
+NvmmResetOffsetList@24
+NvmmGetNumOfOffsets@25
+NvmmGetOffsetListStatus@26
+NvmmGetReadBuffBaseAddress@27
+NvmmGetNumOfBuffMgrIndexs@28
+NvmmSetReadBuffBaseAddress@29
+NvmmGetNumOfValidOffsets@30
+cpu_only NvmmUlpSetKpiMode@31
+cpu_only NvmmUlpGetKpiMode@32
+cpu_only NvmmUlpKpiLoggerInit@33
+cpu_only NvmmUlpKpiLoggerDeInit@34
+cpu_only NvmmUlpKpiSetLogger@35
+cpu_only NvmmUlpKpiGetLogger@36
+cpu_only NvmmUlpKpiSetSongDuration@37
+cpu_only NvmmUlpKpiSetReadStartTime@38
+cpu_only NvmmUlpKpiSetReadEndTime@39
+cpu_only NvmmUlpKpiSetParseStartTime@40
+cpu_only NvmmUlpKpiSetParseEndTime@41
+cpu_only NvmmUlpKpiSetIdleStartTime@42
+cpu_only NvmmUlpKpiSetIdleEndTime@43
+cpu_only NvmmUlpKpiGetParseTimeIdleTimeRatio@44
+cpu_only NvmmUlpKpiGetAverageTimeBwReadRequests@45
+cpu_only NvmmUlpKpiGetTotalReadRequests@46
+cpu_only NvmmUlpKpiPrintAllKpis@47
+cpu_only NvmmUlpKpiGetSongDuration@48
+cpu_only NvmmUlpKpiGetTotalTimeSpent@49
+cpu_only NvmmUlpKpiGetTotalIdleTime@50
+cpu_only NvmmUlpKpiGetTotalParseTime@51
+cpu_only NvmmUlpKpiGetTotalReadTime@52
+cpu_only NvmmUlpKpiGetTotalTimeBwReads@53
+cpu_only NvmmUlpUpdateKpis@54
+cpu_only NvMMUtilAllocateSurfaces@55
+cpu_only NvMMUtilDestroySurfaces@56
+NvMMBufMgrInit@57
+NvMMBufMgrDeinit@58
+NvMMBufMgrAlloc@59
+NvMMBufMgrFree@60
+NvMMBufMgrGetTotalFreeMemoryAvailable@61
+NvMMBufMgrGetLargestFreeChunkAvailable@62
+NvMMUtilAddBufferProfilingEntry@63
+NvMMUtilDumpBufferProfilingData@64
+
+
+NvMMQueueEnQ@65
+NvMMQueueDeQ@66
+NvMMQueueCreate@67
+NvMMQueueDestroy@68
+NvMMQueueGetNumEntries@69
+NvMMQueuePeek@70
+NvMMQueuePeekEntry@71
+
+NvMMInitMediaClocks@72
+NvMMDeInitMediaClocks@73
+NvMMCreateMediaClock@74
+NvMMDestroyMediaClock@75
+NvMMRegisterClockCallback@76
+NvMMSupplyReferenceTime@77
+NvMMSetReference@78
+NvMMGetTime@79
+NvMMGetTimeUntilMediaTime@80
+NvMMWaitUntilMediaTime@81
+NvMMSetClockRate@82
+NvMMGetClockRate@83
+NvMMSetStartTime@84
+NvMMStartClock@85
+NvMMStopClock@86
+NvMMWaitForVideoToStart@87
+NvMMSetWaitForAudio@88
+NvMMSetWaitForVideo@89
+NvMMUnblockWaitUntilMediaTime@90
+
+NvMMCreateSock@91
+NvMMDestroySock@92
+NvMMSetNonBlocking@93
+NvMMReadSock@94
+NvMMWriteSock@95
+NvMMOpenTCP@96
+NvMMCloseTCP@97
+NvMMOpenUDP@98
+NvMMSetUDPPort@99
+NvMMCloseUDP@100
+NvMMNToHL@101
+NvMMSplitURL@102
+NvMMSockReadFullBuffer@103
+NvMMSockGetReply@104
+NvMMSockGetLine@105
+NvMMSockConnectHTTP@106
+NvMMSockGetHTTPFile@107
+
+NvMMUtilFilenameToParserType@108
+NvMMUtilConvertNvMMParserCoreType@109
+
+NvMMReadSockMultiple@110
+NvMMQueueInsertHead@111
+NvMMHToNL@112
+
+NvMMUtilGuessFormatFromFile@113
+
+NvMetaFileParserOpen@114
+NvMetaFileParserClose@115
+NvGetMetaFileInfo@116
+NvMemAlloc@117
+NvMemFree@118
+
+NvMMSockPOSTHTTPFile@119
+NvMMSockConnectHTTPPOST@120
+
+NvMMGetUserAgentString@121
+
+NvLoggerPrint@122
+NvLoggerGetLevel@123
+
+NvMMSetUserAgentString@124
+NvMMSockSetBlockActivity@125
+NvMMSockGetBlockActivity@126
+NvMMGetUAProfAgentString@127
+NvMMSetUAProfAgentString@128
+
+NvMMIsUsingNewAVP@129
+

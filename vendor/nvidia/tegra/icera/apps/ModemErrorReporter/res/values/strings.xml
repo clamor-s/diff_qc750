@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<resources>
+    <string name="AppName">IDA</string>
+    <string name="AppNameSettings">IDA SETTINGS</string>
+    <string name="AppNameDisplayInfo">DISPLAY LOGS / INFO</string>
+    <string name="last_kmsg_filename">/data/dontpanic/last_kmsg</string>
+    <string name="last_coredump">/data/rfs/data/debug/crash_dump00001.zip</string>
+    <string name="TextGetLogs">Press to get logs!</string>
+    <string name="AppStarted">Application started</string>
+    <string name="TextLogging">Enable modem logging</string>
+    <string name="TextLogcat">Enable logcat logging</string>
+    <string name="TextLoggingSize">Set logging size</string>
+    <string name="TextDisablingLP0">LP0 and Auto suspend</string>
+    <string name="TextLogName">Log Directory</string>
+    <string name="TextComment">Add a comment here</string>
+    <string name="TextMarkerComment">Add a Marker comment here</string>
+    <string name="TextShowSettings">Settings</string>
+    <string name="TextShowAutoSaving">Automatic Log Saving</string>
+    <string name="ButtonShowAutoSave">Show Automatic Log Directories</string>
+    <string name="ButtonTextSave">Save logs</string>
+    <string name="ButtonTextDiscard">Delete logs</string>
+    <string name="ButtonTextSettings">Settings</string>
+    <string name="ButtonTextDisplayInfo">Display Logs/Info</string>
+    <string name="TextProgress">Saving progress</string>
+    <string name="TextBooting">Start IDA when device starts</string>
+    <string name="TextAutoSave">Save logs automatically</string>
+    <string name="LogSize">Choose Log size</string>
+    <string name="Space">______________________________________________</string>
+    <string name="InsertMarker">Insert Marker</string>
+    <string-array name="PossibleSize">
+        <item>50Mo (5x10)</item>
+        <item>100Mo (5x20)</item>
+        <item>150Mo (5x30)</item>
+        <item>200Mo (5x40)</item>
+        <item>250Mo (5x50)</item>
+        <item>300Mo (5x60)</item>
+    </string-array>
+
+</resources>

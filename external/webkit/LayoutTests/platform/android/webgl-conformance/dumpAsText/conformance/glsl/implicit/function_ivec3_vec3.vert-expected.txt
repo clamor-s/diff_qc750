@@ -1,0 +1,14 @@
+CONSOLE MESSAGE: line 24: *** Error compiling shader '[object WebGLShader]':ERROR: 0:7: 'foo' : no matching overloaded function found 
+ERROR: 0:7: '=' :  cannot convert from 'const mediump float' to '3-component vector of float'
+
+implicit cast of ivec3 to vec3 in function argument should fail
+
+On success, you will see a series of "PASS" messages, followed by "TEST COMPLETE".
+
+test: implicit cast of ivec3 to vec3 in function argument should fail
+test vertex shader
+default fragment shaderPASS implicit cast of ivec3 to vec3 in function argument should fail
+PASS successfullyParsed is true
+
+TEST COMPLETE
+

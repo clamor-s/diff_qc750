@@ -1,0 +1,105 @@
+################################### tell Emacs this is a -*- makefile-gmake -*-
+#
+# Copyright (c) 2011-2012, NVIDIA CORPORATION.  All rights reserved.
+#
+# NVIDIA CORPORATION and its licensors retain all intellectual property
+# and proprietary rights in and to this software, related documentation
+# and any modifications thereto.  Any use, reproduction, disclosure or
+# distribution of this software and related documentation without an express
+# license agreement from NVIDIA CORPORATION is strictly prohibited.
+#
+# tmake for SW Mobile component makefile
+#
+# nvos/aos AVP specific component makefile
+#
+###############################################################################
+
+ifdef NV_COMPONENT_FLAG_STATIC_LIBRARY_SECTION
+include $(NV_BUILD_START_COMPONENT)
+
+NV_COMPONENT_NAME            := libavpmain_avp_nvos
+NV_COMPONENT_SOURCES         := \
+	aos_avpdebugsemi_stub.c \
+	../aos_print.c \
+	../aos_process_args.c \
+	../aos_profile.c \
+	../aos_semi_uart.c \
+	../aos_semi_rvice.c \
+	../dlmalloc.c \
+	../nvos_aos.c \
+	../nvos_aos_core.c \
+	../nvos_aos_semi.c \
+	../nvap/aos_avp.c \
+	../nvap/aos_avp_cache_t30.c \
+	../nvap/aos_avp_t30.c \
+	../nvap/init_avp.c \
+	../../nvos_alloc.c \
+	../../nvos_debug.c \
+	../../nvos_file.c \
+	../../nvos_pointer_hash.c \
+	../../nvos_thread_no_coop.c \
+	../../nvos_trace.c \
+	../../../nvosutils/nvuhash.c \
+	../../../nvosutils/nvustring.c
+NV_COMPONENT_SOURCES_PREPROCESSED := \
+	../nvap/avp_override.S
+
+ifdef NV_BUILD_CONFIGURATION_IS_MICROBOOT
+NV_COMPONENT_SOURCES         += \
+	../nvap/nvos_aos_gcc_avp.c \
+	../nvap/nvos_aos_libc.c
+# must override NV_IS_AVP definition for this component
+NV_COMPONENT_CFLAGS += \
+	-UNV_IS_AVP -DNV_IS_AVP=1
+NV_COMPONENT_HAS_BROKEN_CODE := \
+	address \
+	return-type
+endif
+
+NV_COMPONENT_CFLAGS += \
+	-DNVAOS_SHELL=1
+
+ifeq ($(NV_TARGET_SOC),ap20)
+NV_COMPONENT_CFLAGS += \
+	-DCONFIG_PLLP_BASE_AS_408MHZ=0 \
+	-DAES_KEYSCHED_LOCK_WAR_BUG_598910=1 \
+	-DSE_AES_KEYSCHED_READ_LOCK=0
+else
+NV_COMPONENT_CFLAGS += \
+	-DCONFIG_PLLP_BASE_AS_408MHZ=1 \
+	-DAES_KEYSCHED_LOCK_WAR_BUG_598910=0 \
+	-DSE_AES_KEYSCHED_READ_LOCK=1
+endif
+ifeq ($(NV_TARGET_BOOTLOADER_PINMUX),kernel)
+NV_COMPONENT_CFLAGS += -DSET_KERNEL_PINMUX
+endif
+
+# TODO: Are core-private includes going to be a problem?
+NV_COMPONENT_INCLUDES := \
+	.. \
+	../.. \
+	../../../../drivers/hwinc \
+	../../../../drivers/nvrm/nvrmkernel/core \
+	$(NV_SOURCE)/core-private/drivers/hwinc \
+	$(NV_SOURCE)/core/drivers/hwinc/$(NV_TARGET_SOC_FAMILY) \
+	$(NV_SOURCE)/core-private/drivers/hwinc/$(NV_TARGET_SOC_FAMILY) \
+	$(NV_SOURCE)/core-private/include
+
+# add Nvidia POSIX headers for environments that don't have them
+ifneq ($(filter rvds_%,$(NV_TARGET_ARCH)),)
+NV_COMPONENT_INCLUDES += \
+	../../../../include/nvposix
+endif
+
+NV_COMPONENT_FLAG_OWN_INTERFACE_HAS_IDL_FILES := 1
+NV_COMPONENT_FLAG_USES_GENERATED_FILES        := 1
+
+nvos_swi_client.h: $(NV_SOURCE)/core-private/make/swigen.py
+	python $< -client NvOs >$@
+endif
+
+# Local Variables:
+# indent-tabs-mode: t
+# tab-width: 8
+# End:
+# vi: set tabstop=8 noexpandtab:

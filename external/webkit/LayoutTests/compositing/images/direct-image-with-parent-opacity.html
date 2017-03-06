@@ -1,0 +1,24 @@
+<body>
+<!-- you should see one image without opacity and three images with similar opacity -->
+<img src="../resources/simple_image.png" />
+<img style="opacity:0.5" src="../resources/simple_image.png" />
+<div style="-webkit-transform: translateZ(0px); opacity: 0.5">
+<img style="-webkit-transform: translateZ(0px);" src="../resources/simple_image.png" />
+</div>
+<img style="-webkit-transform: translateZ(0px); opacity: 0.5" src="../resources/simple_image.png" />
+<pre style="opacity:0" id="layerTree">
+layertree goes here.
+</pre>
+<script type="text/javascript">
+if (window.layoutTestController) {
+    layoutTestController.dumpAsText(true);
+    layoutTestController.waitUntilDone();
+}
+setTimeout(function() {
+    if (window.layoutTestController) {
+        document.getElementById('layerTree').innerHTML = layoutTestController.layerTreeAsText();
+        layoutTestController.notifyDone();
+    }
+}, 30);
+</script>
+</body>

@@ -1,0 +1,72 @@
+/dev/tegra-throughput	0666	system	system
+/dev/knvmap     0660    system  system
+/dev/nvmap      0666    system  system
+/dev/tegra_avp  0660    media   media
+/dev/tegra_avpchannel   0660    media   media
+/dev/tegra_audio_avpchannel	0660	media	media
+/dev/tegra_rpc  0660    media   media
+/dev/tegra_sema	0660    media   media
+/dev/tegra_mediaserver  0660    media   media
+/dev/ov2710     0660    media   camera
+/dev/tegra_camera 0660  media   camera
+/dev/camera*    0660    media   camera
+/dev/focuser*   0660    media   camera
+/dev/torch*     0660    media   camera
+/dev/video0     0660    media   camera
+/dev/video1     0660    media   camera
+/dev/spdif*     0660    system  audio
+/dev/tegra_dc*  0660    system  system
+/dev/ttyACM*    0660    radio   system
+/dev/ttyACM2    0660    radio   log
+/dev/nvhdcp0    0666    system  system
+/dev/nvhdcp1    0666    system  system
+/dev/nvhost-ctrl	0666	root	root
+/dev/nvhost-display	0666	root	root
+/dev/nvhost-dsi	0666	root	root
+/dev/nvhost-gr2d	0666	root	root
+/dev/nvhost-gr3d	0666	root	root
+/dev/nvhost-isp	0666	root	root
+/dev/nvhost-mpe	0666	root	root
+/dev/nvhost-vi	0666	root	root
+/dev/tf_driver  0666    system  system
+/dev/ttyHS1	0664	root	system
+/dev/ttyHS2	0660	bluetooth	bluetooth
+#for FM V4L2 Radio
+/dev/radio      0666    system  radio
+/dev/mpu        0640    system  system
+/dev/mpuirq     0640    system  system
+/dev/accelirq   0640    system  system
+/dev/timerirq   0640    system  system
+/dev/raydium_ts 0777    system  system
+/dev/ion        0666    system  system
+/dev/timerinfo  0444    system  system
+/dev/pn544      0660    nfc     nfc
+/sys/devices/system/cpu/cpufreq/gov_interactive* ../interactive/max_boost 0644 system system
+/sys/devices/system/cpu/cpufreq/gov_interactive* ../interactive/go_maxspeed_load 0644 system system
+/dev/cbus_freq_max	0660	system	system
+/dev/cbus_freq_min	0660	system	system
+/dev/bma250  0666    system  system
+/dev/akm8975_aot  0666    system  system
+/dev/akm8975_dev  0666    system  system
+/dev/gc0308    0660    media   camera
+/dev/hm2057    0660    media   camera
+/dev/t8ev5    0660    media   camera
+/dev/dmard06  0666    system  system
+/sys/class/accelemeter/dmard06/   enable_acc      0666  system   system
+/sys/class/accelemeter/dmard06/   delay_acc      0666  system   system
+/dev/NVTflash	0666	system	system
+/dev/kionix_accel  0666          system   system
+/sys/devices/platform/tegra-i2c.0/i2c-0/0-000f enable 0664 system system
+/sys/devices/platform/tegra-i2c.0/i2c-0/0-000f cali 0664 system system
+/sys/devices/platform/tegra-i2c.0/i2c-0/0-000f direct 0664 system system
+/sys/devices/platform/tegra-i2c.0/i2c-0/0-000f delay 0664 system system
+/dev/elan-epl6814	0666	system	system
+/dev/lis3dh_acc        0666    system  system
+
+# add by vin for usi_3g_module
+/dev/ttyUSB*              0666   radio      radio
+/dev/ttyACM*              0666   radio      radio
+
+# for Bluetooth
+/dev/hci_tty              0666   bluetooth bluetooth
+

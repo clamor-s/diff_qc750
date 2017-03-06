@@ -1,0 +1,112 @@
+Testing GLSL feature: atan
+
+On success, you will see a series of "PASS" messages, followed by "TEST COMPLETE".
+
+
+Testing: atan(float) in vertex shader
+
+test vertex shader
+test fragment shader
+PASS getError was expected value: NO_ERROR : no errors from draw
+PASS getError was expected value: NO_ERROR : no errors from draw
+
+ref
+
+test
+
+PASS images are the same
+
+Testing: atan(vec2) in vertex shader
+
+test vertex shader
+test fragment shader
+PASS getError was expected value: NO_ERROR : no errors from draw
+PASS getError was expected value: NO_ERROR : no errors from draw
+
+ref
+
+test
+
+PASS images are the same
+
+Testing: atan(vec3) in vertex shader
+
+test vertex shader
+test fragment shader
+PASS getError was expected value: NO_ERROR : no errors from draw
+PASS getError was expected value: NO_ERROR : no errors from draw
+
+ref
+
+test
+
+PASS images are the same
+
+Testing: atan(vec4) in vertex shader
+
+test vertex shader
+test fragment shader
+PASS getError was expected value: NO_ERROR : no errors from draw
+PASS getError was expected value: NO_ERROR : no errors from draw
+
+ref
+
+test
+
+PASS images are the same
+
+Testing: atan(float) in fragment shader
+
+test vertex shader
+test fragment shader
+PASS getError was expected value: NO_ERROR : no errors from draw
+PASS getError was expected value: NO_ERROR : no errors from draw
+
+ref
+
+test
+
+PASS images are the same
+
+Testing: atan(vec2) in fragment shader
+
+test vertex shader
+test fragment shader
+PASS getError was expected value: NO_ERROR : no errors from draw
+PASS getError was expected value: NO_ERROR : no errors from draw
+
+ref
+
+test
+
+PASS images are the same
+
+Testing: atan(vec3) in fragment shader
+
+test vertex shader
+test fragment shader
+PASS getError was expected value: NO_ERROR : no errors from draw
+PASS getError was expected value: NO_ERROR : no errors from draw
+
+ref
+
+test
+
+PASS images are the same
+
+Testing: atan(vec4) in fragment shader
+
+test vertex shader
+test fragment shader
+PASS getError was expected value: NO_ERROR : no errors from draw
+PASS getError was expected value: NO_ERROR : no errors from draw
+
+ref
+
+test
+
+PASS images are the same
+PASS successfullyParsed is true
+
+TEST COMPLETE
+

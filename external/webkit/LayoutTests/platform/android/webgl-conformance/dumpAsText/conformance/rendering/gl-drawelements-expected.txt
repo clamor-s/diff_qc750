@@ -1,0 +1,14 @@
+WebGL drawElements Test
+
+On success, you will see a series of "PASS" messages, followed by "TEST COMPLETE".
+
+PASS getError was expected value: NO_ERROR : can call gl.DrawElements with UNSIGNED_SHORT
+PASS getError was expected value: NO_ERROR : can call gl.DrawElements with UNSIGNED_BYTE
+PASS getError was expected value: INVALID_ENUM : gl.DrawElements with QUAD_STRIP should return INVALID_ENUM
+PASS getError was expected value: INVALID_ENUM : gl.DrawElements with QUADS should return INVALID_ENUM
+PASS getError was expected value: INVALID_ENUM : gl.DrawElements with POLYGON should return INVALID_ENUM
+PASS getError was expected value: INVALID_ENUM : gl.DrawElements should return INVALID_ENUM with UNSIGNED_INT
+PASS successfullyParsed is true
+
+TEST COMPLETE
+

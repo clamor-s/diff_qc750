@@ -1,0 +1,11 @@
+fragment shader that expects GL_ES == 1 should succeed
+
+On success, you will see a series of "PASS" messages, followed by "TEST COMPLETE".
+
+test: fragment shader that expects GL_ES == 1 should succeed
+default vertex shader
+test fragment shaderPASS fragment shader that expects GL_ES == 1 should succeed
+PASS successfullyParsed is true
+
+TEST COMPLETE
+

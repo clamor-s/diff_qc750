@@ -1,0 +1,128 @@
+Testing GLSL feature: fract
+
+On success, you will see a series of "PASS" messages, followed by "TEST COMPLETE".
+
+
+Testing: fract(float) in vertex shader
+
+reference vertex shader
+reference fragment shader
+test vertex shader
+test fragment shader
+PASS getError was expected value: NO_ERROR : no errors from draw
+PASS getError was expected value: NO_ERROR : no errors from draw
+
+ref
+
+test
+
+PASS images are the same
+
+Testing: fract(vec2) in vertex shader
+
+reference vertex shader
+reference fragment shader
+test vertex shader
+test fragment shader
+PASS getError was expected value: NO_ERROR : no errors from draw
+PASS getError was expected value: NO_ERROR : no errors from draw
+
+ref
+
+test
+
+PASS images are the same
+
+Testing: fract(vec3) in vertex shader
+
+reference vertex shader
+reference fragment shader
+test vertex shader
+test fragment shader
+PASS getError was expected value: NO_ERROR : no errors from draw
+PASS getError was expected value: NO_ERROR : no errors from draw
+
+ref
+
+test
+
+PASS images are the same
+
+Testing: fract(vec4) in vertex shader
+
+reference vertex shader
+reference fragment shader
+test vertex shader
+test fragment shader
+PASS getError was expected value: NO_ERROR : no errors from draw
+PASS getError was expected value: NO_ERROR : no errors from draw
+
+ref
+
+test
+
+PASS images are the same
+
+Testing: fract(float) in fragment shader
+
+reference vertex shader
+reference fragment shader
+test vertex shader
+test fragment shader
+PASS getError was expected value: NO_ERROR : no errors from draw
+PASS getError was expected value: NO_ERROR : no errors from draw
+
+ref
+
+test
+
+PASS images are the same
+
+Testing: fract(vec2) in fragment shader
+
+reference vertex shader
+reference fragment shader
+test vertex shader
+test fragment shader
+PASS getError was expected value: NO_ERROR : no errors from draw
+PASS getError was expected value: NO_ERROR : no errors from draw
+
+ref
+
+test
+
+PASS images are the same
+
+Testing: fract(vec3) in fragment shader
+
+reference vertex shader
+reference fragment shader
+test vertex shader
+test fragment shader
+PASS getError was expected value: NO_ERROR : no errors from draw
+PASS getError was expected value: NO_ERROR : no errors from draw
+
+ref
+
+test
+
+PASS images are the same
+
+Testing: fract(vec4) in fragment shader
+
+reference vertex shader
+reference fragment shader
+test vertex shader
+test fragment shader
+PASS getError was expected value: NO_ERROR : no errors from draw
+PASS getError was expected value: NO_ERROR : no errors from draw
+
+ref
+
+test
+
+PASS images are the same
+PASS successfullyParsed is true
+
+TEST COMPLETE
+

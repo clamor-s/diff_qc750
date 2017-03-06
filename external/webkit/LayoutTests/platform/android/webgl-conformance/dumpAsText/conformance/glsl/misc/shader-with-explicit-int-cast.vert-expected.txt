@@ -1,0 +1,11 @@
+vertex shader that explicit int to float cast should succeed
+
+On success, you will see a series of "PASS" messages, followed by "TEST COMPLETE".
+
+test: vertex shader that explicit int to float cast should succeed
+test vertex shader
+default fragment shaderPASS vertex shader that explicit int to float cast should succeed
+PASS successfullyParsed is true
+
+TEST COMPLETE
+

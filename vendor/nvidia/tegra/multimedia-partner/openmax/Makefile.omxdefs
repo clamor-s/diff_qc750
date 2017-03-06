@@ -1,0 +1,7 @@
+include $(TEGRA_TOP)/core-private/make/Makefile.nvlibdefs
+
+LCDEFS += -D__OMX_EXPORTS
+LCDEFS += -DOMXVERSION=2
+LCINCS += $(NVLIB_COMMON_INCLUDES)
+LCINCS += -I$(TEGRA_TOP)/multimedia-partner/openmax/include/openmax/il
+LCINCS += -I$(TEGRA_TOP)/graphics/winutil/include

@@ -1,0 +1,15 @@
+NvDdkOneNandOpen
+NvDdkOneNandClose
+NvDdkOneNandRead
+NvDdkOneNandWrite
+NvDdkOneNandErase
+NvDdkOneNandGetDeviceInfo
+NvDdkOneNandSuspend
+NvDdkOneNandResume
+NvDdkOneNandSetFlashLock
+NvDdkOneNandReleaseFlashLock
+NvDdkOneNandBlockDevOpen
+NvDdkOneNandGetLockedRegions
+NvDdkOneNandGetBlockInfo
+NvDdkOneNandBlockDevInit
+NvDdkOneNandBlockDevDeinit

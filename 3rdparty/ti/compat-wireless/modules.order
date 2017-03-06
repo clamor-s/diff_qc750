@@ -1,0 +1,5 @@
+kernel//media/disk1/nvidia_open_source/nvidia_jb_16r10_qc750/3rdparty/ti/compat-wireless/compat/compat.ko
+kernel//media/disk1/nvidia_open_source/nvidia_jb_16r10_qc750/3rdparty/ti/compat-wireless/net/wireless/cfg80211.ko
+kernel//media/disk1/nvidia_open_source/nvidia_jb_16r10_qc750/3rdparty/ti/compat-wireless/net/mac80211/mac80211.ko
+kernel//media/disk1/nvidia_open_source/nvidia_jb_16r10_qc750/3rdparty/ti/compat-wireless/drivers/net/wireless/wl12xx/wl12xx.ko
+kernel//media/disk1/nvidia_open_source/nvidia_jb_16r10_qc750/3rdparty/ti/compat-wireless/drivers/net/wireless/wl12xx/wl12xx_sdio.ko

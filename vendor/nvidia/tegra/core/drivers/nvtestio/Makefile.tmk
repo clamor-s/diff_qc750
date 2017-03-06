@@ -1,0 +1,126 @@
+################################### tell Emacs this is a -*- makefile-gmake -*-
+#
+# Copyright (c) 2011-2012 NVIDIA CORPORATION.  All Rights Reserved.
+#
+# NVIDIA CORPORATION and its licensors retain all intellectual property
+# and proprietary rights in and to this software, related documentation
+# and any modifications thereto.  Any use, reproduction, disclosure or
+# distribution of this software and related documentation without an express
+# license agreement from NVIDIA CORPORATION is strictly prohibited.
+#
+# tmake for SW Mobile component makefile
+#
+# libnvtestio static and shared libraries component makefile
+#
+###############################################################################
+
+_common_sources                := \
+	tio_vfs.c \
+	tio_remote.c \
+	tio_host.c \
+	tio_host_stdio.c \
+	tio_listen.c \
+	tio_target.c \
+	tio_reliable.c \
+	tio_gdbt.c \
+	tio_gdbt_host.c \
+	tio_gdbt_target.c \
+	tio_shmoo.c \
+	tio_shmoo_norm.c \
+	tio_nvos.c \
+	tio_null_file_cache.c
+
+ifeq ($(NV_BUILD_CONFIGURATION_IS_QNX),1)
+_common_sources                += \
+	tio_null_poll.c \
+	tio_null_stdio.c \
+	tio_null_tcp.c \
+	tio_null_uart.c
+else
+_common_sources                += \
+	tio_linux.c \
+	tio_linux_poll.c \
+	tio_tcp.c
+endif
+
+_common_includes               := \
+	include \
+	$(NV_SOURCE)/core/drivers/nvboot
+
+_common_broken_code_flags      := \
+	missing-field-initializers \
+	sign-compare
+
+# Static lib
+ifdef NV_COMPONENT_FLAG_STATIC_LIBRARY_SECTION
+include $(NV_BUILD_START_COMPONENT)
+
+NV_COMPONENT_NAME              := libnvtestio
+NV_COMPONENT_OWN_INTERFACE_DIR := .
+NV_COMPONENT_SOURCES           := \
+	$(_common_sources)
+
+NV_COMPONENT_INCLUDES          := \
+	$(_common_includes)
+
+ifeq ($(NV_BUILD_CONFIGURATION_IS_ANDROID),1)
+NV_COMPONENT_SOURCES           += \
+	tio_linux_usb.c
+NV_COMPONENT_HAS_BROKEN_CODE   := \
+	$(_common_broken_code_flags)
+else ifeq ($(NV_BUILD_CONFIGURATION_IS_QNX),1)
+NV_COMPONENT_SOURCES           += \
+	tio_null_usb.c
+else
+NV_COMPONENT_SOURCES           += \
+	tio_linux_usb.c
+endif
+
+include $(NV_BUILD_STATIC_LIBRARY)
+endif
+
+# Shared lib
+ifdef NV_COMPONENT_FLAG_SHARED_LIBRARY_SECTION
+include $(NV_BUILD_START_COMPONENT)
+
+NV_COMPONENT_NAME              := nvtestio
+NV_COMPONENT_OWN_INTERFACE_DIR := .
+NV_COMPONENT_SOURCES           := \
+	$(_common_sources)
+
+ifeq ($(NV_BUILD_CONFIGURATION_IS_CSIM),1)
+NV_COMPONENT_SOURCES           += \
+	tio_linux_usb.c
+
+NV_COMPONENT_NEEDED_INTERFACE_DIRS := \
+	../../utils/nvusbhost/libnvusbhost
+else
+NV_COMPONENT_SOURCES           += \
+	tio_null_usb.c
+endif
+
+NV_COMPONENT_INCLUDES          := \
+	$(_common_includes)
+
+NV_COMPONENT_NEEDED_INTERFACE_DIRS += \
+	$(NV_SOURCE)/core/utils/nvapputil \
+	$(NV_SOURCE)/core/utils/nvos
+
+ifeq ($(NV_BUILD_CONFIGURATION_IS_ANDROID),1)
+NV_COMPONENT_HAS_BROKEN_CODE   := \
+	$(_common_broken_code_flags)
+endif
+
+include $(NV_BUILD_SHARED_LIBRARY)
+endif
+
+# Reset local variables
+_common_sources  :=
+_common_includes :=
+_common_broken_code_flags :=
+
+# Local Variables:
+# indent-tabs-mode: t
+# tab-width: 8
+# End:
+# vi: set tabstop=8 noexpandtab:

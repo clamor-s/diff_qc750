@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual C++ Express 2008
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "aes_client", "aes_client.vcproj", "{A1361D79-5A53-459C-B0A6-FE1BA9A5A7BF}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "aes_service", "aes_service.vcproj", "{9E4D2FB9-D843-4BCB-AE9B-896D9742026A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A1361D79-5A53-459C-B0A6-FE1BA9A5A7BF}.Debug|Win32.ActiveCfg = Debug|Win32
+		{A1361D79-5A53-459C-B0A6-FE1BA9A5A7BF}.Debug|Win32.Build.0 = Debug|Win32
+		{A1361D79-5A53-459C-B0A6-FE1BA9A5A7BF}.Release|Win32.ActiveCfg = Release|Win32
+		{A1361D79-5A53-459C-B0A6-FE1BA9A5A7BF}.Release|Win32.Build.0 = Release|Win32
+		{9E4D2FB9-D843-4BCB-AE9B-896D9742026A}.Debug|Win32.ActiveCfg = Debug|Win32
+		{9E4D2FB9-D843-4BCB-AE9B-896D9742026A}.Debug|Win32.Build.0 = Debug|Win32
+		{9E4D2FB9-D843-4BCB-AE9B-896D9742026A}.Release|Win32.ActiveCfg = Release|Win32
+		{9E4D2FB9-D843-4BCB-AE9B-896D9742026A}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

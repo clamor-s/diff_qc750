@@ -1,0 +1,39 @@
+; Lauterbach TRACE32 debugger script to configure JTAG for the CPU with both CPU cores active.
+
+;system.reset
+system.jtagclock rtck
+
+system.cpu CORTEXA9MPCoreSMP2
+
+system.option enreset off
+
+; Older versions of Lauterbach software assumed fixed offsets between the DAP controllers.
+; Newer versions require that the DAP controller addersses be explicitly enumerated.
+if (VERSION.BUILD()>17662.)
+(
+  system.config corebase apb:0x80010000 apb:0x80012000
+)
+else
+(
+  system.config corebase apb:0x80010000
+)
+
+system.config irpre 0.
+system.config irpost 0.
+system.config drpre 0.
+system.config drpost 0.
+
+system.config DAPIRPOST 4
+system.config DAPDRPOST 1
+system.config DAPIRPRE 0
+system.config DAPDRPRE 0
+
+trace.disable
+
+tronchip.set PABORT OFF
+tronchip.set DABORT OFF
+tronchip.set UNDEF  OFF
+tronchip.set SWI    OFF
+
+enddo
+

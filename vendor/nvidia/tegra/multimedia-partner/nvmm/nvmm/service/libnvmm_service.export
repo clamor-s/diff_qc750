@@ -1,0 +1,6 @@
+NvMMServiceOpen
+NvMMServiceClose
+NvMMServiceSendMessage
+NvMMServiceSendMessageBlocking
+GetAVPServiceHandle
+NvMMServiceGetLoaderHandle

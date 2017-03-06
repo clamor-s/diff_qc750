@@ -1,0 +1,10 @@
+config.s.serviceID: 410574B4-199E-447a-AC91-5706952877C5
+config.s.lazy_instantiation: true
+config.s.multi_instance: false
+config.s.multi_session: true
+config.s.multi_command: true
+config.s.default_stack_size: 1024
+config.s.heap_size: 4096
+smx.name: CRYPTOCATALOGUE EXAMPLE
+smx.vendor: Trusted Logic S.A.
+smx.description: An example of cryptographic functions usage

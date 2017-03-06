@@ -1,0 +1,101 @@
+#!/bin/bash
+
+pid=$1
+if [[ -z $pid ]] ; then
+    echo "Please supply android pid on command line"
+    exit 1
+fi
+
+if [[ ! -f libnvos.so ]] ; then
+    echo "Could not find libnvos.so." 
+    echo "Please run from the top level _out dir for android.  For example:"
+    echo ""
+    echo "    cd $P4ROOT/sw/mobile/main/_out/debug_nvap15_android_armv6"
+    echo "    asym $pid"
+    echo ""
+    exit 1
+fi
+
+
+adb=`type adb`
+if [[ ! -x $adb ]] ; then
+    adb=$ANDROID_ROOT/out/host/linux-x86/bin/adb
+fi
+if [[ ! -x $adb ]] ; then
+    echo "Could not find adb"
+    exit 1
+fi
+
+
+readelf=`type -p arm-eabi-readelf`
+if [[ ! -x $readelf ]] ; then
+    readelf=$ANDROID_ROOT/prebuilt/linux-x86/toolchain/arm-eabi-$GCC_TOOLCHAIN_VERSION/bin/arm-eabi-readelf
+fi
+if [[ ! -x $readelf ]] ; then
+    echo "Could not find arm-eabi-readelf"
+    exit 1
+fi
+
+notfound=""
+
+_find_syms()
+{
+    typeset f
+    typeset name
+    typeset addr
+    typeset p
+    typeset off
+    typeset text
+    while read f addr p
+    do
+        #echo "file=$f  addr=$addr  p=$p"
+        name=${f##*/}
+        if [[ ! -f $name ]] ; then
+            name=`find . -name $name`
+        fi
+        if [[ -f $name ]] ; then
+            off=`$readelf -S $name | \
+                grep ' .text ' | \
+                sed -n -e 's|.*\.text  *PROGBITS  *[^ ][^ ]* \([^ ]*\) .*|\1|p'`
+            #echo "off=$off"
+            addr="0x$addr"
+            off="0x$off"
+            (( text = addr + off ))
+            printf "    add-symbol-file %s 0x%08x\n" "$name" $text
+        else
+            notfound="$notfound $f"
+        fi
+    done
+}
+
+#arm-eabi-readelf -S simplest.so
+
+echo "Note: This assumes you run gdb from the top android _out file, e.g.:"
+echo "    cd $P4ROOT/sw/mobile/main/_out/debug_nvap15_android_armv6"
+echo "    arm-eabi-gdb"
+echo ""
+echo "Copy these lines into gdb:"
+echo ""
+echo "    define getsyms"
+
+$adb shell cat /proc/$pid/maps | \
+    sed -n \
+    -e 's|\([^-]*\)-[^ ]* \(r[^ ]*\) [^/]*\(/lib/.*\.so\)|\3 \1 \2|p' \
+    -e 's|\([^-]*\)-[^ ]* \(r[^ ]*\) [^/]*\(/lib/.*\.so\) .*|\3 \1 \2|p' \
+    -e 's|\([^-]*\)-[^ ]* \(r[^ ]*\) [^/]*\(/system/lib/.*\.so\)|\3 \1 \2|p' \
+    -e 's|\([^-]*\)-[^ ]* \(r[^ ]*\) [^/]*\(/system/lib/.*\.so\) .*|\3 \1 \2|p' \
+    | sort -u | \
+    grep 'r.xp' | \
+    _find_syms
+
+echo "    end"
+echo "    getsyms"
+echo ""
+
+if [[ -n $notfound ]] ; then
+    echo "WARNING: The following were not found:"
+    for i in $notfound
+    do
+        echo "    $i"
+    done
+fi

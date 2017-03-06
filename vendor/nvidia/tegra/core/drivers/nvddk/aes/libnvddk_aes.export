@@ -1,0 +1,14 @@
+NvDdkAesOpen
+NvDdkAesClose
+NvDdkAesSelectAndSetSbk
+NvDdkAesSelectKey
+NvDdkAesSelectOperation
+NvDdkAesSetInitialVector
+NvDdkAesGetInitialVector
+NvDdkAesProcessBuffer
+NvDdkAesGetCapabilities
+NvDdkAesLockSecureStorageKey
+NvDdkAesDisableCrypto
+NvDdkAesClearSecureBootKey
+NvDdkAesSetAndLockSecureStorageKey
+NvDdkAes_Dispatch

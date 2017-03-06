@@ -1,0 +1,10 @@
+NvBootHostRcmGetMsgBufferLength
+NvBootHostRcmInitMsg
+NvBootHostRcmGetMsgPayloadBuffer
+NvBootHostRcmSignMsg
+NvBootHostRcmGetMsgLength
+NvBootHostRcmCreateMsgFromBuffer
+NvBootHostRcmCreateMsgFromFileHandle
+NvBootHostRcmCreateMsgFromFile
+
+NvBootHostCryptoEncryptSignBuffer

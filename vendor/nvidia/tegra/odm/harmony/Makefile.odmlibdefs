@@ -1,0 +1,68 @@
+#  This is a platform-specific file which is used to allow platform-
+#  specific remapping of the library directories.  Libraries which
+#  are used as-is from the template directory should point to the
+#  template directory, libraries which are compiled uniquely for the
+#  platform should point to the local subdirectory.
+#
+#  Query must always be implemented for the platform, and it is expected to
+#  be located at $(TARGET_BOARD_DIR)/odm_kit/query
+#
+#  Any drivers which are not included by the platform should be initialized
+#  to empty values
+
+NVODMDIR_ODM_AUDIOCODEC  := $(TEMPLATE_DIR)/odm_kit/adaptations/audiocodec
+# For a Linux K35 environment use the disp_devfb variant of ODM_DISPLAY.
+ifeq ($(TARGET_OS)-$(TARGET_STUB_NVRM),linux-true)
+  NVODMDIR_ODM_DISPLAY   := $(TEMPLATE_DIR)/odm_kit/adaptations/disp_devfb
+else
+  NVODMDIR_ODM_DISPLAY   := $(TARGET_BOARD_DIR)/odm_kit/adaptations/disp
+endif
+NVODMDIR_ODM_GPIO_EXT    := $(TEMPLATE_DIR)/odm_kit/adaptations/gpio_ext
+NVODMDIR_ODM_USB_MUX     := $(TEMPLATE_DIR)/odm_kit/adaptations/usb_mux
+NVODMDIR_ODM_PMU         := $(TEMPLATE_DIR)/odm_kit/adaptations/pmu
+NVODMDIR_ODM_FUELGAUGEFWUPGRADE := $(TEMPLATE_DIR)/odm_kit/platform/fuelgaugefwupgrade
+NVODMDIR_ODM_DTVTUNER    := $(TARGET_BOARD_DIR)/odm_kit/adaptations/dtvtuner
+NVODMDIR_ODM_MISC        := $(TARGET_BOARD_DIR)/odm_kit/adaptations/misc
+NVODMDIR_ODM_HDMI        := $(TARGET_BOARD_DIR)/odm_kit/adaptations/hdmi
+NVODMDIR_ODM_TMON        := $(TEMPLATE_DIR)/odm_kit/adaptations/tmon
+NVODMDIR_ODM_CHARGING    := $(TEMPLATE_DIR)/odm_kit/adaptations/charging
+NVODMDIR_ODM_AVP         := $(TEMPLATE_DIR)/odm_kit/adaptations/avp
+NVODMDIR_ODM_IMAGER      :=
+
+ifeq ($(NVCAMERA_SUPPORTED),1)
+  NVODMDIR_ODM_IMAGER     := $(TEGRA_TOP)/camera-partner/imager
+endif
+
+#Touch and Scrollwheel is needed for Android Fastboot. Don't delete it
+NVODMDIR_ODM_TOUCH       := $(TARGET_BOARD_DIR)/odm_kit/platform/touch
+NVODMDIR_ODM_ACCEL       := $(TEMPLATE_DIR)/odm_kit/platform/accelerometer
+NVODMDIR_ODM_SCROLLWHEEL := $(TARGET_BOARD_DIR)/odm_kit/platform/scrollwheel
+NVODMDIR_ODM_VIBRATE     :=
+NVODMDIR_ODM_OTA         := $(TEMPLATE_DIR)/odm_kit/platform/ota
+NVODMDIR_ODM_POWERKEYS   := $(TARGET_BOARD_DIR)/odm_kit/platform/powerkeys
+NVODMDIR_ODM_MOUSE       := $(TARGET_BOARD_DIR)/odm_kit/platform/mouse
+NVODMDIR_ODM_BATTERY     := $(TARGET_BOARD_DIR)/odm_kit/platform/battery
+NVODMDIR_ODM_KEYBOARD    := $(TARGET_BOARD_DIR)/odm_kit/platform/keyboard
+ifeq ($(TARGET_OS),linux)
+ NVODMDIR_ODM_KBCMAPPING   := $(TARGET_BOARD_DIR)/os/drivers/linux/keymapping
+endif
+NVODMDIR_ODM_NVAPODM     := $(TEMPLATE_DIR)/os/$(OS_TREE)/odm
+
+NVODMDIR_ODM_EXTFSMGR_LINUX := $(TEMPLATE_DIR)/os/linux/system/nvextfsmgr
+NVODMDIR_ODM_EXTFS_LINUX := $(TEMPLATE_DIR)/os/linux/system/extfs
+
+# Harmony-specific registry key overrides & bib files
+NVODMDIR_ODM_ADDITIONAL_CUST_REG_FILES := $(TARGET_BOARD_DIR)/os/$(OS_TREE)/regbib/harmony.reg
+NVODMDIR_ODM_ADDITIONAL_REG_FILES := regbib/smsc9500.reg
+NVODMDIR_ODM_ADDITIONAL_BIB_FILES := regbib/smsc9500.bib
+
+NVODM_HAS_BATTERY := 1
+NVODM_HAS_EC := 1
+NVODM_HDMI_IS_SOURCE_RELEASE := 0
+
+NVODM_PARTITION_DATA_BOOT_IMAGE   := $(TARGET_BOARD_DIR)/partition_data/bitmaps/nvlogo_64x39_rgb565_wheader.raw
+NVODM_PARTITION_DATA_CHARGE_IMAGE := $(TARGET_BOARD_DIR)/partition_data/bitmaps/chglogo_100x41_rgb565_wheader.raw
+NVODM_PARTITION_DATA_BOOT_AUDIO   := $(TARGET_BOARD_DIR)/partition_data/wav/beep.wav
+
+NVODM_NVFLASH_BCT := $(TARGET_BOARD_DIR)/nvflash/harmony_a02_12Mhz_H5PS1G83EFR-S5C_333Mhz_1GB_2K8Nand_HY27UF084G2B-TP.bct
+

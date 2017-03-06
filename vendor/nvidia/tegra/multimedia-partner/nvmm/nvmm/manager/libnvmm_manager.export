@@ -1,0 +1,17 @@
+NvmmManagerOpen
+NvmmManagerClose
+NvmmManagerRegisterBlock
+NvmmManagerUpdateBlockInfo
+NvmmManagerUnregisterBlock
+NvmmManagerRegisterProcessClient
+NvmmManagerUnregisterProcessClient
+NvmmManagerChangePowerState
+NvmmManagerGetPowerState
+NvmmManagerNotify
+NvmmManagerIRAMScratchAlloc
+NvmmManagerIRAMScratchFree
+
+NvMMManagerIsUsingNewAVP
+
+NvMM_Dispatch
+

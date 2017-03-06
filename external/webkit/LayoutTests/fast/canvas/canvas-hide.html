@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Canvas hide by resize</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<style type="text/css">
+canvas {
+  width: 100px;
+  height: 100px;
+}
+.verify {
+  width: 100px;
+  height: 100px;
+  background-color: #00ff00;
+}
+</style>
+<script type="text/javascript">
+if (window.layoutTestController) {
+    layoutTestController.dumpAsText(true);
+    layoutTestController.waitUntilDone();
+}
+
+function init() {
+    var cnv = document.getElementById("cnv");
+    var ctx = cnv.getContext("2d");
+
+    ctx.fillStyle = '#f00';
+    ctx.fillRect(0, 0, cnv.width, cnv.height);
+
+    setTimeout(function() {
+        cnv.width = 0;
+        cnv.height = 0;
+        setTimeout(function() {
+            if (window.layoutTestController) {
+                layoutTestController.notifyDone();
+            }
+        }, 50);
+    }, 50);
+    // there should be a green rectangle on the screen. Red canvas should not be visible.
+}
+</script>
+</head>
+<body onload="init();">
+<div class="verify">
+<canvas id="cnv" width="100" height="100"></canvas>
+</div>
+</body>
+</html>

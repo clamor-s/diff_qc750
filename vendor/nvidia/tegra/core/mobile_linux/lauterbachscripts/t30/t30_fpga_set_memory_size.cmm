@@ -1,0 +1,54 @@
+; Lauterbach TRACE32 debugger script to set the memory size
+; *************** Will work only with FPGA SYSTEMS ***************
+
+; For NVIDIA internal use only. Customers should not use this script
+; unless NVIDIA explicitly directs them to do so.
+
+
+LOCAL &STRAPS
+GLOBAL &MEMORY_SIZE
+
+; Read APB_MISC_PP_STRAPPING_OPT_A_0
+&STRAPS=data.long(D:0x70000008)
+
+; Isolate the RAM_CODE field.
+&STRAPS=(&STRAPS&0x000000F0)
+
+; Shift the RAM_CODE field to the LSB position.
+&STRAPS=(&STRAPS>>4)
+
+IF &STRAPS==1
+(
+   D.S SD:0x7000E4A0  %LE %LONG  0x20000000 ;// APBDEV_PMC_SCRATCH20_0: CustomerOption = 512 MB
+   PRINT "Memory is 512MB DDR"
+   &MEMORY_SIZE=0x20000000
+)
+ELSE IF &STRAPS==2
+(
+   D.S SD:0x7000E4A0  %LE %LONG  0x20000000 ;// APBDEV_PMC_SCRATCH20_0: CustomerOption = 512 MB
+   PRINT "Memory is 512MB DDR2"
+   &MEMORY_SIZE=0x20000000
+)
+ELSE IF &STRAPS==3
+(
+   D.S SD:0x7000E4A0  %LE %LONG  0x10000000 ;// APBDEV_PMC_SCRATCH20_0: CustomerOption = 256 MB
+   PRINT "Memory is 256MB LPDDR2"
+   &MEMORY_SIZE=0x10000000
+)
+ELSE IF &STRAPS==5
+(
+   D.S SD:0x7000E4A0  %LE %LONG  0x40000000 ;// APBDEV_PMC_SCRATCH20_0: CustomerOption = 1GB MB
+   PRINT "Memory is 1GB DDR3"
+   &MEMORY_SIZE=0x40000000
+)
+ELSE
+(
+   D.S SD:0x7000E4A0  %LE %LONG  0x10000000 ;// APBDEV_PMC_SCRATCH20_0: CustomerOption = 256 MB
+   PRINT "Memory type is unknown -- setting size to 256 MB"
+   &MEMORY_SIZE=0x10000000
+)
+
+wait 2.s
+
+enddo
+

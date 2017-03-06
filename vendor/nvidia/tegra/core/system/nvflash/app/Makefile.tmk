@@ -1,0 +1,116 @@
+################################### tell Emacs this is a -*- makefile-gmake -*-
+#
+# Copyright (c) 2011-2012, NVIDIA CORPORATION.  All Rights Reserved.
+#
+# NVIDIA CORPORATION and its licensors retain all intellectual property
+# and proprietary rights in and to this software, related documentation
+# and any modifications thereto.  Any use, reproduction, disclosure or
+# distribution of this software and related documentation without an express
+# license agreement from NVIDIA CORPORATION is strictly prohibited.
+#
+# tmake for SW Mobile component makefile
+#
+# nvflash: static host executable
+#
+###############################################################################
+
+ifdef NV_COMPONENT_FLAG_STATIC_EXECUTABLE_SECTION
+include $(NV_BUILD_START_COMPONENT)
+
+NV_COMPONENT_SOURCES  := \
+	nvflash_usage.c \
+	nvflash_util.c \
+	nvflash_util_ap20.c \
+	nvflash_util_t30.c
+NV_COMPONENT_NEEDED_STATIC_INTERFACE_DIRS := \
+	../lib \
+	../../nv3p/host \
+	../../nvdioconverter \
+	../../nvbuildbct \
+	../../../drivers/nvboot/lib/host \
+	../../../utils/aes_ref \
+	../../../utils/nvapputil \
+	../../../utils/nvos \
+	../../../utils/nvusbhost/libnvusbhost
+NV_COMPONENT_INCLUDES := \
+	../../../drivers/hwinc \
+	../../nvbuildbct \
+	../../../drivers/nvboot/include \
+	../../../drivers/nvboot/ap20/include \
+	../../../drivers/nvboot/t30/include \
+
+NV_COMPONENT_NAME := nvflash
+
+ifeq ($(NV_HOST_OS),windows)
+NV_COMPONENT_SYSTEM_STATIC_LIBRARIES := setupapi
+else
+NV_COMPONENT_SYSTEM_SHARED_LIBRARIES := pthread dl
+endif
+
+ifeq ($(NV_HOST_OS),darwin)
+NV_COMPONENT_HAS_BROKEN_CODE := \
+	cast-align \
+	missing-field-initializers
+endif
+
+ifeq ($(NV_BUILD_CONFIGURATION_IS_ANDROID),1)
+NV_COMPONENT_SOURCES += \
+	nvflash_hostblockdev.c
+NV_COMPONENT_CFLAGS  += \
+	-DNVODM_BOARD_IS_FPGA=0 \
+	-DNVODM_ENABLE_SIMULATION_CODE=1
+else
+NV_COMPONENT_CFLAGS += \
+	-DNVODM_BOARD_IS_FPGA=0 \
+	-DNVODM_ENABLE_SIMULATION_CODE=0
+endif
+
+NV_COMPONENT_RELEASE_FILES += \
+	nvflash_miniloader_ap20.h \
+	nvflash_miniloader_t30.h
+
+# ARCHITECTURE PROBLEM ########################################################
+#
+# Generated from RVCT binaries introduce inter-component dependency
+#
+# Disable finalizing in customer build
+ifdef NV_CUSTOMER_BUILD
+
+# Depends on released nvflash_miniloader_XXX.h files
+NV_COMPONENT_SOURCES  += nvflash_app.c
+NV_COMPONENT_INCLUDES += $(NV_RELDIR)/$(NV_PATH)-$(NV_TARGET_ARCH)
+
+# Finalizing configuration
+else ifndef NV_COMPONENTS_FINALIZING_INPUT
+
+# Don't link the final binary in first round
+NV_COMPONENT_FLAG_NEEDS_FINALIZING := 1
+
+else
+
+# Depends on generated nvflash_miniloader_XXX.h files
+NV_COMPONENT_SOURCES += nvflash_app.c
+
+NV_COMPONENT_FLAG_USES_GENERATED_FILES := 1
+
+define _link_miniloader
+$(notdir $(1)): $(1)
+	$(LN_S) $$< $$@
+endef
+$(foreach m, $(NV_COMPONENTS_FINALIZING_INPUT), \
+	$(eval $(call _link_miniloader, $(m))))
+m :=
+endif
+###############################################################################
+
+nvstormgr.h: $(NV_SOURCE)/core/include/nvstormgr.idl
+	$(NV_TOOLS_OUTDIR)/nvidl.exe \
+		-I $(NV_SOURCE)/core/include -h -o $@ $<
+
+include $(NV_BUILD_STATIC_EXECUTABLE)
+endif
+
+# Local Variables:
+# indent-tabs-mode: t
+# tab-width: 8
+# End:

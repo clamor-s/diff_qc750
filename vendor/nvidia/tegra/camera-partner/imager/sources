@@ -1,0 +1,35 @@
+!if 0
+;*
+;* Copyright (c) 2007 NVIDIA Corporation.  All Rights Reserved.
+;*
+;* NVIDIA Corporation and its licensors retain all intellectual property and
+;* proprietary rights in and to this software and related documentation.  Any
+;* use, reproduction, disclosure or distribution of this software and related
+;* documentation without an express license agreement from NVIDIA Corporation
+;* is strictly prohibited.
+;*
+!endif
+
+TARGETNAME=libnvodm_imager
+TARGETTYPE=DYNLINK
+RELEASETYPE=PLATFORM
+DEFFILE=libnvodm_imager.def
+NOMIPS16CODE=1
+
+INCLUDES= \
+    $(_TARGETPLATROOT)\src\include; \
+    $(INCLUDES); \
+    $(_TARGETPLATROOT)\prebuilt\inc; \
+    ./configs; \
+    ../../query/include/;
+
+
+SOURCES= \
+    imager_hal.c \
+    imager_util.c \
+    sensor_bayer.c \
+    sensor_yuv_soc380.c \
+    sensor_bayer_ov5630.c \	
+	sensor_bayer_ov5650.c \
+    focuser.c
+

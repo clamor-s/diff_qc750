@@ -1,0 +1,75 @@
+#
+# Copyright (c) 2008 - 2012 NVIDIA Corporation.  All rights reserved.
+#
+# NVIDIA Corporation and its licensors retain all intellectual property
+# and proprietary rights in and to this software, related documentation
+# and any modifications thereto.  Any use, reproduction, disclosure or
+# distribution of this software and related documentation without an express
+# license agreement from NVIDIA Corporation is strictly prohibited.
+#
+
+GRAPHICS_STUB := $(OUTPUT_DIRNAME)/libnvrm_graphics$(DLL_SUFFIX)
+GRAPHICS_IMPL := $(OUTPUT_DIRNAME)/libnvrm_graphics_impl$(DLL_SUFFIX)
+
+TARGETS := $(GRAPHICS_STUB) $(GRAPHICS_IMPL)
+
+default: $(TARGETS)
+	$(NV_INSTALL) -l $(TARGETS) $(INSTALL_TARGET)
+
+IDL_FLAGS := -I $(TEGRA_TOP)/core/include/linux/kernel -u $(IDL_FLAGS)
+
+LCINCS += $(NVLIB_COMMON_INCLUDES)
+LCINCS += -I$(TEGRA_TOP)/core/drivers/nvrm/graphics
+LCINCS += -I$(TEGRA_TOP)/core/drivers/nvrm/graphics/common
+LCINCS += -I$(TEGRA_TOP)/core/utils/nvos/aos/nvap
+LCINCS += $(NVLIB_HWINC_INCLUDES)
+LCINCS += -I$(OUTPUT_DIRNAME)
+LCINCS += -I$(TEGRA_TOP)/core/drivers/nvrm/nvrmkernel/core/common
+
+LCDEFS += -DNVRM_TRANSPORT_IN_KERNEL=1
+LCDEFS += -DNV_IS_AVP=0
+LCDEFS += -DNV_IS_DYNAMIC=1
+
+SYSTEM_LDLIBS_DLL += -lpthread
+ifeq ($(WIN_INTERFACE),x11)
+  SYSTEM_LDLIBS_DLL += -L$(NVLIB_X11_ROOT)/lib -lX11 -lXext
+endif
+
+## GRAPHICS_STUB
+
+C_FILES :=
+C_FILES += common/nvrm_disasm.c
+C_FILES += common/nvrm_stream.c
+C_FILES += common/nvsched.c
+C_FILES += common/nvrm_channel_linux.c
+C_FILES += ap20/ap20sched.c
+C_FILES += ap20/ap20rm_stream_parse.c
+OBJS := $(patsubst %.c,$(OUTDIR)/%$(OBJ_SUFFIX),$(notdir $(C_FILES)))
+
+$(GRAPHICS_STUB): $(OBJS)
+$(GRAPHICS_STUB): $(NVLIB_NVOS)
+$(GRAPHICS_STUB): $(NVLIB_NVRM_KERNEL)
+$(GRAPHICS_STUB): $(NVLIB_IDLHELPER)
+
+## GRAPHICS_IMPL
+
+C_FILES :=
+C_FILES += common/nvrm_disasm.c
+C_FILES += common/nvrm_stream.c
+C_FILES += common/nvsched.c
+C_FILES += common/nvrm_channel_linux.c
+C_FILES += ap20/ap20sched.c
+C_FILES += ap20/ap20rm_stream_parse.c
+OBJS := $(patsubst %.c,$(OUTDIR)/%$(OBJ_SUFFIX),$(notdir $(C_FILES)))
+
+$(OUTDIR)/NvRmGraphics_Dispatch.c: $(TEGRA_TOP)/core/include/nvrm_graphics.idl $(IDL_COMPILER)
+	$(IDL_COMPILER) $(IDL_FLAGS) -g -o $@ $<
+
+$(GRAPHICS_IMPL): $(OBJS)
+$(GRAPHICS_IMPL): $(NVLIB_NVOS)
+$(GRAPHICS_IMPL): $(NVLIB_NVREFTRACK)
+$(GRAPHICS_IMPL): $(NVLIB_IDLHELPER)
+$(GRAPHICS_IMPL): $(TEGRA_TOP)/core/include/$(OUTDIR)/libnvrm$(DLL_SUFFIX)
+
+include $(TEGRA_TOP)/core-private/make/Makefile.rules
+

@@ -1,0 +1,26 @@
+Verify that LINE_LOOP and TRIANGLE_FAN works correctly.
+
+On success, you will see a series of "PASS" messages, followed by "TEST COMPLETE".
+
+Draw a square using a line loop and verify that it draws all four sides and nothing else.
+PASS Line loop was drawn correctly.
+Draw a square using an indexed line loop and verify that it draws all four sides and nothing else.
+PASS Line loop was drawn correctly.
+Draw a square using a line loop with a vertex buffer offset and verify that it draws all four sides and nothing else.
+PASS Line loop was drawn correctly.
+Draw a square using an indexed line loop with an index buffer offset and verify that it draws all four sides and nothing else.
+PASS Line loop was drawn correctly.
+Draw a square using an ubyte indexed line loop with 256 indices and verify that it draws all four sides and nothing else.
+PASS Line loop was drawn correctly.
+Draw a filled square using a triangle fan and verify that it fills the entire canvas.
+PASS Triangle fan was drawn correctly.
+Draw a filled square using an indexed triangle fan and verify that it fills the entire canvas.
+PASS Triangle fan was drawn correctly.
+Draw a filled square using a triangle fan with a vertex buffer offset and verify that it fills the entire canvas.
+PASS Triangle fan was drawn correctly.
+Draw a filled square using an indexed triangle fan with an index buffer offset and verify that it fills the entire canvas.
+PASS Triangle fan was drawn correctly.
+PASS successfullyParsed is true
+
+TEST COMPLETE
+

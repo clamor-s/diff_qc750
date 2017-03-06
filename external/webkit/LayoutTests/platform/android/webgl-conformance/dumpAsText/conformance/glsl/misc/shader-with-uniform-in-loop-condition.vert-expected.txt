@@ -1,0 +1,13 @@
+CONSOLE MESSAGE: line 24: *** Error compiling shader '[object WebGLShader]':ERROR: 0:9: 'i' : Loop index cannot be compared with non-constant expression
+
+vertex shader with uniform variable in loop condition should fail
+
+On success, you will see a series of "PASS" messages, followed by "TEST COMPLETE".
+
+test: vertex shader with uniform variable in loop condition should fail
+test vertex shader
+default fragment shaderPASS vertex shader with uniform variable in loop condition should fail
+PASS successfullyParsed is true
+
+TEST COMPLETE
+

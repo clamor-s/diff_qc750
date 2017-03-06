@@ -1,0 +1,10 @@
+ 
+tests function nodes
+
+On success, you will see a series of "PASS" messages, followed by "TEST COMPLETE".
+
+PASS Rendering results are the same
+PASS successfullyParsed is true
+
+TEST COMPLETE
+

@@ -1,0 +1,19 @@
+#
+# This is the manifest for the certstore_client application
+#
+
+#
+# Identifier of the application
+#
+sm.client.id: 7EF2A52B-9041-4de0-9C88-B0A0EB6BBC35
+
+#
+# This property must be set to true to allow the application to 
+# have access to the "manager" operations of the certstore example
+# service, i.e., to be able to add or delete certificates in the
+# certstore. The service checks this property when the client
+# connects. If the client is not authenticated or if it does not
+# set this property to true, then the client can only read the
+# certificates, not modify them.
+#
+example_certstore.allow_manager_operations: true

@@ -1,0 +1,53 @@
+################################### tell Emacs this is a -*- makefile-gmake -*-
+#
+# Copyright (c) 2011-2012 NVIDIA CORPORATION.  All Rights Reserved.
+#
+# NVIDIA CORPORATION and its licensors retain all intellectual property
+# and proprietary rights in and to this software, related documentation
+# and any modifications thereto.  Any use, reproduction, disclosure or
+# distribution of this software and related documentation without an express
+# license agreement from NVIDIA CORPORATION is strictly prohibited.
+#
+# tmake for SW Mobile component makefile
+#
+# libnvddk_aes static library component makefile
+#
+###############################################################################
+
+ifdef NV_COMPONENT_FLAG_STATIC_LIBRARY_SECTION
+include $(NV_BUILD_START_COMPONENT)
+
+NV_COMPONENT_NAME              := libnvddk_aes
+NV_COMPONENT_OWN_INTERFACE_DIR := .
+NV_COMPONENT_SOURCES           := \
+	nvddk_aes_blockdev.c \
+	nvddk_aes_core.c \
+	ap20/ap20_aes_hw_utils.c \
+	ap20/nvddk_aes_hw_ap20.c
+NV_COMPONENT_INCLUDES          := \
+	../../hwinc
+NV_COMPONENT_NEEDED_INTERFACE_DIRS := \
+	../../nvrm
+
+NV_COMPONENT_HAS_BROKEN_CODE   := \
+	cast-align \
+	undef
+
+ifeq ($(NV_BUILD_CONFIGURATION_ENABLE_SECURITY),1)
+NV_COMPONENT_CFLAGS            += \
+	-DENABLE_SECURITY=1
+else
+NV_COMPONENT_CFLAGS            += \
+	-DENABLE_SECURITY=0
+endif
+
+NV_COMPONENT_FLAG_OWN_INTERFACE_HAS_IDL_FILES := 1
+
+include $(NV_BUILD_STATIC_LIBRARY)
+endif
+
+# Local Variables:
+# indent-tabs-mode: t
+# tab-width: 8
+# End:
+# vi: set tabstop=8 noexpandtab:

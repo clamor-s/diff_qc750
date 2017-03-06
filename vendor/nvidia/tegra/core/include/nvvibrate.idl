@@ -1,0 +1,284 @@
+/*
+ * Copyright (c) 2007 NVIDIA Corporation.  All rights reserved.
+ *
+ * NVIDIA Corporation and its licensors retain all intellectual property
+ * and proprietary rights in and to this software, related documentation
+ * and any modifications thereto.  Any use, reproduction, disclosure or
+ * distribution of this software and related documentation without an express
+ * license agreement from NVIDIA Corporation is strictly prohibited.
+ */
+
+/!
+/** @file
+ * @brief <b>NVIDIA Vibrate API</b>
+ *
+ * @b Description: Declares the Vibrate API to be used by applications to
+ *                 interact with the Vibrate HW.
+ */
+!/
+
+/* used to generate the dispatcher */
+package NvVib
+{
+    nvvibrate,
+}
+
+package NvVib;
+
+interface nvvibrate {
+
+/!
+#include "nvcommon.h"
+#include "nvos.h"
+!/
+
+/!
+/*
+ * @ingroup nvvibrate
+ * @{
+ */
+!/
+
+/!
+/**
+ * NvVibDeviceHandle is an opaque handle to a Vibrate device.
+ */
+!/
+handle NvVibDeviceHandle;
+
+/!
+/**
+ * @brief Context structure used by the applications which contains
+ *   the device handle and the client specific message Q name.
+ */!/
+struct NvVibContext
+{
+/!
+    /** Vibrate device handle */
+!/
+NvVibDeviceHandle hVibDevice;
+
+}
+
+typedef struct NvVibContext;
+
+/!
+/**
+ * @brief The message structure that would be used between applications and shims
+ */
+!/
+struct NvVibSettings
+{
+/!
+    /**
+     * Duty-Cycle to be used by the HW
+     */
+!/
+NvS32 Amplitude;
+
+/!
+    /**
+     * Frequency to be used by the HW
+     */
+!/
+NvS32 Frequency;
+
+/!
+    /**
+     * Duration in milliseconds
+     */
+!/
+NvU32 TimeoutMS;
+
+}
+
+/!
+/**
+ * @brief Type settings to be made to the Vibrate device.
+ */
+!/
+typedef struct NvVibSettings;
+
+/!
+/**
+ * @brief This enum stores the capabilities of the device
+ */
+!/
+enum NvVibrateCapabilities
+{
+/!
+    /* Indiacates Amplitude is Supported */
+!/
+    NvVibrateCapabilities_Amplitude = 0x0001,
+
+/!
+    /* Indiacates Frequency is Supported */
+!/
+    NvVibrateCapabilities_Frequency = 0x0010,
+
+/!
+    /* Indiacates Timeout is Supported */
+!/
+    NvVibrateCapabilities_TimeoutMS = 0x0100,
+
+}
+
+
+/!
+/**
+ * @brief The attributes that the applications should use to communicate
+ *  with the Vibrate device
+ */
+!/
+enum NvVibAttribute
+{
+/!
+    /** Invalid attribute */
+!/
+NvVibAttribute_Invalid = 0,
+
+/!
+    /** Max supported frequency */
+!/
+NvVibAttribute_MaxFreq,
+
+/!
+    /** Min supported frequency */
+!/
+NvVibAttribute_MinFreq,
+
+/!
+    /** Max supported duty-cycle */
+!/
+NvVibAttribute_MaxDutyCycle,
+
+/!
+    /**
+     *  Start the device with the set
+     *  duty-cycle and frequency. The timeout value in
+     *  milliseconds can be sent along with the attribute.
+     *  If the timeout value is not sent the device will be running
+     *  until it is explicitly stopped.
+     */
+!/
+NvVibAttribute_StartDevice,
+
+/!
+    /** Stops the previously running device */
+!/
+NvVibAttribute_StopDevice,
+
+/!
+    /** Settings to be done to the Vibrate HW */
+!/
+NvVibAttribute_Settings,
+
+}
+
+/!
+/**
+ * Opens the Vibrate device and gets a handle to the device. The message Q
+ * name is returned in the context structure to be used by clients.
+ *
+ * Can be called multiple times for a given device. Subsequent
+ * calls will not necessarily return the same handle. Each call to
+ * NvVibOpen() must be paired with a corresponding call to NvVibClose().
+ *
+ * This call will perform all the significant hardware
+ * initialization of the device and will initialize internal data
+ * structures that are involved in managing the device.
+ * 
+ * Assert encountered in debug mode if pContext is NULL.
+ * 
+ * @param pContext the Vibrate device context is stored here.
+ *
+ * @retval NvSuccess Indicates that device was successfully opened.
+ * @retval NvError_InsufficientMemory Indicates that shim was unable to allocate
+ *     memory for its internal data structures.
+ */
+NvError NvVibOpen(NvVibContext *pContext);
+!/
+
+/!
+/**
+ * Closes the Vibrate device.
+ *
+ * Each call to NvVibOpen() must be paired with a corresponding call
+ * to NvVibClose().
+ *
+ * @param pContext the Vibrate device context. If pContext is NULL, this API has no effect.
+ *
+ */
+void NvVibClose(NvVibContext *pContext);
+!/
+
+/!
+/**
+ * Sets attributes to the Vibrate device.
+ *
+ * Assert encountered in debug mode if pAttribData/pContext is NULL.
+ *
+ * @param pContext The Vibrate device context. If pContext is NULL, this API has no effect.
+ * @param Attributes The attribute that you want to use.
+ * @param Length Size of the attribute value pointer
+ * @param pAttribData Pointer to the attribute data
+ *
+ * @retval NvSuccess Indicates that the settings were done successfully.
+ * @retval NvError_InsufficientMemory Indicates that shim was unable to allocate
+ *     memory for its internal data structures.
+ */
+!/
+NvError
+NvVibSetAttributes(
+    [in] NvVibContext pContext,
+    [in] NvVibAttribute Attribute,
+    [in] NvU32 Length,
+    [in, count(Length)] NvU32 pAttribData);
+
+/!
+/**
+ * Gets attributes as specified in NvVibSettings structure to the Vibrate device.
+ *
+ * Assert encountered in debug mode if pAttribValue/pContext is NULL.
+ *
+ * @param pContext The Vibrate device context. If pContext is NULL, this API has no effect.
+ * @param Attribute The attribute that the application needs.
+ * @param Length Size of the attribute value pointer
+ * @param AttributeValue The value of the attribute querried from the device
+ *
+ * @retval NvSuccess Indicates that device was successfully opened.
+ * @retval NvError_InsufficientMemory Indicates that shim was unable to allocate
+ *     memory for its internal data structures.
+ */
+!/
+NvError
+NvVibGetAttributes(
+    [in] NvVibContext pContext,
+    [in] NvVibAttribute Attribute,
+    [in] NvU32 Length,
+    [out, count(Length)] NvU32 pAttributeValue);
+
+/!
+/**
+ * Gets capabilities as specified in NvVibSettings structure to the Vibrate device.
+ *
+ * Assert encountered in debug mode if pCapabilities/pContext is NULL.
+ *
+ * @param pContext The Vibrate device context. If pContext is NULL, this API has no effect.
+ * @param pCapabilities The capabilities of the device that are suppoted will be set
+ *
+ * @retval NvSuccess Indicates that device was successfully set the capabilites.
+ * @retval NvError_InsufficientMemory Indicates that shim was unable to allocate
+ *     memory for its internal data structures.
+ */
+!/
+NvError
+NvVibGetCapabilities(
+    [in]  NvVibContext pContext,
+    [out] NvU32 *pCapabilities);
+
+/!
+/** @} */
+!/
+
+} // interface

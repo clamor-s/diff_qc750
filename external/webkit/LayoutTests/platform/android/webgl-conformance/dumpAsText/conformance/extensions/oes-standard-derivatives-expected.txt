@@ -1,0 +1,54 @@
+CONSOLE MESSAGE: line 24: *** Error compiling shader '[object WebGLShader]':ERROR: 0:8: '' :  no GL_OES_standard_derivatives ; 
+
+CONSOLE MESSAGE: line 24: *** Error compiling shader '[object WebGLShader]':ERROR: 0:5: 'dFdx' : no matching overloaded function found 
+ERROR: 0:6: 'dFdy' : no matching overloaded function found 
+ERROR: 0:7: 'fwidth' : no matching overloaded function found 
+
+CONSOLE MESSAGE: line 24: *** Error compiling shader '[object WebGLShader]':WARNING: 0:2: extension 'GL_OES_standard_derivatives' is not supported
+ERROR: 0:6: 'dFdx' : no matching overloaded function found 
+ERROR: 0:7: 'dFdy' : no matching overloaded function found 
+ERROR: 0:8: 'fwidth' : no matching overloaded function found 
+
+CONSOLE MESSAGE: line 24: *** Error compiling shader '[object WebGLShader]':ERROR: 0:5: 'GL_OES_standard_derivatives' : extension is disabled
+ERROR: 0:6: 'GL_OES_standard_derivatives' : extension is disabled
+ERROR: 0:7: 'GL_OES_standard_derivatives' : extension is disabled
+
+This test verifies the functionality of the OES_standard_derivatives extension, if it is available.
+
+On success, you will see a series of "PASS" messages, followed by "TEST COMPLETE".
+
+
+PASS WebGL context exists
+Testing FRAGMENT_SHADER_DERIVATIVE_HINT_OES with extension disabled
+PASS getError was expected value: INVALID_ENUM : FRAGMENT_SHADER_DERIVATIVE_HINT_OES should not be queryable if extension is disabled
+PASS getError was expected value: INVALID_ENUM : hint should not accept FRAGMENT_SHADER_DERIVATIVE_HINT_OES if extension is disabled
+
+Testing various shader compiles with extension disabled
+PASS GL_OES_standard_derivatives not defined in shaders when extension disabled
+PASS Shader built-ins disallowed without #extension pragma
+PASS Shader built-ins failed to compile when extension disabled
+PASS Successfully enabled OES_standard_derivatives extension
+PASS OES_standard_derivatives listed as supported and getExtension succeeded
+Testing FRAGMENT_SHADER_DERIVATIVE_HINT_OES with extension enabled
+PASS ext.FRAGMENT_SHADER_DERIVATIVE_HINT_OES is 0x8B8B
+PASS getError was expected value: NO_ERROR : FRAGMENT_SHADER_DERIVATIVE_HINT_OES query should succeed if extension is enabled
+PASS Default value of FRAGMENT_SHADER_DERIVATIVE_HINT_OES is DONT_CARE
+PASS getError was expected value: NO_ERROR : hint should accept FRAGMENT_SHADER_DERIVATIVE_HINT_OES
+PASS Round-trip of hint()/getParameter() with all supported modes
+
+Testing various shader compiles with extension enabled
+PASS GL_OES_standard_derivatives defined in shaders when extension is enabled
+PASS Shader built-ins disallowed without #extension pragma
+PASS Shader built-ins compiled successfully when extension enabled
+Testing various draws for valid built-in function behavior
+PASS Draw 1 (no variation) returned the correct data
+PASS Draw 2 (variation in x) returned the correct data
+PASS Draw 3 (variation in y) returned the correct data
+PASS Draw 4 (variation in x & y) returned the correct data
+Testing that getExtension() returns the same object each time
+PASS gl.getExtension("OES_standard_derivatives").myProperty is 2
+
+PASS successfullyParsed is true
+
+TEST COMPLETE
+

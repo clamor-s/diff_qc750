@@ -1,0 +1,353 @@
+################################### tell Emacs this is a -*- makefile-gmake -*-
+#
+# Copyright (c) 2011-2012, NVIDIA CORPORATION.  All rights reserved.
+#
+# NVIDIA CORPORATION and its licensors retain all intellectual property
+# and proprietary rights in and to this software, related documentation
+# and any modifications thereto.  Any use, reproduction, disclosure or
+# distribution of this software and related documentation without an express
+# license agreement from NVIDIA CORPORATION is strictly prohibited.
+#
+# tmake for SW Mobile component makefile
+#
+# libnvrm: shared & static library
+#
+###############################################################################
+
+#------------------------------------------------------------------------------
+# Definitions common both to static lib and simulation shared lib
+#------------------------------------------------------------------------------
+_common_src_staticlib_and_simulation := \
+	core/common/nvrm_chiplib.c \
+	core/common/nvrm_clocks_limits.c \
+	core/common/nvrm_configuration.c \
+	core/common/nvrm_hwintf.c \
+	core/common/nvrm_keylist.c \
+	core/common/nvrm_module.c \
+	core/common/nvrm_null_stub.c \
+	core/common/nvrm_pinmux.c \
+	core/common/nvrm_pmu.c \
+	core/common/nvrm_power.c \
+	core/common/nvrm_power_dfs.c \
+	core/common/nvrm_relocation_table.c \
+	core/common/nvrm_rmctrace.c \
+	core/common/nvrm_surface.c \
+	core/common/nvrm_surface_debug.c \
+	io/common/nvrm_gpioi2c.c \
+	io/common/nvrm_i2c.c \
+	io/common/nvrm_owr.c \
+	core/ap15/ap15rm_clock_config.c \
+	core/ap15/ap15rm_clock_misc.c \
+	core/ap15/ap15rm_clocks.c \
+	core/ap15/ap15rm_hwmap.c \
+	core/ap15/ap15rm_init.c \
+	core/ap15/ap15rm_init_common.c \
+	core/ap15/ap15rm_interrupt.c \
+	core/ap15/ap15rm_interrupt_generic.c \
+	core/ap15/ap15rm_pinmux.c \
+	core/ap15/ap15rm_power.c \
+	core/ap15/ap15rm_power_dfs.c \
+	core/ap15/ap15rm_power_utils.c \
+	core/ap15/ap15rm_surface.c \
+	core/ap15/nvrm_clocks.c \
+	core/ap15/nvrm_diag.c \
+	io/ap15/ap15rm_analog.c \
+	io/ap15/ap15rm_dma_hw_private.c \
+	io/ap15/ap15rm_dma_intr.c \
+	io/ap15/ap15rm_gpio_vi.c \
+	io/ap15/ap15rm_pwm.c \
+	io/ap15/nvrm_dma.c \
+	io/ap15/nvrm_gpio.c \
+	io/ap15/nvrm_gpio_private.c \
+	io/ap15/nvrm_gpio_stub_helper.c \
+	io/ap15/rm_common_slink_hw_private.c \
+	io/ap15/rm_dma_hw_private.c \
+	io/ap15/rm_spi_hw_private.c \
+	io/ap15/rm_spi_slink.c \
+	core/ap20/ap20rm_clock_config.c \
+	core/ap20/ap20rm_clocks.c \
+	core/ap20/ap20rm_clocks_info.c \
+	core/ap20/ap20rm_fuse.c \
+	core/ap20/ap20rm_memctrl.c \
+	core/ap20/ap20rm_pinmux_tables.c \
+	core/ap20/ap20rm_power_dfs.c \
+	core/ap20/ap20rm_reloctable.c \
+	io/ap20/ap20rm_i2c.c \
+	io/ap20/ap20rm_owr.c \
+	io/ap20/ap20rm_pcie.c \
+	io/ap20/ap20rm_slink_hw_private.c \
+	core/t30/t30rm_clocks.c \
+	core/t30/t30rm_clocks_info.c \
+	core/t30/t30rm_fuse.c \
+	core/t30/t30rm_memctrl.c \
+	core/t30/t30rm_pinmux.c \
+	core/t30/t30rm_pinmux_tables.c \
+	core/t30/t30rm_reloctable.c \
+	io/t30/t30rm_dma_hw_private.c \
+	io/t30/t30rm_i2c_slave.c \
+	io/t30/t30rm_owr.c \
+	io/t30/t30rm_slink_hw_private.c \
+	../nvlimits/nvrm_clocks_limits_init.c \
+	../nvlimits/ap20rm_clocks_limits.c \
+	../nvlimits/t30rm_clocks_limits.c
+
+_common_src_aos_and_linux := \
+	core/common/nvrm_heap_carveout.c \
+	core/common/nvrm_heap_secure.c \
+	core/common/nvrm_heap_iram.c \
+	core/common/nvrm_heap_simple.c \
+	core/common/nvrm_memmgr.c \
+	core/common/nvrm_transport.c \
+	core/ap15/ap15rm_gart.c \
+	core/ap15/ap15rm_xpc.c \
+	core/ap15/ap15rm_xpc_hw_private.c \
+	core/ap20/ap20rm_gart.c \
+	core/t30/t30rm_smmu.c \
+	core/t30/t30rm_smmu_clients.c
+
+_common_includes_staticlib_and_simulation := \
+	core \
+	core/common \
+	core/ap15 \
+	io \
+	io/common \
+	../../hwinc \
+	../../hwinc/$(NV_TARGET_SOC_FAMILY) \
+	../../../utils/nvos/aos/nvap \
+	$(NV_SOURCE)/core-private/drivers/hwinc \
+	$(NV_SOURCE)/core-private/drivers/hwinc/$(NV_TARGET_SOC_FAMILY) \
+	$(NV_SOURCE)/camera/core/hwinc
+
+#------------------------------------------------------------------------------
+# Static library
+#------------------------------------------------------------------------------
+ifdef NV_COMPONENT_FLAG_STATIC_LIBRARY_SECTION
+include $(NV_BUILD_START_COMPONENT)
+
+NV_COMPONENT_NAME                  := libnvrm_impl
+NV_COMPONENT_OWN_INTERFACE_DIR     := ..
+NV_COMPONENT_SOURCES               := \
+	$(_common_src_staticlib_and_simulation) \
+	$(_common_src_aos_and_linux)
+
+NV_COMPONENT_INCLUDES              := $(_common_includes_staticlib_and_simulation)
+
+NV_COMPONENT_HAS_BROKEN_CODE       := \
+	undef \
+	uninitialized \
+	cast-align \
+	missing-field-initializers \
+	sign-compare
+
+NV_COMPONENT_FLAG_OWN_INTERFACE_HAS_IDL_FILES := 1
+
+ifeq ($(NV_BUILD_CONFIGURATION_IS_EMULATION),1)
+NV_COMPONENT_CFLAGS                += \
+	-DPLATFORM_EMULATION=1
+else
+NV_COMPONENT_CFLAGS                += \
+	-DPLATFORM_EMULATION=0
+endif
+
+# Currently we only support AOS in FPGA build
+ifeq ($(NV_BUILD_CONFIGURATION_IS_EMULATION),1)
+NV_COMPONENT_CFLAGS                += \
+	-DNV_USE_AOS=1 \
+	-DNVRM_TRANSPORT_IN_KERNEL=0 \
+	-DNV_SHMOO_DATA_INIT=1
+else ifeq ($(NV_BUILD_CONFIGURATION_IS_QNX),1)
+NV_COMPONENT_CFLAGS                += \
+	-DNV_SHMOO_DATA_INIT=1
+else
+NV_COMPONENT_CFLAGS                += \
+	-DNVRM_TRANSPORT_IN_KERNEL=1 \
+	-DNVOS_IS_LINUX=0
+endif
+
+NV_COMPONENT_CFLAGS                += \
+	-DNV_USE_FUSE_CLOCK_ENABLE=0
+
+ifeq ($(NV_TARGET_SOC),ap20)
+NV_COMPONENT_CFLAGS                += \
+	-DCONFIG_PLLP_BASE_AS_408MHZ=0
+else
+NV_COMPONENT_CFLAGS                += \
+	-DCONFIG_PLLP_BASE_AS_408MHZ=1
+endif
+ifeq ($(NV_TARGET_BOOTLOADER_PINMUX),kernel)
+NV_COMPONENT_CFLAGS += -DSET_KERNEL_PINMUX
+endif
+
+include $(NV_BUILD_STATIC_LIBRARY)
+endif #NV_COMPONENT_FLAG_STATIC_LIBRARY_SECTION
+
+#------------------------------------------------------------------------------
+# Shared library
+#------------------------------------------------------------------------------
+ifdef NV_COMPONENT_FLAG_SHARED_LIBRARY_SECTION
+include $(NV_BUILD_START_COMPONENT)
+
+ifeq ($(NV_BUILD_CONFIGURATION_IS_CSIM),1)
+NV_COMPONENT_SOURCES               := \
+	$(_common_src_staticlib_and_simulation) \
+	core/ap15/ap15rm_avp_service.c \
+	core/ap15/ap15rm_memctrl.c \
+	core/common/nvrm_avp_cpu_rpc.c \
+	core/common/nvrm_clocks_limits_stub.c \
+	core/common/nvrm_moduleloader_linux.c
+
+ifeq ($(NV_BUILD_CONFIGURATION_IS_QNX),1)
+NV_COMPONENT_SOURCES               += \
+	core/common/nvrm_memmgr_qnx.c \
+	core/common/nvrm_memmgr_qnx_common.c
+else
+NV_COMPONENT_SOURCES               += \
+	$(_common_src_aos_and_linux)
+endif
+
+NV_COMPONENT_CFLAGS                += \
+	-DPLATFORM_SIMULATION=1 \
+	-DNVRM_TRANSPORT_IN_KERNEL=0 \
+	-DCONFIG_PLLP_BASE_AS_408MHZ=1 \
+	-DNV_SHMOO_DATA_INIT=1
+
+NV_COMPONENT_NEEDED_STATIC_INTERFACE_DIRS := \
+	../../nvodm/services \
+	../../../utils/nvintr
+
+NV_COMPONENT_NEEDED_WHOLE_STATIC_INTERFACE_DIRS := \
+	../graphics
+
+NV_COMPONENT_ODM_STATIC            := \
+	gpio_ext \
+	query \
+	pmu \
+	tmon
+# nvrmkernel doesn't wholly link in any ODM components
+NV_COMPONENT_ODM_WHOLE_STATIC :=
+include $(NV_SOURCE)/customers/nvidia-partner/Makefile.odm.tmk
+
+NV_COMPONENT_INCLUDES              += \
+	$(_common_includes_staticlib_and_simulation)
+
+# By default the toolchain used in simulation build interprets
+# undefined variables as errors, but for nvrmkernel this is not
+# acceptable, because generation of real dependency files in first
+# make run for the component would fail. This is because some sources
+# use macros defined in IDL files of the component, and these
+# definitions are not available during the first make run, since
+# headers are not yet generated from corresponding IDL files. (IDL
+# headers can not be generated safely in parallel builds, until during
+# the second make run, when full dependency information is available).
+NV_COMPONENT_HAS_BROKEN_CODE       := undef
+
+else # Not a simulation build
+NV_COMPONENT_SOURCES               := \
+	core/ap15/ap15rm_surface.c \
+	core/ap15/ap15rm_hwmap.c \
+	core/common/nvrm_chiplib.c \
+	core/common/nvrm_surface.c \
+	core/common/nvrm_surface_debug.c \
+	core/common/nvrm_stub_helper.c \
+	core/common/nvrpc_helper.c \
+	null_stubs/nvrm_analog_stub.c \
+	null_stubs/nvrm_diag_stub.c \
+	null_stubs/nvrm_dma_stub.c \
+	null_stubs/nvrm_gpio_stub.c \
+	null_stubs/nvrm_i2c_stub.c \
+	null_stubs/nvrm_init_stub.c \
+	null_stubs/nvrm_interrupt_stub.c \
+	null_stubs/nvrm_keylist_stub.c \
+	null_stubs/nvrm_memctrl_stub.c \
+	null_stubs/nvrm_module_stub.c \
+	null_stubs/nvrm_owr_stub.c \
+	null_stubs/nvrm_pcie_stub.c \
+	null_stubs/nvrm_pinmux_stub.c \
+	null_stubs/nvrm_pmu_stub.c \
+	null_stubs/nvrm_power_stub.c \
+	null_stubs/nvrm_pwm_stub.c \
+	null_stubs/nvrm_spi_stub.c
+
+ifeq ($(NV_BUILD_CONFIGURATION_IS_QNX),1)
+NV_COMPONENT_SOURCES               += \
+	core/common/nvrm_memmgr_qnx_common.c \
+	core/common/nvrm_stub_helper_qnx.c
+else
+NV_COMPONENT_SOURCES               += \
+	core/ap15/ap15rm_avp_service.c \
+	core/common/nvrm_avp_cpu_rpc.c \
+	core/common/nvrm_moduleloader_linux.c \
+	core/common/nvrm_stub_helper_linux.c \
+	core/common/nvrm_stub_helper_linux_nvmap.c \
+	core/common/nvrm_stub_helper_linux_ion.c
+endif
+
+NV_COMPONENT_CFLAGS += \
+	-DPLATFORM_SIMULATION=0 \
+	-DNVRM_TRANSPORT_IN_KERNEL=1 \
+	-DCONFIG_PLLP_BASE_AS_408MHZ=0
+
+endif
+
+NV_COMPONENT_NAME                  := nvrm
+NV_COMPONENT_OWN_INTERFACE_DIR     := ..
+NV_COMPONENT_NEEDED_INTERFACE_DIRS := \
+	../../../utils/nvos
+
+NV_COMPONENT_NEEDED_STATIC_INTERFACE_DIRS += \
+	../../../utils/md5
+
+NV_COMPONENT_FLAG_OWN_INTERFACE_HAS_IDL_FILES := 1
+
+NV_COMPONENT_CFLAGS                += \
+	-DPLATFORM_EMULATION=0 \
+	-DNV_USE_FUSE_CLOCK_ENABLE=0
+
+NV_COMPONENT_HAS_BROKEN_CODE       += \
+	cast-align \
+	sign-compare \
+	missing-field-initializers \
+	uninitialized
+
+NV_COMPONENT_INCLUDES              += \
+	../../hwinc \
+	../../hwinc/$(NV_TARGET_SOC_FAMILY)
+
+ifeq ($(NV_BUILD_CONFIGURATION_IS_ANDROID),1)
+NV_COMPONENT_INCLUDES              += \
+	$(ANDROID_BUILD_TOP)/external/valgrind/main/include \
+	$(ANDROID_BUILD_TOP)/external/valgrind/main/memcheck
+NV_COMPONENT_NEEDED_INTERFACE_DIRS += \
+	$(NV_SOURCE)/tmake/external/android/cutils
+else ifeq ($(NV_BUILD_CONFIGURATION_IS_CSIM),1)
+# nothing
+else ifeq ($(NV_BUILD_CONFIGURATION_IS_QNX),1)
+NV_COMPONENT_HAS_BROKEN_CODE       += \
+	ignore-all
+# QNX does not implement NvRmFreeLibrary/NvRmLoadLibrary/NvRmLoadLibraryEx()
+NV_COMPONENT_FLAG_NO_API_CHECK     := 1
+else
+NV_COMPONENT_CFLAGS                += \
+	$(NV_TOOLCHAIN_X11_CFLAGS)
+NV_COMPONENT_NEEDED_INTERFACE_DIRS += \
+	$(NV_SOURCE)/l4t/3rdpartystub/X11 \
+	$(NV_SOURCE)/l4t/3rdpartystub/Xext
+NV_COMPONENT_NEEDED_STATIC_INTERFACE_DIRS += \
+	$(NV_SOURCE)/graphics/X11/drivers/tegra/src/tdr
+endif
+ifeq ($(NV_TARGET_BOOTLOADER_PINMUX),kernel)
+NV_COMPONENT_CFLAGS += -DSET_KERNEL_PINMUX
+endif
+
+include $(NV_BUILD_SHARED_LIBRARY)
+endif #NV_COMPONENT_FLAG_SHARED_LIBRARY_SECTION
+
+# Cleanup
+_common_src_staticlib_and_simulation      :=
+_common_includes_staticlib_and_simulation :=
+
+# Local Variables:
+# indent-tabs-mode: t
+# tab-width: 8
+# End:
+# vi: set tabstop=8 noexpandtab:

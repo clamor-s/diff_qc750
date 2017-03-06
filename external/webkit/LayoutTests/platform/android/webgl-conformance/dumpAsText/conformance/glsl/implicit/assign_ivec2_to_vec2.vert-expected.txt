@@ -1,0 +1,13 @@
+CONSOLE MESSAGE: line 24: *** Error compiling shader '[object WebGLShader]':ERROR: 0:4: '=' :  cannot convert from 'const mediump 2-component vector of int' to '2-component vector of float'
+
+implicit cast assigning ivec2 to vec2 should fail
+
+On success, you will see a series of "PASS" messages, followed by "TEST COMPLETE".
+
+test: implicit cast assigning ivec2 to vec2 should fail
+test vertex shader
+default fragment shaderPASS implicit cast assigning ivec2 to vec2 should fail
+PASS successfullyParsed is true
+
+TEST COMPLETE
+

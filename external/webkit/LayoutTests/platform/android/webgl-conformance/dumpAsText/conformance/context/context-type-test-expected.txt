@@ -1,0 +1,16 @@
+This test ensures WebGL implementations interact correctly with the canvas tag.
+
+On success, you will see a series of "PASS" messages, followed by "TEST COMPLETE".
+
+
+Canvas.getContext
+PASS WebGLRenderingContext should be a member of window
+PASS WebGLRenderingContext should be 'in' window
+PASS context exists
+Checking context type
+PASS context type should be WebGLRenderingContext
+
+PASS successfullyParsed is true
+
+TEST COMPLETE
+ 

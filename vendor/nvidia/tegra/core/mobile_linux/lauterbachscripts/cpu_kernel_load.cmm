@@ -1,0 +1,194 @@
+; Lauterbach TRACE32 debugger script to load the kernel image via the JTAG backdoor loader.
+
+; For NVIDIA internal use only. Customers should not use this script
+; unless NVIDIA explicitly directs them to do so.
+
+
+LOCAL &RAMDISK_SIZE
+LOCAL &CHIPID
+LOCAL &MAJOR
+LOCAL &MINOR
+LOCAL &NETLIST
+LOCAL &PATCH
+LOCAL &CHIPID_HEX
+LOCAL &MAJOR_HEX
+LOCAL &MINOR_HEX
+LOCAL &NETLIST_HEX
+LOCAL &PATCH_HEX
+GLOBAL &CMDLINE
+GLOBAL &MEMORY_SIZE
+
+if ("&TARGET_SOC"=="ap15")
+(
+  PRINT "The backdoor loader script is not supported for AP15"
+  STOP
+)
+
+; Setup JTAG for CPU.
+do &(TARGET_SOC)/&(TARGET_SOC)_cpu_jtag_setup.cmm
+
+system.mode.attach
+
+if state.run()
+(
+   break
+)
+
+; Force CPU to supervisor state with interrupt disabled.
+R.S CPSR 0xD3
+
+; Disable MMU and caches.
+do cpu_disable_mmu.cmm
+
+; Setup for kernel virtual addressing mode.
+do virtual_setup.cmm
+
+; Halt the AVP
+D.S SD:0x60007004  %LE %LONG  0x40000000 ; FLOW_CTLR_HALT_COP_EVENTS_0
+
+; Get the memory size
+&MEMORY_SIZE=data.long(D:0x7000E4A0)    ; APBDEV_PMC_SCRATCH20_0
+&MEMORY_SIZE=&MEMORY_SIZE&0xF0000000
+
+; Generate the "tegraid" string for the command line
+&CHIPID=data.long(A:0x70000804)    ; APB_MISC_GP_HIDREV_0
+&MAJOR=&CHIPID
+&MINOR=&CHIPID
+&CHIPID=(&CHIPID>>8)&0xFF
+&MAJOR=(&MAJOR>>4)&0xF
+&MINOR=((&MINOR>>8)>>8)&0xF        ; For some reason >>16 does not work
+
+&NETLIST=data.long(A:0x70000860)   ; APB_MISC_GP_EMU_REVID_0
+&PATCH=&NETLIST
+&NETLIST=(&NETLIST&0xFFFF)
+&PATCH=((&PATCH>>8)>>8)&0xFF       ; For some reason >>16 does not work
+
+&CHIPID_HEX=FORMAT.HEX(2.,&CHIPID)
+&MAJOR_HEX=FORMAT.HEX(1.,&MAJOR)
+&MINOR_HEX=FORMAT.HEX(1.,&MINOR)
+&NETLIST_HEX=FORMAT.HEX(2.,&NETLIST)
+&PATCH_HEX=FORMAT.HEX(2.,&PATCH)
+
+IF &MEMORY_SIZE==0x80000000
+(
+  ; 2GB SDRAM
+  &CMDLINE="tegraid=&CHIPID_HEX.&MAJOR_HEX.&MINOR_HEX.&NETLIST_HEX.&PATCH_HEX mem=2047M@2048M vmalloc=256M video=tegrafb console=ttyS0,115200n8 usbcore.old_scheme_first=1"
+)
+ELSE IF &MEMORY_SIZE==0x40000000
+(
+  ; 1GB SDRAM with 128MB Carveout in the middle of memory
+  &CMDLINE="tegraid=&CHIPID_HEX.&MAJOR_HEX.&MINOR_HEX.&NETLIST_HEX.&PATCH_HEX mem=1024M@2048M vmalloc=256M video=tegrafb console=ttyS0,115200n8 usbcore.old_scheme_first=1"
+)
+ELSE IF &MEMORY_SIZE==0x20000000
+(
+  ; 512MB SDRAM with 128MB Carveout at top of memory
+  &CMDLINE="tegraid=&CHIPID_HEX.&MAJOR_HEX.&MINOR_HEX.&NETLIST_HEX.&PATCH_HEX mem=512M@2048M vmalloc=256M video=tegrafb console=ttyS0,115200n8 usbcore.old_scheme_first=1"
+)
+ELSE
+(
+  ; 256MB SDRAM with 32MB Carveout at top of memory
+  &CMDLINE="tegraid=&CHIPID_HEX.&MAJOR_HEX.&MINOR_HEX.&NETLIST_HEX.&PATCH_HEX mem=256M@2048M vmalloc=160M video=tegrafb console=ttyS0,115200n8 usbcore.old_scheme_first=1"
+)
+
+PRINT "CMDLINE=&CMDLINE"
+wait 2.S
+
+; If OS is LDK the ramdisk must be initialized
+IF "&TARGET_OS"=="gnu_linux"
+(
+  &CMDLINE="rdinit=/linuxrc &(CMDLINE)"
+)
+
+; Load the kernel image and symbols.
+sYmbol.RESet
+
+data.load &KERNEL &KERNEL_LOAD_PHYS /name kernel
+;print "data.load &KERNEL &KERNEL_LOAD_PHYS /name kernel"
+;wait 2.s
+data.load.ELF &KERNEL_ELF /NOCODE /RELPATH /PATH &KERNEL_SRC
+;print "data.load.ELF &KERNEL_ELF /NOCODE /RELPATH /PATH &KERNEL_SRC"
+;wait 2.s
+
+if ("&RAMDISK"!="")
+(
+  data.load &RAMDISK &RAMDISK_ADDR /name ramdisk /noclear
+  print "data.load &RAMDISK &RAMDISK_ADDR /name ramdisk /noclear"
+  &RAMDISK_SIZE=os.file.size("&RAMDISK")
+)
+else
+(
+  &RAMDISK_SIZE=0
+)
+
+IF "&TRANSLATE_SRC_PATH"=="TRUE"
+(
+  SYMBOL.SOURCEPATH.TRANSLATE "&BUILDTOP" "&TOP"
+)
+
+local &tags
+&tags=&TAGS_ADDR
+
+d.s &tags+0x00 %long 5
+d.s &tags+0x04 %long 0x54410001
+d.s &tags+0x08 %long 1
+d.s &tags+0x0C %long 4096
+d.s &tags+0x10 %long 0xFF
+&tags=&tags+0x14
+
+if (&RAMDISK_SIZE!=0)
+(
+  d.s &tags+0x00 %long 4
+  d.s &tags+0x04 %long 0x54420005
+  d.s &tags+0x08 %long &RAMDISK_ADDR
+  d.s &tags+0x0C %long &RAMDISK_SIZE
+  &tags=&tags+0x10
+)
+else
+(
+  PRINT "RAMDISK_SIZE==0"
+  WAIT 3.S
+)
+
+if ("&CMDLINE"!="")
+(
+  d.s &tags+0x00 %long 0x42
+  d.s &tags+0x04 %long 0x54410009
+  &tags=&tags+0x08
+  d.s &tags++0x100 %byte 0
+  d.s &tags "&CMDLINE"
+  &tags=&tags+0x100
+)
+
+; End of tags marker
+d.s &tags+0x00 %long 0
+d.s &tags+0x04 %long 0
+
+register.set pc &KERNEL_LOAD_PHYS
+register.set r0 0
+register.set r1 &MACHINE_ID
+register.set r2 &TAGS_ADDR
+
+; Initialize new-style DCC console.
+IF "&ENABLE_DCC_WINDOW"=="TRUE"
+(
+  do cpu_dcc_setup.cmm
+)
+
+IF &MEMORY_SIZE==0x80000000
+(
+  PRINT "Memory size is 2GB"
+)
+ELSE IF &MEMORY_SIZE==0x40000000
+(
+  PRINT "Memory size is 1GB"
+)
+ELSE IF &MEMORY_SIZE==0x20000000
+(
+  PRINT "Memory size is 512MB"
+)
+ELSE
+(
+  PRINT "Memory size is 256MB"
+)
+enddo
+

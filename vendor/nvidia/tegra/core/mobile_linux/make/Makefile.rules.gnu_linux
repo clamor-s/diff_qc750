@@ -1,0 +1,360 @@
+#
+# Copyright (c) 2009-2012, NVIDIA CORPORATION.  All rights reserved.
+#
+
+NV_MAKEFILE_LIST += $(TEGRA_TOP)/core/mobile_linux/make/Makefile.rules.gnu_linux
+
+CONFIG_DIR := $(TEGRA_TOP)
+
+# copy_ch_filelist usage:
+#        $(1) - list of files to copy
+#        $(2) - output directory
+#        $(3) - permissions
+#        $(4) - owner
+#        $(5) - group
+define copy_ch_filelist
+	@if [ -z "$(and $(1),$(2),$(3),$(4),$(5))" ]; then \
+		echo "Argument missing in copy_ch_filelist" ; \
+		exit 1; \
+	fi
+	$(SUDO) install -d $(2)
+	-$(SUDO) install -m $(3) -o $(4) -g $(5) $(1) $(2)
+endef
+
+# copy_dir_recur usage:
+#        $(1) - copy everything from this directory, recursively
+#        $(2) - to this output directory
+#        $(3) - owner
+#        $(4) - group
+define copy_dir_recur
+	@if [ -z "$(and $(1),$(2),$(3),$(4))" ]; then \
+		echo "Argument missing in copy_dir_recur" ; \
+		exit 1; \
+	fi
+	$(SUDO) install -d $(2)
+	( cd $(1) ; $(SUDO) $(TAR) --owner $(3) --group $(4) -cf - * ) | (cd $(2) ; $(SUDO) $(TAR) -xpvf - )
+endef
+
+#gnu_linux_fs_archive := $(P4ROOT)/sw/tools/embedded/vendor/nvidia/esoc3-4.3.2-nv/arm-none-linux-gnueabi/target/emPower-minimal-targetfs.tgz
+gnu_linux_fs_archive := $(P4ROOT)/sw/mobile/linux/distro/mobile_ldk/
+gnu_linux_fs_archive := $(gnu_linux_fs_archive)/emPower-minimal-targetfs.tgz
+
+ATHEROS_WIFI_PATH ?= $(TEGRA_TOP)/3rdparty/atheros/ar6k_sdk/host
+atheros_wifi_path := $(ATHEROS_WIFI_PATH)
+
+SMMU_PATH ?= $(TEGRA_TOP)/tests/nvrm/smmu
+scripts_dir := $(TEGRA_TOP)/core/mobile_linux/scripts
+
+ifeq ($(TARGET_FLOAT_ABI_HARD),1)
+	sample_fs_archive := $(P4ROOT)/sw/mobile/linux/distro/mobile_ldk/target_filesystem/sample_fs_$(TARGET_FS_VERSION)_hf.tgz
+else
+	sample_fs_archive := $(P4ROOT)/sw/mobile/linux/distro/mobile_ldk/target_filesystem/sample_fs_$(TARGET_FS_VERSION).tgz
+endif
+
+loopback_device   := /dev/loop0
+image_block_size  := 512
+image_block_count := 409600
+
+output_image := empower_ext3.img
+
+TARGET_NFS_ROOT ?= $(TEGRA_TOP)/core/targetfs
+TARGET_NFS_ROOT_HOME := $(TARGET_NFS_ROOT)/home
+TARGET_NFS_ROOT_PASSWD := $(TARGET_NFS_ROOT)/etc/passwd
+
+DEF_USER = $(or $(and $(wildcard $(TARGET_NFS_ROOT_HOME)),\
+             $(shell ls $(TARGET_NFS_ROOT_HOME) | head -n 1)),ubuntu)
+DEF_USER_UID = $(or $(and $(wildcard $(TARGET_NFS_ROOT_PASSWD)),\
+                 $(shell cat $(TARGET_NFS_ROOT_PASSWD) | grep "$(DEF_USER)" | cut -d ':' -f 3)),\
+                 1000)
+DEF_USER_GID = $(or $(and $(wildcard $(TARGET_NFS_ROOT_PASSWD)),\
+                 $(shell cat $(TARGET_NFS_ROOT_PASSWD) | grep "$(DEF_USER)" | cut -d ':' -f 4)),\
+                 1000)
+
+TARGETFS_TEST_DIR=$(TARGET_NFS_ROOT)/home/$(DEF_USER)
+
+# kernel space tests
+KERNEL_SPACE_TESTS := $(TEGRA_TOP)/tests/linux/kernel_space_tests/
+
+# Variables for flashing
+fastboot := $(P4ROOT)/sw/mobile/linux/distro/mobile_ldk/fastboot
+mkyaffs2image := $(P4ROOT)/sw/mobile/linux/distro/mobile_ldk/mkyaffs2image
+
+# bug 910359 - variables for NvMMLite/TVMR to be included in targetfs
+NVMMLITE_TVMR_AXF=${TEGRA_TOP}/multimedia/tvmr/tvmr/ucode/t30/*.axf
+NVMMLITE_TVMR_BIN=${TEGRA_TOP}/multimedia/tvmr/tvmr/ucode/t30/*.bin
+
+# gst-omx plugin to be included in targetfs
+GST_PLUGINS = ${TEGRA_TOP}/core/$(OUTDIR)/libgstomx.so
+GST_PLUGINS += ${TEGRA_TOP}/core/$(OUTDIR)/libgstnvxvimagesink.so
+NV_LIBJPEG = ${TEGRA_TOP}/core/$(OUTDIR)/libjpeg.so
+
+# L4T pre-built directory
+L4T_PREBUILT_DIR=$(TEGRA_TOP)/l4t/prebuilts
+
+# Linux tests directory from test repo
+LINUX_TEST_DIR=$(TEGRA_TOP)/tests/linux
+# and test scripts
+LINUX_TEST_SCRIPT_MAP := \
+nvlowpower/nvlptest.sh:nvlptest.sh\
+kernel_space_tests/common/disable_dvfs.sh:disable_dvfs.sh\
+kernel_space_tests/common/modulehelper.sh:modulehelper.sh\
+kernel_space_tests/cpa/cpa_submit.sh:cpa_submit.sh\
+kernel_space_tests/i2c/eeprom/i2c_eepromtest_submit.sh:i2c_eepromtest_submit.sh\
+kernel_space_tests/pcie/pcie_submit.sh:pcie_submit.sh\
+kernel_space_tests/pinmux/config_test/pinmux_submit.sh:pinmux_submit.sh\
+kernel_space_tests/spi/master/spi_master_submit.sh:spi_master_submit.sh
+
+# NFS target update ops
+TARGET_FS_UPDATE_OPS :=
+TARGET_FS_UPDATE_OPS += nfs_targetfs_update_libs
+TARGET_FS_UPDATE_OPS += nfs_targetfs_update_config
+TARGET_FS_UPDATE_OPS += nfs_targetfs_update_kmod
+TARGET_FS_UPDATE_OPS += nfs_targetfs_update_firmware
+TARGET_FS_UPDATE_OPS += nfs_targetfs_update_testbits
+TARGET_FS_UPDATE_OPS += nfs_targetfs_update_apps
+
+ifeq ($(TARGET_BOARD),whistler)
+  bct_file := customers/nvidia-partner/whistler/nvflash/whistler_a02_12Mhz_H5PS1G63EFR_333Mhz_512MB_emmc_THGBM1G6D4EBAI4_x8.bct
+  bct_file_nand := customers/nvidia-partner/whistler/nvflash/whistler_12Mhz_H5PS1G63EFR_150Mhz_512MB_emmc_THGBM1G6D4EBAI4_x8.bct
+  bct_file_emmc := $(bct_file)
+  cfg_file := customers/nvidia-partner/whistler/nvflash/gnu_linux_fastboot_emmc_nfs.cfg
+  cfg_file_emmc := customers/nvidia-partner/whistler/nvflash/gnu_linux_fastboot_emmc_full.cfg
+  cfg_file_nand := customers/nvidia-partner/whistler/nvflash/gnu_linux_fastboot_nand_full.cfg
+  odm_data := 0xc0105
+  nfs_product := eth0
+else ifeq ($(TARGET_BOARD),harmony)
+  bct_file := customers/nvidia-partner/harmony/nvflash/harmony_a02_12Mhz_H5PS1G83EFR-S5C_333Mhz_1GB_2K8Nand_HY27UF084G2B-TP.bct
+  bct_file_nand := $(bct_file)
+  bct_file_emmc := customers/nvidia-partner/harmony/nvflash/harmony_12Mhz_H5PS1G83EFR-Y5C_300Mhz_1GB_2K8Nand_HY27UF084G2B-TP.bct
+  cfg_file := customers/nvidia-partner/harmony/nvflash/gnu_linux_fastboot_nand.cfg
+  cfg_file_emmc := customers/nvidia-partner/harmony/nvflash/gnu_linux_fastboot_emmc_full.cfg
+  cfg_file_nand := customers/nvidia-partner/harmony/nvflash/gnu_linux_fastboot_nand_full.cfg
+  odm_data := 0xd8011
+  nfs_product := usb0
+endif
+emmc_product := mmcblk3p1
+nand_product := mtdblock2
+
+.PHONY: nfs_targetfs nfs_targetfs_clean nfs_targetfs_update nfs_flash nfs_targetfs_add_khronos_headers
+.PHONY: nfs_targetfs_update_libs nfs_targetfs_update_config nfs_targetfs_update_kmod
+.PHONY: nfs_targetfs_update_firmware nfs_targetfs_update_testbits nfs_targetfs_update_apps
+
+nfs_targetfs:
+ifeq ($(wildcard $(sample_fs_archive)),)
+	@$(ECHO) "Sample root FS does not exist"
+	@exit 1
+else ifeq ($(EMPTY),$(filter $(TARGET_FS_VERSION),jaunty lucid maverick natty oneiric precise))
+	@$(ECHO) "Unsupported sample root FS (Try TARGET_FS_VERSION=jaunty|lucid|maverick|natty|oneiric|precise)"
+	@exit 1
+else
+	@$(ECHO) "Extracting sample root filesystem"
+	-$(SUDO) rm -rf $(TARGET_NFS_ROOT)
+	$(SUDO) mkdir -p $(TARGET_NFS_ROOT)
+	$(SUDO) $(TAR) -xvf $(sample_fs_archive) -C $(TARGET_NFS_ROOT)
+	@$(MAKE) nfs_targetfs_update
+endif
+
+nfs_targetfs_update:
+	$(foreach _update,$(TARGET_FS_UPDATE_OPS),$(MAKE) $(_update) && ) true
+	@$(ECHO) "nfs_targetfs: SUCCESS"
+
+nfs_targetfs_update_libs:
+	@$(ECHO) "Applying NV drivers"
+	$(call copy_ch_filelist,$(wildcard $(AVP_INSTALL_TARGET)/nvmm*.axf),$(TARGET_NFS_ROOT)/lib/firmware,0644,root,root)
+	$(call copy_ch_filelist,$(wildcard $(PRIVATE_AVP_INSTALL_TARGET)/nvrm_avp*.bin),$(TARGET_NFS_ROOT)/lib/firmware,0644,root,root)
+	$(call copy_ch_filelist,$(wildcard $(INSTALL_TARGET)/libnv*.so),$(TARGET_NFS_ROOT)/usr/lib,0644,root,root)
+	$(call copy_ch_filelist,$(wildcard $(PRIVATE_INSTALL_TARGET)/libnv*.so),$(TARGET_NFS_ROOT)/usr/lib,0644,root,root)
+	$(call copy_ch_filelist,$(wildcard $(PRIVATE_INSTALL_TARGET)/tegra_drv.so),$(TARGET_NFS_ROOT)/usr/lib/xorg/modules/drivers,0644,root,root)
+	$(call copy_ch_filelist,$(wildcard $(PRIVATE_INSTALL_TARGET)/tegra_drv.abi*.so),$(TARGET_NFS_ROOT)/usr/lib/xorg/modules/drivers,0644,root,root)
+	$(call copy_ch_filelist,$(wildcard $(INSTALL_TARGET)/$(TARGET_BOARD)/libnv*.so),$(TARGET_NFS_ROOT)/usr/lib,0644,root,root)
+	$(call copy_ch_filelist,$(KHRONOS_LIBS),$(TARGET_NFS_ROOT)/usr/lib,0644,root,root)
+	$(call copy_ch_filelist,$(NV_LIBJPEG),$(TARGET_NFS_ROOT)/usr/lib,0644,root,root)
+ifeq ($(TARGET_SOC),t30)
+	$(call copy_ch_filelist,$(NVMMLITE_TVMR_AXF),$(TARGET_NFS_ROOT)/lib/firmware,0644,root,root)
+	$(call copy_ch_filelist,$(NVMMLITE_TVMR_BIN),$(TARGET_NFS_ROOT)/lib/firmware,0644,root,root)
+endif
+
+nfs_targetfs_update_config:
+	$(SUDO) install -o root -g root -m 644 -D $(TEGRA_TOP)/graphics/X11/xorg.conf.example $(TARGET_NFS_ROOT)/etc/X11/xorg.conf
+ifeq (1,$(NV_EMBEDDED_BUILD))
+	$(SUDO) $(CP) $(TEGRA_TOP)/embedded/release/utils/rootfs_extra/nv_board_init.conf $(TARGET_NFS_ROOT)/etc/init/
+	$(SUDO) $(CP) $(TEGRA_TOP)/embedded/release/utils/rootfs_extra/asound.conf.* $(TARGET_NFS_ROOT)/etc/init/
+	$(SUDO) $(CP) $(TEGRA_TOP)/embedded/release/utils/rootfs_extra/nv_udev.rules $(TARGET_NFS_ROOT)/lib/udev/rules.d/51-nvrm.rules
+	$(SUDO) $(CP) $(TEGRA_TOP)/core/utils/ad1937/$(OUTDIR)/ad1937 $(TARGET_NFS_ROOT)/bin/
+	$(SUDO) $(CP) $(TEGRA_TOP)/core/utils/wm8731/$(OUTDIR)/wm8731 $(TARGET_NFS_ROOT)/bin/
+	$(SUDO) $(CP) $(TEGRA_TOP)/embedded/release/utils/rootfs_extra/ttyS0.conf $(TARGET_NFS_ROOT)/etc/init/
+	$(SUDO) $(CP) $(TEGRA_TOP)/embedded/release/utils/rootfs_extra/autologin $(TARGET_NFS_ROOT)/usr/bin/
+	$(SUDO) $(CP) $(TEGRA_TOP)/embedded/release/utils/rootfs_extra/S01nv-run-once-add-user $(TARGET_NFS_ROOT)/etc/rcS.d/
+else
+	@$(ECHO) "Copying L4T init scripts and udev rules"
+	$(call copy_dir_recur,$(TEGRA_TOP)/l4t/release/rfs/etc/,$(TARGET_NFS_ROOT)/etc/,root,root)
+endif
+
+nfs_targetfs_update_kmod:
+	@$(ECHO) "Applying kernel drivers"
+	$(SUDO) $(MAKE) -C $(KERN_DIR) $(KERN_ENV) modules_install INSTALL_MOD_PATH=$(TARGET_NFS_ROOT)
+ifneq ($(EMPTY),$(filter $(TARGET_BOARD),harmony))
+	$(call copy_ch_filelist,$(atheros_wifi_path)/os/linux/ar6000.ko,$(TARGET_NFS_ROOT)/lib/modules/`cat $(KERN_OUTDIR)/include/config/kernel.release`/kernel/drivers/net/wireless/,0644,root,root)
+endif
+	# call depmod explicitly, as out of kernel source tree module is copied above
+	@$(ECHO) "Running depmod on kernel modules"
+	$(SUDO) /sbin/depmod -ae -F $(KERN_OUTDIR)/System.map -b $(TARGET_NFS_ROOT)  `cat $(KERN_OUTDIR)/include/config/kernel.release`
+
+nfs_targetfs_update_firmware:
+	# copying firmware files to the target filesystem
+ifneq ($(EMPTY),$(filter $(TARGET_BOARD),harmony))
+	@$(ECHO) "Applying Atheros Wi-Fi driver and firmware"
+	$(call copy_ch_filelist,$(wildcard $(atheros_wifi_path)/../target/*),$(TARGET_NFS_ROOT)/lib/firmware/ar6002,0644,root,root)
+else ifneq (1,$(NV_EMBEDDED_BUILD))
+	@$(ECHO) "Applying Broadcom Wi-Fi firmware"
+	$(SUDO) install -o root -g root -m 644 -D $(TEGRA_TOP)/hardware/broadcom/wlan/bcm4329/firmware/fw_bcm4329.bin $(TARGET_NFS_ROOT)/lib/firmware/bcm4329/fw_bcm4329.bin
+	$(SUDO) install -o root -g root -m 644 -D $(TEGRA_TOP)/3rdparty/broadcom/bcmbinaries/bcm4329/wlan/nh930_nvram.txt $(TARGET_NFS_ROOT)/lib/firmware/nvram_4329.txt
+	$(SUDO) install -o root -g root -m 644 -D $(TEGRA_TOP)/hardware/broadcom/wlan/bcmdhd/firmware/bcm4330/fw_bcm4330_b2.bin $(TARGET_NFS_ROOT)/lib/firmware/bcm4330/fw_bcmdhd.bin
+	$(SUDO) install -o root -g root -m 644 -D $(TEGRA_TOP)/3rdparty/broadcom/bcmbinaries/bcm4330/wlan/NB099H.nvram_20110708.txt $(TARGET_NFS_ROOT)/lib/firmware/nvram_4330.txt
+endif
+
+nfs_targetfs_update_testbits: local_uid := $(DEF_USER_UID)
+nfs_targetfs_update_testbits: local_gid := $(DEF_USER_GID)
+nfs_targetfs_update_testbits: local_testdir := $(TARGETFS_TEST_DIR)
+nfs_targetfs_update_testbits:
+	@$(ECHO) "Applying L4T test bits"
+	$(call copy_ch_filelist,$(SMMU_PATH)/nvavp/nvavp_smmu.bin,$(TARGET_NFS_ROOT)/lib/firmware/,0644,root,root)
+	$(SUDO) $(MAKE) -C $(KERN_DIR) $(KERN_ENV) M=$(KERNEL_SPACE_TESTS) modules_install INSTALL_MOD_PATH=$(TARGET_NFS_ROOT)
+	$(call copy_ch_filelist,$(TEST_FILES),$(local_testdir),0755,$(local_uid),$(local_gid))
+	$(call copy_dir_recur,$(INSTALL_TARGET)/,$(local_testdir),$(local_uid),$(local_gid))
+	$(foreach fmap,$(LINUX_TEST_SCRIPT_MAP),$(SUDO) install -m 0755 -o $(local_uid) -g $(local_gid) $(LINUX_TEST_DIR)/$(word 1, $(subst :, ,$(fmap))) $(local_testdir)/$(word 2, $(subst :, ,$(fmap))) && ) true
+ifeq ($(TARGET_FLOAT_ABI_HARD),1)
+	$(call copy_ch_filelist,$(L4T_PREBUILT_DIR)/invensense/polldmp-static_armel,$(local_testdir),0755,$(local_uid),$(local_gid))
+endif
+
+nfs_targetfs_update_apps:
+	$(call copy_ch_filelist,$(GST_PLUGINS),$(TARGET_NFS_ROOT)/usr/lib/gstreamer-0.10,0644,root,root)
+	$(call copy_ch_filelist,$(INSTALL_TARGET)/nvgst*,$(TARGET_NFS_ROOT)/usr/bin/,0755,root,root)
+
+nfs_targetfs_add_khronos_headers:
+	$(call copy_ch_filelist,$(wildcard $(P4ROOT)/sw/mobile/main/include/GLES2/*),$(TARGET_NFS_ROOT)/usr/include/GLES2,0644,root,root)
+	$(call copy_ch_filelist,$(wildcard $(P4ROOT)/sw/mobile/main/include/EGL/*),$(TARGET_NFS_ROOT)/usr/include/EGL,0644,root,root)
+	$(call copy_ch_filelist,$(wildcard $(P4ROOT)/sw/mobile/main/include/KHR/*),$(TARGET_NFS_ROOT)/usr/include/KHR,0644,root,root)
+	@$(ECHO) "nfs_targetfs_add_khronos_headers: SUCCESS"
+
+nfs_targetfs_clean:
+	-$(SUDO) $(RM_RECURSIVE) $(TARGET_NFS_ROOT)
+
+nfs_flash:
+	$(CP) $(TEGRA_TOP)/core/_out/$(BUILD_FLAVOR)_$(DVS_NEWBUILD_CHIP_FAMILY)_aos_armv6/fastboot.bin $(TEGRA_TOP)/core/$(HOST_OUTDIR)/fastboot.bin
+	cd $(TEGRA_TOP)/core/$(HOST_OUTDIR) && $(SUDO) LD_LIBRARY_PATH=. ./nvflash --bct $(CONFIG_DIR)/$(bct_file) --setbct --configfile $(CONFIG_DIR)/$(cfg_file) --create --bl fastboot.bin --odmdata $(odm_data) --go
+	$(SUDO) $(fastboot) -i 0x955 -p $(nfs_product) flash:raw boot $(KERN_OUTDIR)/arch/arm/boot/zImage
+
+.PHONY: ext3_rootfs ext3_rootfs_clean
+
+ext3_rootfs: $(gnu_linux_fs_archive) create_empower_sys.sh
+	-$(RM_RECURSIVE) $(OUTDIR)/tmp
+	mkdir -p $(OUTDIR)/tmp
+	$(SUDO) bash ./create_empower_sys.sh \
+	    $(OUTDIR)/$(output_image) \
+	    $(image_block_count) \
+	    $(loopback_device) \
+	    $(OUTDIR)/tmp \
+	    $(gnu_linux_fs_archive) \
+	    mkfs.ext3
+
+ext3_rootfs_clean:
+	-$(RM_RECURSIVE) $(OUTDIR)/tmp
+	-$(RM_RECURSIVE) $(OUTDIR)/$(output_image)
+
+# gnu ext3 system image generation
+#
+# Number of 512 byte blocks in ext3 system filesystem
+#
+# 1GB / 512 = 2097152 blocks
+#
+EXT3_SYS_NUM_BLOCKS := 2097152
+
+# Loop device file
+EXT3_SYS_LOOP_DEV := /dev/loop0
+
+$(OUTDIR)/ext3_gnu_system.img: $(SYS_STAMP) create_gnu_ext3_sys.sh
+	rm -rf $@
+	mkdir -p $(OUTDIR)/ext3mount
+	$(SUDO) bash ./create_gnu_ext3_sys.sh \
+	    $@ \
+	    $(EXT3_SYS_NUM_BLOCKS) \
+	    $(EXT3_SYS_LOOP_DEV) \
+	    $(OUTDIR)/ext3mount \
+	    $(TARGET_NFS_ROOT) \
+	    mkfs.ext3
+
+ext3_system-force:
+	rm -f   $(OUTDIR)/ext3_gnu_system.img
+	$(MAKE) $(OUTDIR)/ext3_gnu_system.img
+
+# gnu yaffs2 system image generation
+$(OUTDIR)/yaffs2_gnu_system.img: $(SYS_STAMP) create_gnu_yaffs2_sys.sh
+	rm -rf $@
+	$(SUDO) bash ./create_gnu_yaffs2_sys.sh \
+	    $@ \
+	    $(TARGET_NFS_ROOT) \
+	    $(mkyaffs2image)
+
+yaffs2_system-force:
+	rm -f   $(OUTDIR)/yaffs2_gnu_system.img
+	$(MAKE) $(OUTDIR)/yaffs2_gnu_system.img
+
+.PHONY: emmc_flash nand_flash
+
+emmc_flash:
+	$(CP) $(TEGRA_TOP)/core/_out/$(BUILD_FLAVOR)_$(DVS_NEWBUILD_CHIP_FAMILY)_aos_armv6/fastboot.bin $(TEGRA_TOP)/core/$(HOST_OUTDIR)/fastboot.bin
+	$(SUDO) $(CP) $(OUTDIR)/ext3_gnu_system.img $(TEGRA_TOP)/core/$(HOST_OUTDIR)/ext3_gnu_system.img
+	cd $(TEGRA_TOP)/core/$(HOST_OUTDIR) && $(SUDO) LD_LIBRARY_PATH=. ./nvflash --bct $(CONFIG_DIR)/$(bct_file_emmc) --setbct --configfile $(CONFIG_DIR)/$(cfg_file_emmc) --create --bl fastboot.bin --odmdata $(odm_data) --go
+	$(SUDO) $(fastboot) -i 0x955 -p $(emmc_product) flash:raw boot $(KERN_OUTDIR)/arch/arm/boot/zImage
+
+nand_flash:
+	$(CP) $(TEGRA_TOP)/core/_out/$(BUILD_FLAVOR)_$(DVS_NEWBUILD_CHIP_FAMILY)_aos_armv6/fastboot.bin $(TEGRA_TOP)/core/$(HOST_OUTDIR)/fastboot.bin
+	$(SUDO) $(CP) $(OUTDIR)/yaffs2_gnu_system.img $(TEGRA_TOP)/core/$(HOST_OUTDIR)/yaffs2_gnu_system.img
+	cd $(TEGRA_TOP)/core/$(HOST_OUTDIR) && $(SUDO) LD_LIBRARY_PATH=. ./nvflash --bct $(CONFIG_DIR)/$(bct_file_nand) --setbct --configfile $(CONFIG_DIR)/$(cfg_file_nand) --create --bl fastboot.bin --odmdata $(odm_data) --go
+	$(SUDO) $(fastboot) -i 0x955 -p $(nand_product) flash:raw boot $(KERN_OUTDIR)/arch/arm/boot/zImage
+
+.PHONY: flashboot_image_clean flashboot_image_emmc flashboot_image_nand
+
+mkbootimg_util := $(P4ROOT)/sw/mobile/linux/distro/mobile_ldk/mkbootimg
+
+flashboot_output_image := flashboot.img
+kern_zimage := $(KERN_OUTDIR)/arch/arm/boot/zImage
+
+flashboot_image_clean:
+	-$(RM_RECURSIVE) $(OUTDIR)/$(flashboot_output_image)
+
+flashboot_image_emmc: $(mkbootimg_util) $(kern_zimage)
+	$(mkbootimg_util) --kernel $(kern_zimage) \
+	    --ramdisk NONE \
+	    --output $(OUTDIR)/$(flashboot_output_image) \
+	    --board $(emmc_product)
+
+flashboot_image_nand: $(mkbootimg_util) $(kern_zimage)
+	$(mkbootimg_util) --kernel $(kern_zimage) \
+	    --ramdisk NONE \
+	    --output $(OUTDIR)/$(flashboot_output_image) \
+	    --board $(nand_product)
+
+gnu_linux_release_list:
+	NV_LIST_RELEASE_PACKAGE=1 $(MAKE) -C $(TEGRA_TOP)/core-private/make
+	(unset TARGET_OS_SUBTYPE; \
+	NV_LIST_RELEASE_PACKAGE=1 $(MAKE) -C $(TEGRA_TOP)/core-private/make TARGET_CPU=armv4 TARGET_OS=rvds)
+	NV_LIST_RELEASE_PACKAGE=1 $(MAKE) -C $(TEGRA_TOP)/core/mobile_linux/daemons
+
+.PHONY: flash bsp flash_kernel flash_rfs flash_ldk
+
+flash:
+	$(TEGRA_TOP)/l4t/release/scripts/flash_from_build_env.sh all
+
+bsp:
+	$(TEGRA_TOP)/l4t/release/scripts/package_linux_for_tegra.sh
+
+flash_kernel:
+	$(TEGRA_TOP)/l4t/release/scripts/flash_from_build_env.sh kernel
+
+flash_rfs:
+	$(TEGRA_TOP)/l4t/release/scripts/flash_from_build_env.sh rfs
+
+flash_ldk:
+	$(TEGRA_TOP)/l4t/release/scripts/flash_from_build_env.sh ldk

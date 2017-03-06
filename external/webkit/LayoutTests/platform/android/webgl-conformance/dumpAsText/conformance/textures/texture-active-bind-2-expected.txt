@@ -1,0 +1,13 @@
+ 
+Tests that binding both TEXTURE_2D and TEXTURE_CUBE_MAP to the sameactive texture unit works as long as they are not usedsimultaneously in the same shader program.
+
+On success, you will see a series of "PASS" messages, followed by "TEST COMPLETE".
+
+PASS expected:0, 0, 255, 255 found: 0, 0, 255, 255
+PASS expected:255, 0, 255, 255 found: 255, 0, 255, 255
+PASS expected:0, 0, 255, 255 found: 0, 0, 255, 255
+PASS expected:255, 0, 255, 255 found: 255, 0, 255, 255
+PASS successfullyParsed is true
+
+TEST COMPLETE
+

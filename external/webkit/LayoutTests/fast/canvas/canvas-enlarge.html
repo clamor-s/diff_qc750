@@ -1,0 +1,26 @@
+<body>
+<!-- you should see a green rectangle of 300px x 300px -->
+<script type="text/javascript">
+if (window.layoutTestController) {
+  layoutTestController.waitUntilDone();
+  layoutTestController.dumpAsText(true);
+}
+var body = document.getElementsByTagName("body")[0];
+var t = document.createElement("canvas");
+t.width = "10";
+t.height = "10";
+var tctx = t.getContext("2d");
+tctx.fillStyle = "#0f0";
+tctx.fillRect(0, 0, t.width, t.height);
+body.appendChild(t);
+setTimeout(function () {
+  t.width = 300;
+  t.height = 300;
+  tctx.fillStyle = "#0f0";
+  tctx.fillRect(0, 0, t.width, t.height);
+  if (layoutTestController)
+      layoutTestController.notifyDone();
+}, 10);
+
+</script>
+</body>

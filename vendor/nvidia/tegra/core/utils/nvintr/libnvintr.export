@@ -1,0 +1,5 @@
+NvIntrInit
+NvIntrRegister
+NvIntrUnRegister
+NvIntrSet
+NvIntrHandler

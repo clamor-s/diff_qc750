@@ -1,0 +1,51 @@
+# openclose.c
+nvdcOpen
+nvdcClose
+
+# flip.c
+nvdcGetWindow
+nvdcPutWindow
+nvdcFlip
+
+# displays.c
+nvdcQueryNumHeads
+nvdcQueryDisplays
+nvdcQueryDisplayInfo
+nvdcQueryDisplayEdid
+nvdcDisplayBind
+nvdcDisplayUnbind
+nvdcQueryVblankSyncpt
+
+# cursor.c
+nvdcGetCursor
+nvdcPutCursor
+nvdcSetCursorImage
+nvdcSetCursor
+
+# modes.c
+nvdcGetMode
+nvdcSetMode
+nvdcDPMS
+nvdcQueryHeadStatus
+nvdcValidateMode
+
+# events.c
+nvdcEventFds
+nvdcEventData
+nvdcEventHotplug
+nvdcEventModeChange
+nvdcInitAsyncEvents
+
+# csc.c
+nvdcSetCsc
+
+# util.c
+pack_ufixed_20_12_f
+
+# lut.c
+nvdcAllocLut
+nvdcFreeLut
+nvdcSetLut
+
+# caps.c
+nvdcGetCapabilities

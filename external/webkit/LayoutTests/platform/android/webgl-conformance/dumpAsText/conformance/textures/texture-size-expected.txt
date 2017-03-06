@@ -1,0 +1,32 @@
+Checks that various sizes of textures render
+
+On success, you will see a series of "PASS" messages, followed by "TEST COMPLETE".
+
+MAX_TEXTURE_SIZE:2048
+MAX_CUBE_MAP_TEXTURE_SIZE:2048
+PASS 2D texture of size 1x1 with no mips should draw with red
+PASS 2D texture of size 1x1 with mips should draw with blue
+PASS 2D texture of size 1x1 with no mips should draw with yellow
+PASS 2D texture of size 1x1 with mips should draw with magenta
+PASS 2D texture of size 1x1 with no mips should draw with cyan
+PASS 2D texture of size 1x1 with mips should draw with green
+PASS cube map of size 1x1 with no mips should draw with red
+PASS cube map of size 1x1 with mips should draw with blue
+PASS getError was expected value: NO_ERROR : Should be no errors.
+PASS 2D texture of size 2x1 with no mips should draw with yellow
+PASS 2D texture of size 2x1 with mips should draw with magenta
+PASS 2D texture of size 1x2 with no mips should draw with cyan
+PASS 2D texture of size 1x2 with mips should draw with green
+PASS 2D texture of size 2x2 with no mips should draw with red
+PASS 2D texture of size 2x2 with mips should draw with blue
+PASS cube map of size 2x2 with no mips should draw with yellow
+PASS cube map of size 2x2 with mips should draw with magenta
+PASS 2D texture of size 4x1 with no mips should draw with cyan
+PASS 2D texture of size 4x1 with mips should draw with green
+PASS 2D texture of size 1x4 with no mips should draw with red
+PASS 2D texture of size 1x4 with mips should draw with blue
+PASS 2D texture of size 4x4 with no mips should draw with yellow
+PASS 2D texture of size 4x4 with mips should draw with magenta
+PASS cube map of size 4x4 with no mips should draw with cyan
+PASS cube map of size 4x4 with mips should draw with green
+

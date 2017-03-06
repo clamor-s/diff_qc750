@@ -1,0 +1,11 @@
+fragment shader with appropriately limited indexing expression should succeed
+
+On success, you will see a series of "PASS" messages, followed by "TEST COMPLETE".
+
+test: fragment shader with appropriately limited indexing expression should succeed
+test vertex shader
+test fragment shaderPASS fragment shader with appropriately limited indexing expression should succeed
+PASS successfullyParsed is true
+
+TEST COMPLETE
+

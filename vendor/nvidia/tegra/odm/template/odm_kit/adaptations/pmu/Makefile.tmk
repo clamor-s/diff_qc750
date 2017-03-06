@@ -1,0 +1,114 @@
+################################### tell Emacs this is a -*- makefile-gmake -*-
+#
+# Copyright (c) 2011-2012, NVIDIA CORPORATION.  All rights reserved.
+#
+# NVIDIA CORPORATION and its licensors retain all intellectual property
+# and proprietary rights in and to this software, related documentation
+# and any modifications thereto.  Any use, reproduction, disclosure or
+# distribution of this software and related documentation without an express
+# license agreement from NVIDIA CORPORATION is strictly prohibited.
+#
+# tmake for SW Mobile component makefile
+#
+# nvodm_pmu static library component makefile
+#
+###############################################################################
+
+ifdef NV_COMPONENT_FLAG_STATIC_LIBRARY_SECTION
+include $(NV_BUILD_START_COMPONENT)
+
+NV_COMPONENT_NAME              := libnvodm_pmu
+NV_COMPONENT_OWN_INTERFACE_DIR := .
+NV_COMPONENT_SOURCES           := \
+	pmu_hal.c \
+	pmu_i2c/nvodm_pmu_i2c.c \
+	tps6586x/nvodm_pmu_tps6586x_i2c.c \
+	tps6586x/nvodm_pmu_tps6586x_interrupt.c \
+	tps6586x/nvodm_pmu_tps6586x_batterycharger.c \
+	tps6586x/nvodm_pmu_tps6586x_adc.c \
+	tps6586x/nvodm_pmu_tps6586x.c \
+	tps6586x/nvodm_pmu_tps6586x_rtc.c \
+	tps6591x/nvodm_pmu_tps6591x_pmu_driver.c \
+	tps6236x/nvodm_pmu_tps6236x_pmu_driver.c \
+	tps6238x/nvodm_pmu_tps6238x_pmu_driver.c \
+	max897x/nvodm_pmu_max897x_pmu_driver.c \
+	tps8003x/tps8003x_core_driver.c \
+	tps8003x/nvodm_pmu_tps8003x_pmu_driver.c \
+	tps8003x/nvodm_pmu_tps8003x_adc_driver.c \
+	tps8003x/nvodm_pmu_tps8003x_battery_charging_driver.c \
+	ricoh583/nvodm_pmu_ricoh583_pmu_driver.c \
+	max8907b/max8907b.c \
+	max8907b/max8907b_adc.c \
+	max8907b/max8907b_batterycharger.c \
+	max8907b/max8907b_i2c.c \
+	max8907b/max8907b_interrupt.c \
+	max8907b/max8907b_rtc.c \
+	max8907b/fan5355_buck_i2c.c \
+	max8907b/tca6416_expander_i2c.c \
+	max8907b/mic2826_i2c.c \
+	max8907b/ad5258_dpm.c \
+	tca6416/nvodm_pmu_tca6416.c \
+	apgpio/nvodm_pmu_apgpio.c \
+	max77663/nvodm_pmu_max77663_pmu_driver.c \
+	boards/cardhu/nvodm_pmu_cardhu_rail.c \
+	boards/cardhu/nvodm_pmu_cardhu_dummy.c \
+	boards/cardhu/odm_pmu_cardhu_tps6591x_rail.c \
+	boards/cardhu/odm_pmu_cardhu_tps6236x_rail.c \
+	boards/cardhu/odm_pmu_cardhu_apgpio_rail.c \
+	boards/cardhu/odm_pmu_cardhu_ricoh583_rail.c \
+	boards/cardhu/odm_pmu_cardhu_max77663_rail.c \
+	boards/enterprise/nvodm_pmu_enterprise_rail.c \
+	boards/enterprise/nvodm_pmu_enterprise_dummy.c \
+	boards/enterprise/odm_pmu_enterprise_tps8003x_rail.c \
+	boards/enterprise/odm_pmu_enterprise_apgpio_rail.c \
+	boards/enterprise/nvodm_pmu_enterprise_battery.c \
+	boards/kai/nvodm_pmu_kai_rail.c \
+	boards/kai/nvodm_pmu_kai_dummy.c \
+	boards/kai/odm_pmu_kai_apgpio_rail.c \
+	boards/kai/odm_pmu_kai_max77663_rail.c \
+	boards/p1852/nvodm_pmu_p1852_rail.c \
+	boards/p1852/odm_pmu_p1852_tps6591x_rail.c
+
+NV_COMPONENT_INCLUDES          := .
+
+#
+# NOTE: The code from these modules is also executed on the AVP!
+#       Therefore they need to be compiled with code generation flags
+#       compatible with AVP, i.e. ARMv4T ARM code.
+#
+NV_COMPONENT_CODE_GENERATION   := avp
+
+NV_COMPONENT_HAS_BROKEN_CODE   := \
+	missing-field-initializers \
+	undef
+
+ifeq ($(NV_TARGET_REFERENCE_BOARD),cardhu)
+NV_COMPONENT_CFLAGS            += -DNV_TARGET_CARDHU
+else ifeq ($(NV_TARGET_REFERENCE_BOARD),e1853)
+NV_COMPONENT_CFLAGS            += -DNV_TARGET_E1853
+else ifeq ($(NV_TARGET_REFERENCE_BOARD),enterprise)
+NV_COMPONENT_CFLAGS            += -DNV_TARGET_ENTERPRISE
+else ifeq ($(NV_TARGET_REFERENCE_BOARD),harmony)
+# nothing
+else ifeq ($(NV_TARGET_REFERENCE_BOARD),kai)
+NV_COMPONENT_CFLAGS            += -DNV_TARGET_KAI
+else ifeq ($(NV_TARGET_REFERENCE_BOARD),p852)
+# nothing
+else ifeq ($(NV_TARGET_REFERENCE_BOARD),p1852)
+NV_COMPONENT_CFLAGS            += -DNV_TARGET_P1852
+else ifeq ($(NV_TARGET_REFERENCE_BOARD),ventana)
+NV_COMPONENT_CFLAGS            += -DNV_TARGET_VENTANA
+else ifeq ($(NV_TARGET_REFERENCE_BOARD),whistler)
+NV_COMPONENT_CFLAGS            += -DNV_TARGET_WHISTLER
+else
+$(error unsupported board configuration '$(NV_TARGET_REFERENCE_BOARD)' for nvodm_pmu)
+endif
+
+include $(NV_BUILD_STATIC_LIBRARY)
+endif
+
+# Local Variables:
+# indent-tabs-mode: t
+# tab-width: 8
+# End:
+# vi: set tabstop=8 noexpandtab:

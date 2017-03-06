@@ -1,0 +1,13 @@
+CONSOLE MESSAGE: line 24: *** Error compiling shader '[object WebGLShader]':ERROR: 0:19: '' :  Reference of struct type nesting2 exceeds maximum struct nesting of 4
+
+shader with too-deep struct nesting should fail per WebGL spec
+
+On success, you will see a series of "PASS" messages, followed by "TEST COMPLETE".
+
+test: shader with too-deep struct nesting should fail per WebGL spec
+test vertex shader
+default fragment shaderPASS shader with too-deep struct nesting should fail per WebGL spec
+PASS successfullyParsed is true
+
+TEST COMPLETE
+

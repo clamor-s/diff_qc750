@@ -1,0 +1,802 @@
+//*
+//* Copyright (c) 2007-2012 NVIDIA Corporation.  All Rights Reserved.
+//*
+//* NVIDIA Corporation and its licensors retain all intellectual property and
+//* proprietary rights in and to this software and related documentation.  Any
+//* use, reproduction, disclosure or distribution of this software and related
+//* documentation without an express license agreement from NVIDIA Corporation
+//* is strictly prohibited.
+//*
+//*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+//*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+//*!!!                                                                                !!!
+//*!!! ** SECURITY NOTICE ** SECURITY NOTICE ** SECURITY NOTICE ** SECURITY NOTICE ** !!!
+//*!!!                                                                                !!!
+//*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+//*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+//*!!!                                                                                !!!
+//*!!!   FOR SECURITY REASONS, THIS FILE SHOULD BE DISTRIBUTED ONLY IN BINARY FORM.   !!!
+//*!!!                                                                                !!!
+//*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+//*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+
+#define  ASSEMBLY_SOURCE_FILE  1
+
+#include "nvbl_assembly.h"
+
+
+#include "nvbl_arm_cpsr.h"
+#include "nvbl_memmap_nvap.h"
+//#include "avp/ap20/nvbl_avp_power.h"
+//#include "ap20/nvbl_private_regs.h"
+//#include "ap20/nvbl_pmcscratch_sparemap.h"
+#include "ap20/nvboot_pmc_scratch_map.h"
+#include "ap20/arapbpm.h"
+#include "ap20/arapb_misc.h"
+#include "ap20/aremc.h"
+#include "ap20/arevp.h"
+#include "ap20/arflow_ctlr.h"
+#include "ap20/arpg.h"
+#include "ap20/artimerus.h"
+#include "ap20/arclk_rst.h"
+#include "nvrm_drf_asm.h"
+#include "ap20/argpio.h"
+
+
+//-------------------------------------------------------------------------------
+// Compile-time code options
+//-------------------------------------------------------------------------------
+
+// CPU Clock Source -- DO NOT CHOOSE PLL-X
+#define CPU_CLOCK_SOURCE    CLK_RST_CONTROLLER_CCLK_BURST_POLICY_0_CWAKEUP_IDLE_SOURCE_PLLP_OUT0
+
+//Scratch map
+#define APBDEV_PMC_SCRATCH_FOR_LP_EXIT_TIME_0   APBDEV_PMC_SCRATCH1_0
+#define APBDEV_PMC_SCRATCH_FOR_AVP_RESUME_PTR_0 APBDEV_PMC_SCRATCH39_0
+
+//Misc warmboot parameters
+#define AP20_WB0_RUN_ADDRESS    0x40020000
+
+//Apertures bases
+#define CLK_RST_PA_BASE     0x60006000  // Base address for arclk_rst.h registers
+#define EVP_PA_BASE         0x6000F000  // Base address for arevp.h registers
+#define FLOW_PA_BASE        0x60007000  // Base address for arflow_ctlr.h registers
+#define PMC_PA_BASE         0x7000E400  // Base address for arapbpm.h registers
+#define TIMERUS_PA_BASE     0x60005010  // Base address for artimerus.h registers
+#define PG_UP_PA_BASE       0x60000000  // Base address for arpg.h registers
+#define MISC_PA_BASE        0x70000000  // Base address for arapb_misc.h registers
+
+
+//-------------------------------------------------------------------------------
+// Compile-time debug code enables
+//-------------------------------------------------------------------------------
+
+#define DEBUG_LP0_EXIT1                 0   // Set non-zero to enable LP0 exit debug code
+#define DEBUG_LP0_EXIT2                 0   // Set non-zero to enable LP0 exit debug code
+#define DEBUG_HALT_AVP_ON_LP0_EXIT      0   // Set non-zero to unconditionally halt AVP on LP0 exit
+#define DEBUG_DO_NOT_OBFUSCATE          0   // Set non-zero to skip obfuscation of WB0 code
+#define DEBUG_DO_NOT_RESET_CORESIGHT    0   // Set non-zero to skip resetting CoreSight
+#define DEBUG_LP0_EXIT3_HW_GPTGL        0   // Set non-zero to enable LP0 exit GPIO tgl for Harmony and Whistler
+
+
+        TEXT
+        P2ALIGN(2)
+
+
+//===============================================================================
+// How this all works.
+//
+// The AP20 bootrom has fairly stringent requirements on the AVP-side code to
+// be run for LP0 exit (a.k.a. the WB0 code). These requirements are much more
+// strict than on prior chips.
+//
+// 1. Digital signing and encryption requirements:
+//    (a) In pre-production mode, no signing is required.
+//    (b) In NvProduction mode, the code is signed with an all-zero key.
+//    (c) In OdmProductionOpen mode, the code is signed with the Secure
+//        Boot Key (SBK).
+//    (d) In OdmProductionSecure mode, the code is encrypted and signed with
+//        the Secure Boot Key (SBK).
+// 2. The code must contain a bootrom-defined header that contains the
+//    digital signature as well as the code's run-time address and entry point.
+// 3. The signing and encryption requirements imply that this code must be
+//    available to the bootloader because the SBK will be cleared from the
+//    AES engine when the bootloader exits. This imposes severe requirements
+//    on this code (see "Restrictions" below).
+// 4. The bootloader must call NvBlPowerInitializeCodeSegment() to generate
+//    the header, relocate, encrypt, and sign this code into the AVP-side
+//    LP0 code segment area set aside by and for the OS image.
+// 5. The address of the AVP-side code segment plus header that was prepared by
+//    NvBlPowerInitializeCodeSegment() is passed by the bootloader to the OS
+//    via PMC_SCRATCH41.
+// 6. Upon LP0 entry the OS passes the address of the AVP-side code segment plus
+//    header to the bootrom in PMC_SCRATCH1. The address of the CPU-side
+//    recovery code is passed to the AVP-side code segment in PMC_SCRATCH41.
+// 7. Upon LP0 exit, the bootrom validates the signature and decrypts (if necessary)
+//    the AVP-side code segment, relocating it to it's run address specified
+//    in the header. If then jumps to the entry point specified in the header.
+//    If the signature validation fails, the chip will be reset and a cold boot
+//    performed.
+// 8. This code is physically linked into the bootloader. There is *NO* instance
+//    of this code visible to the OS other than what the bootloader has prepared
+//    in NvBlPowerInitializeCodeSegment(). This means that if there is a change
+//    in the WB0 code code sequence that affects the OS restoration process,
+//    you must update the bootloader on the target device in order for the OS
+//    to actually be able to use the new WB0 code.
+//===============================================================================
+
+
+//-------------------------------------------------------------------------------
+// Prototype:
+//   void NvBlPowerExitLowPowerState(void)
+//
+// Input:
+//
+// Output:
+//   None
+//
+// Registers Used:
+//   ALL
+//
+// Description:
+//   This function restarts the CPU and then waits for the AVP driver to
+//   tell it where to transfer control to finish restoration of the AVP state.
+//-------------------------------------------------------------------------------
+// Restrictions:
+//   1. This code is executed *ONLY* by the AVP upon exit from BOOTROM WB0 code.
+//      As a result it must use only ARMv4i instructions.
+//   2. This code must be completely self-contained and *MUST NOT* call any
+//      subroutines (that means *NO STACK*).
+//   3. All code segment references *MUST BE* completely position independent.
+//   4. All data segment references *MUST BE* completely position independent.
+//   5. There *MUST BE NO* explicit references to any code in the bootloader
+//      *OR* OS images. All external addresses must be communicated through
+//      PMC SCRATCH registers.
+//   6. This code must not be delivered in source form for security reasons.
+//-------------------------------------------------------------------------------
+
+// Until this code is placed into the TrustZone hypervisor, it will be sitting
+// as plain-text in the non-secure bootloader. Use random meaninless strings
+// for the entry points to hide the true purpose of this code to make it a
+// little harder to identify from a symbol table entry.
+
+        EXPORT  adSklS9DjzHw6Iuy34J8o7dli4ueHy0jg     // NvBlPowerExitLowPowerState
+adSklS9DjzHw6Iuy34J8o7dli4ueHy0jg LABEL
+
+        //------------------------------------------------------------------
+        // Spit out some random garbage as a place holder for the bootrom
+        // header.
+        //------------------------------------------------------------------
+
+        DCD     0x9118A910
+        DCD     0xED704136
+        DCD     0x3A102D00
+        DCD     0xEE206404
+        DCD     0xE6514AC1
+        DCD     0xD6008420
+        DCD     0x43028604
+        DCD     0x42009241
+        DCD     0xB8006910
+        DCD     0x2D01780C
+        DCD     0xA8047900
+        DCD     0xB940AD08
+        DCD     0xD64C8090
+        DCD     0x5520A602
+        DCD     0xE6020600
+        DCD     0x06105640
+
+Start   LABEL   // Do not export this label
+
+#if     DEBUG_LP0_EXIT3_HW_GPTGL
+        //-----------------------------------------------------------------
+        // Toggle GPIO_PJ7 before LP0 wakeup
+        //-----------------------------------------------------------------
+        // Deassert DPD_Sample
+        LDR     r0, =0x7000E420 // APBDEV_PMC_DPD_SAMPLE_0
+        LDR     r1, =0x0
+        STR     r1, [r0]
+
+        // Un-tristate the pin
+        LDR     r0, =0x70000014 // TRISTATE_REG_A
+        LDR     r1, [r0]
+        BIC     r1, r1, #APB_MISC_PP_TRISTATE_REG_A_0_Z_GMC_FIELD
+        STR     r1, [r0] // TRISTATE_REG_A
+
+        // configure pin as gpio
+        LDR     r0, =0x6000D904 //GPIO_MSK_CNF_2_7
+        LDR     r1, =0x00008080
+        STR     r1, [r0] //GPIO_MSK_CNF_2_7
+
+        // drive 1 on GPIO_PJ7
+        LDR     r0, =0x6000D924 //GPIO_MSK_OUT_2_7
+        LDR     r1, =0x00008080
+        STR     r1, [r0] //GPIO_MSK_OUT_2_7
+
+        // set OE enabled got GPIO_PJ7
+        LDR     r0, =0x6000D914 //GPIO_MSK_OE_2_7
+        LDR     r1, =0x00008080
+        STR     r1, [r0] //GPIO_MSK_OE_2_7
+
+        // Delay to catch the pulse
+        LDR     r0, = 0x10000
+LoopDelay:
+        SUBS    r0, r0, #1
+        BHI     LoopDelay
+
+        // drive 0 on the gpio signal
+        LDR     r0, =0x6000D924 //GPIO_MSK_OUT_2_7
+        LDR     r1, =0x00008000
+        STR     r1, [r0] //GPIO_MSK_OUT_2_7
+
+#endif//DEBUG_LP0_EXIT3_HW_GPTGL
+
+        //------------------------------------------------------------------
+        // The bootrom disables JTAG before handing control to us.
+        // Enable JTAG and RTCK Daisychaining.
+        //------------------------------------------------------------------
+
+        LDR     r0, =MISC_PA_BASE               // R0 = MISC PA base address
+        LDR     r1, =NV_DRF_DEF(APB_MISC_PP, CONFIG_CTL, JTAG, ENABLE) \
+                _OR_ NV_DRF_DEF(APB_MISC_PP, CONFIG_CTL, TBE, ENABLE)
+        STR     r1, [r0, #NV_DRF_OFFSET(APB_MISC_PP, CONFIG_CTL)]
+
+#if     DEBUG_LP0_EXIT1
+
+        //-----------------------------------------------------------------
+        // Debug check point.
+        //----------------------------------------------------------------
+
+        B       .
+
+#endif//DEBUG_LP0_EXIT1
+
+        //-----------------------------------------------------------------
+        // Load up the base addresses for the register blocks.
+        //-----------------------------------------------------------------
+
+        LDR     r5, =PMC_PA_BASE                // R5 = PMC PA base address
+        LDR     r6, =FLOW_PA_BASE               // R6 = FLOW PA base address
+        LDR     r7, =TIMERUS_PA_BASE            // R7 = TIMERUS PA base address
+        LDR     r8, =CLK_RST_PA_BASE            // R8 = CLK PA base address
+        LDR     r9, =EVP_PA_BASE                // R9 = EVP PA base address
+
+        //-----------------------------------------------------------------
+        // Are we running where we're supposed to be?
+        //-----------------------------------------------------------------
+
+        LDR     r0, =AP20_WB0_RUN_ADDRESS       // R0 = expected load address
+        ADD     r1, pc, #Here-(.+8)             // R1 = &here
+Here    LABEL   // Do not export this label
+        SUB     r1, r1, #(Here-Start)           // R1 = actual load address
+        LDR     r2, =PG_UP_PA_BASE              // R2 = PG PA base address
+        LDR     r3, [r2, #PG_UP_TAG_0]          // R3 = processor tag
+        LDR     r2, =PG_UP_TAG_0_PID_COP        // R2 = AVP processor tag
+        CMP     r0, r1                          // Addresses match?
+        CMPEQ   r2, r3                          // Processor tags match?
+        BNE     DoReset                         // No -- reset the chip
+
+        //-----------------------------------------------------------------
+        // Get a snapshot of the Usec count. This is a good indicator of
+        // the overhead of BOOTROM after a wake-up event.
+        //-----------------------------------------------------------------
+
+        LDR     r11, [r7, #TIMERUS_CNTR_1US_0]
+
+        //==================================================================
+        // BEGIN CPU COMPLEX INITIALIZATON
+        //------------------------------------------------------------------
+        // Initialize the CPU complex. This code is essentially the same
+        // as what is done on cold boot by NvBlAvpStartCpu() but that
+        // function is not callable from here.
+        //==================================================================
+
+#if     !DEBUG_DO_NOT_RESET_CORESIGHT
+
+        //----------------------------------------------------------------
+        // Assert CoreSight reset.
+        //----------------------------------------------------------------
+
+        MOV     r1, #NV_DRF_MASK(CLK_RST_CONTROLLER,RST_DEV_U_SET,SET_CSITE_RST)
+        STR     r1, [r8, #CLK_RST_CONTROLLER_RST_DEV_U_SET_0]
+
+#endif//!DEBUG_DO_NOT_RESET_CORESIGHT
+
+	//Set the drive strength
+	ldr	r1, [r8, #CLK_RST_CONTROLLER_OSC_CTRL_0]
+	ldr	r3, =NV_DRF_MASK(CLK_RST_CONTROLLER, OSC_CTRL, XOFS) \
+                _OR_ NV_DRF_MASK(CLK_RST_CONTROLLER, OSC_CTRL, XOE)
+	bic 	r1, r1, r3
+	ldr	r3, =NV_DRF_NUM(CLK_RST_CONTROLLER, OSC_CTRL, XOFS, 0x4) \
+                _OR_ NV_DRF_NUM(CLK_RST_CONTROLLER, OSC_CTRL, XOE, 0x1)
+	orr 	r3, r1, r3
+	str	r3, [r8, #CLK_RST_CONTROLLER_OSC_CTRL_0]
+
+        //-----------------------------------------------------------------
+        // Power up the CPU complex if necessary.
+        //-----------------------------------------------------------------
+
+        LDR     r3, [r5, #APBDEV_PMC_PWRGATE_STATUS_0]
+        TST     r3, #NV_DRF_MASK(APBDEV_PMC, PWRGATE_STATUS, CPU)
+
+        LDREQ   r2, =NV_DRF_DEF(APBDEV_PMC, PWRGATE_TOGGLE, PARTID, CP) \
+                _OR_ NV_DRF_DEF(APBDEV_PMC, PWRGATE_TOGGLE, START, ENABLE)
+        STREQ   r2, [r5, #APBDEV_PMC_PWRGATE_TOGGLE_0]
+
+IsCpuOn LABEL   // Do not export this label
+        LDR     r3, [r5, #APBDEV_PMC_PWRGATE_STATUS_0]
+        TST     r3, #NV_DRF_MASK(APBDEV_PMC, PWRGATE_STATUS, CPU)
+        BEQ     IsCpuOn
+
+        //-----------------------------------------------------------------
+        // Remove the I/O clamps from the CPU power partition.
+        //-----------------------------------------------------------------
+
+        MOV     r3, #NV_DRF_DEF(APBDEV_PMC, REMOVE_CLAMPING_CMD, CPU, ENABLE)
+        STR     r3, [r5, #APBDEV_PMC_REMOVE_CLAMPING_CMD_0]
+
+        //------------------------------------------------------------------
+        // PLL-P is at 432MHz (as set by the boot ROM). Upon resume, it
+        // should be reprogrammed to 216Mhz [bug 455955]. Since SCLK/AVP is
+        // on PLLP after resume, switch SCLK to PLLM_OUT1 first.
+        //
+        // Set the divider ratio for PLLM_OUT1 such that the frequency is
+        // within the safe range for SCLK. PLLM maximum frequence is
+        // approximately 1066 MHz so a divider of 8 yields PLLM_OUT1
+        // frquency of approximately 213 MHz. Set APB divider 1:2 to keep
+        // safe APB clock as well.
+        //------------------------------------------------------------------
+
+        LDR     r1, = NV_DRF_DEF(CLK_RST_CONTROLLER, PLLM_OUT, PLLM_OUT1_RSTN, RESET_DISABLE) \
+                _OR_  NV_DRF_DEF(CLK_RST_CONTROLLER, PLLM_OUT, PLLM_OUT1_CLKEN, ENABLE) \
+                _OR_  NV_DRF_NUM(CLK_RST_CONTROLLER, PLLM_OUT, PLLM_OUT1_RATIO, 0x8)
+        STR     r1, [r8, #CLK_RST_CONTROLLER_PLLM_OUT_0]
+
+        LDR     r1, =NV_DRF_NUM(CLK_RST_CONTROLLER, CLK_SYSTEM_RATE, APB_RATE, 1)
+        STR     r1, [r8, #CLK_RST_CONTROLLER_CLK_SYSTEM_RATE_0]
+
+        //------------------------------------------------------------------
+        // Switch AVP to PLLM_OUT1, wait 2us for switch to complete.
+        //------------------------------------------------------------------
+
+        LDR     r2, =NV_DRF_DEF(CLK_RST_CONTROLLER, SCLK_BURST_POLICY, SWAKEUP_FIQ_SOURCE, PLLM_OUT1) \
+                _OR_ NV_DRF_DEF(CLK_RST_CONTROLLER, SCLK_BURST_POLICY, SWAKEUP_IRQ_SOURCE, PLLM_OUT1) \
+                _OR_ NV_DRF_DEF(CLK_RST_CONTROLLER, SCLK_BURST_POLICY, SWAKEUP_RUN_SOURCE, PLLM_OUT1) \
+                _OR_ NV_DRF_DEF(CLK_RST_CONTROLLER, SCLK_BURST_POLICY, SWAKEUP_IDLE_SOURCE, PLLM_OUT1) \
+                _OR_ NV_DRF_DEF(CLK_RST_CONTROLLER, SCLK_BURST_POLICY, SYS_STATE, IDLE)
+        STR     r2, [r8, #CLK_RST_CONTROLLER_SCLK_BURST_POLICY_0]
+
+        LDR     r3, =NV_DRF_NUM(FLOW_CTLR, HALT_COP_EVENTS, ZERO, (2+1)) \
+                _OR_ NV_DRF_NUM(FLOW_CTLR, HALT_COP_EVENTS, uSEC, 1) \
+                _OR_ NV_DRF_NUM(FLOW_CTLR, HALT_COP_EVENTS, MODE, 2)
+        STR     r3, [r6, #FLOW_CTLR_HALT_COP_EVENTS_0]
+
+        //------------------------------------------------------------------
+        // Re-configure PLLP to 216MHz and adjust PLLP output dividers
+        // to keep default frequencies; leave PLLP bypassed
+        //------------------------------------------------------------------
+
+        LDR     r1, [r8, #CLK_RST_CONTROLLER_OSC_CTRL_0]
+        MOV     r1, r1, LSR #NV_DRF_SHIFT(CLK_RST_CONTROLLER, OSC_CTRL, OSC_FREQ)
+        ADD     r2, pc, #pllp_base_table-(.+8)
+        LDR     r2, [r2, r1, LSL #2]
+        ADD     r3, pc, #pllp_misc_table-(.+8)
+        LDR     r3, [r3, r1, LSL #2]
+
+        STR     r3, [r8, #CLK_RST_CONTROLLER_PLLP_MISC_0]
+        STR     r2, [r8, #CLK_RST_CONTROLLER_PLLP_BASE_0]
+        ORR     r2, r2, #NV_DRF_DEF(CLK_RST_CONTROLLER, PLLP_BASE, PLLP_ENABLE, ENABLE)
+        STR     r2, [r8, #CLK_RST_CONTROLLER_PLLP_BASE_0]
+
+        LDR     r1, = NV_DRF_DEF(CLK_RST_CONTROLLER, PLLP_OUTA, PLLP_OUT1_RSTN, RESET_DISABLE) \
+                _OR_  NV_DRF_DEF(CLK_RST_CONTROLLER, PLLP_OUTA, PLLP_OUT1_CLKEN, ENABLE) \
+                _OR_  NV_DRF_DEF(CLK_RST_CONTROLLER, PLLP_OUTA, PLLP_OUT1_OVRRIDE, ENABLE) \
+                _OR_  NV_DRF_NUM(CLK_RST_CONTROLLER, PLLP_OUTA, PLLP_OUT1_RATIO, 0xD) \
+                _OR_  NV_DRF_DEF(CLK_RST_CONTROLLER, PLLP_OUTA, PLLP_OUT2_RSTN, RESET_DISABLE) \
+                _OR_  NV_DRF_DEF(CLK_RST_CONTROLLER, PLLP_OUTA, PLLP_OUT2_CLKEN, ENABLE) \
+                _OR_  NV_DRF_DEF(CLK_RST_CONTROLLER, PLLP_OUTA, PLLP_OUT2_OVRRIDE, ENABLE) \
+                _OR_  NV_DRF_NUM(CLK_RST_CONTROLLER, PLLP_OUTA, PLLP_OUT2_RATIO, 0x7)
+        STR     r1, [r8, #CLK_RST_CONTROLLER_PLLP_OUTA_0]
+        LDR     r1, = NV_DRF_DEF(CLK_RST_CONTROLLER, PLLP_OUTB, PLLP_OUT3_RSTN, RESET_DISABLE) \
+                _OR_  NV_DRF_DEF(CLK_RST_CONTROLLER, PLLP_OUTB, PLLP_OUT3_CLKEN, ENABLE) \
+                _OR_  NV_DRF_DEF(CLK_RST_CONTROLLER, PLLP_OUTB, PLLP_OUT3_OVRRIDE, ENABLE) \
+                _OR_  NV_DRF_NUM(CLK_RST_CONTROLLER, PLLP_OUTB, PLLP_OUT3_RATIO, 0x4) \
+                _OR_  NV_DRF_DEF(CLK_RST_CONTROLLER, PLLP_OUTB, PLLP_OUT4_RSTN, RESET_DISABLE) \
+                _OR_  NV_DRF_DEF(CLK_RST_CONTROLLER, PLLP_OUTB, PLLP_OUT4_CLKEN, ENABLE) \
+                _OR_  NV_DRF_DEF(CLK_RST_CONTROLLER, PLLP_OUTB, PLLP_OUT4_OVRRIDE, ENABLE) \
+                _OR_  NV_DRF_NUM(CLK_RST_CONTROLLER, PLLP_OUTB, PLLP_OUT4_RATIO, 0x2)
+        STR     r1, [r8, #CLK_RST_CONTROLLER_PLLP_OUTB_0]
+        b       iodelay
+
+        // Base settings: bypassed, pll disabled, ref enabled, override,
+        // M, N, P for 216MHz output in order of OSC_FREQ field setting
+pllp_base_table LABEL
+        DCD     0x9011B00D      // OSC_FREQ=0 - 13MHz
+        DCD     0x90105A04      // OSC_FREQ=1 - 19.2MHz
+        DCD     0x9011B00C      // OSC_FREQ=2 - 12MHz
+        DCD     0x9011B01A      // OSC_FREQ=3 - 26MHz
+pllp_misc_table LABEL
+        DCD     0x00000800
+        DCD     0x00000100
+        DCD     0x00000800
+        DCD     0x00000800
+
+        //-----------------------------------------------------------------
+        // Give I/O signals and PLLP time to stabilize.
+        // !!!FIXME!!! (BUG 580733) THIS TIME HAS NOT BEEN CHARACTERIZED BUT 20 MS(Hw/System Engg Recomendation) IS WAY TOO GO
+        //-----------------------------------------------------------------
+iodelay LABEL
+        LDR     r3, =NV_DRF_NUM(FLOW_CTLR, HALT_COP_EVENTS, ZERO, 0x14) \
+                _OR_ NV_DRF_NUM(FLOW_CTLR, HALT_COP_EVENTS, MSEC, 1) \
+                _OR_ NV_DRF_NUM(FLOW_CTLR, HALT_COP_EVENTS, MODE, 2)
+        STR     r3, [r6, #FLOW_CTLR_HALT_COP_EVENTS_0]
+
+        // Remove PLLP bypass
+        BIC     r2, r2, #NV_DRF_DEF(CLK_RST_CONTROLLER, PLLP_BASE, PLLP_BYPASS, ENABLE)
+        STR     r2, [r8, #CLK_RST_CONTROLLER_PLLP_BASE_0]
+
+        //------------------------------------------------------------------
+        // Assert CPU complex reset.
+        //------------------------------------------------------------------
+
+        MOV     r1, #NV_DRF_MASK(CLK_RST_CONTROLLER,RST_DEV_L_SET,SET_CPU_RST)
+        STR     r1, [r8, #CLK_RST_CONTROLLER_RST_DEV_L_SET_0]
+
+        //------------------------------------------------------------------
+        // Hold both CPUs in reset.
+        //------------------------------------------------------------------
+
+        LDR     r3, =NV_DRF_NUM(CLK_RST_CONTROLLER, RST_CPU_CMPLX_SET, SET_CPURESET1, 1) \
+                _OR_ NV_DRF_NUM(CLK_RST_CONTROLLER, RST_CPU_CMPLX_SET, SET_DBGRESET1, 1) \
+                _OR_ NV_DRF_NUM(CLK_RST_CONTROLLER, RST_CPU_CMPLX_SET, SET_DERESET1,  1) \
+                _OR_ NV_DRF_NUM(CLK_RST_CONTROLLER, RST_CPU_CMPLX_SET, SET_CPURESET0, 1) \
+                _OR_ NV_DRF_NUM(CLK_RST_CONTROLLER, RST_CPU_CMPLX_SET, SET_DBGRESET0, 1) \
+                _OR_ NV_DRF_NUM(CLK_RST_CONTROLLER, RST_CPU_CMPLX_SET, SET_DERESET0,  1)
+        STR     r3, [r8, #CLK_RST_CONTROLLER_RST_CPU_CMPLX_SET_0]
+
+        //------------------------------------------------------------------
+        // Halt CPU1 at the flow controller for uni-processor configurations.
+        //------------------------------------------------------------------
+
+        MOV     r3, #NV_DRF_DEF(FLOW_CTLR, HALT_CPU1_EVENTS, MODE, FLOW_MODE_STOP)
+        STR     r3, [r6, #FLOW_CTLR_HALT_CPU1_EVENTS_0]
+
+        //-----------------------------------------------------------------
+        // Set the CPU reset vector. SCRATCH41 contains the physical
+        // address of the CPU-side restoration code.
+        //-----------------------------------------------------------------
+
+        LDR     r3, [r5, #APBDEV_PMC_SCRATCH41_0]
+        STR     r3, [r9, #EVP_CPU_RESET_VECTOR_0]
+
+        //------------------------------------------------------------------
+        // Select CPU complex clock source.
+        //------------------------------------------------------------------
+
+        LDR     r3, =(CPU_CLOCK_SOURCE _SHL_ NV_DRF_SHIFT(CLK_RST_CONTROLLER, CCLK_BURST_POLICY, CWAKEUP_FIQ_SOURCE))  \
+                _OR_ (CPU_CLOCK_SOURCE _SHL_ NV_DRF_SHIFT(CLK_RST_CONTROLLER, CCLK_BURST_POLICY, CWAKEUP_IRQ_SOURCE))  \
+                _OR_ (CPU_CLOCK_SOURCE _SHL_ NV_DRF_SHIFT(CLK_RST_CONTROLLER, CCLK_BURST_POLICY, CWAKEUP_RUN_SOURCE))  \
+                _OR_ (CPU_CLOCK_SOURCE _SHL_ NV_DRF_SHIFT(CLK_RST_CONTROLLER, CCLK_BURST_POLICY, CWAKEUP_IDLE_SOURCE)) \
+                _OR_ NV_DRF_DEF(CLK_RST_CONTROLLER, CCLK_BURST_POLICY, CPU_STATE, RUN)
+        STR     r3, [r8, #CLK_RST_CONTROLLER_CCLK_BURST_POLICY_0]
+
+        //------------------------------------------------------------------
+        // Start the CPU0 clock and stop the CPU1 clock.
+        //------------------------------------------------------------------
+
+        LDR     r3, =NV_DRF_DEF(CLK_RST_CONTROLLER, CLK_CPU_CMPLX, CPU_BRIDGE_CLKDIV, DEFAULT) \
+                _OR_ NV_DRF_NUM(CLK_RST_CONTROLLER, CLK_CPU_CMPLX, CPU0_CLK_STP, 0) \
+                _OR_ NV_DRF_NUM(CLK_RST_CONTROLLER, CLK_CPU_CMPLX, CPU1_CLK_STP, 1)
+        STR     r3, [r8, #CLK_RST_CONTROLLER_CLK_CPU_CMPLX_0]
+
+        //------------------------------------------------------------------
+        // Enable the CPU complex clock.
+        //------------------------------------------------------------------
+
+        MOV     r3, #NV_DRF_MASK(CLK_RST_CONTROLLER,CLK_ENB_L_SET,SET_CLK_ENB_CPU)
+        STR     r3, [r8, #CLK_RST_CONTROLLER_CLK_ENB_L_SET_0]
+
+        //-----------------------------------------------------------------
+        // Make sure the resets were held for at least 2 microseconds.
+        //-----------------------------------------------------------------
+
+        ADD     r3, r11, #2
+RstPoll LABEL
+        LDR     r2, [r7, #TIMERUS_CNTR_1US_0]
+        CMP     r2, r3
+        BLE     RstPoll
+
+#if     !DEBUG_DO_NOT_RESET_CORESIGHT
+
+        //-----------------------------------------------------------------
+        // De-assert CoreSight reset.
+        // NOTE: We're leaving the CoreSight clock on the oscillator for
+        //       now. It will be restored to its original clock source
+        //       when the CPU-side restoration code runs.
+        //-----------------------------------------------------------------
+
+        MOV     r1, #NV_DRF_MASK(CLK_RST_CONTROLLER,RST_DEV_U_CLR,CLR_CSITE_RST)
+        STR     r1, [r8, #CLK_RST_CONTROLLER_RST_DEV_U_CLR_0]
+
+#endif//!DEBUG_DO_NOT_RESET_CORESIGHT
+#if     DEBUG_LP0_EXIT2
+
+        //-----------------------------------------------------------------
+        // Debug check point.
+        //----------------------------------------------------------------
+
+        B       .
+
+#endif//DEBUG_LP0_EXIT2
+
+        //-----------------------------------------------------------------
+        // Sample the microsecond timestamp again. This is the time we must
+        // use when returning from LP0 for PLL stabilization delays.
+        //-----------------------------------------------------------------
+
+        LDR     r11, [r7, #TIMERUS_CNTR_1US_0]
+        STR     r11, [r5, #APBDEV_PMC_SCRATCH_FOR_LP_EXIT_TIME_0]
+
+        //-----------------------------------------------------------------
+        // Get the oscillator frequency. For 19.2 MHz, just use 19 to
+        // make the calculations easier.
+        //-----------------------------------------------------------------
+
+        LDR     r4, [r7, #TIMERUS_USEC_CFG_0]
+        AND     r4, r4, #NV_DRF_MASK(TIMERUS, USEC_CFG, USEC_DIVISOR)
+        ADD     r4, r4, #1
+        CMP     r4, #26
+        MOVGT   r4, #19
+
+        //-----------------------------------------------------------------
+        // Disassemble the PLL-X parameters from their scratch register
+        // holding areas and reassemble them into their proper clock
+        // register fields. We also need to calculate (in R4) the PLL-X
+        // frequency to know whether or not to set DCCON.
+        //
+        // NOTE: This code takes some shortcuts based upon the knowledge
+        //       of how the bits are organized into the registers. This
+        //       code may not be portable to future chips or bootroms.
+        //-----------------------------------------------------------------
+
+        // PLLX_BASE.PLLX_DIVM
+        LDR     r0, [r5, #APBDEV_PMC_SCRATCH3_0]
+        AND     r2, r0, #APBDEV_PMC_SCRATCH3_0_CLK_RST_PLLX_BASE_PLLX_DIVM_DEFAULT_MASK
+        CMP     r2, r4
+        MOVEQ   r4, #0
+        MOVNE   r4, #1
+
+        // PLLX_BASE.PLLX_DIVN
+        MOV     r0, r0, ASR #(APBDEV_PMC_SCRATCH3_0_CLK_RST_PLLX_BASE_PLLX_DIVN_SHIFT - APBDEV_PMC_SCRATCH3_0_CLK_RST_PLLX_BASE_PLLX_DIVM_SHIFT)
+        LDR     r3, =APBDEV_PMC_SCRATCH3_0_CLK_RST_PLLX_BASE_PLLX_DIVN_DEFAULT_MASK
+        AND     r1, r0, r3
+        ORR     r2, r2, r1, LSL #CLK_RST_CONTROLLER_PLLX_BASE_0_PLLX_DIVN_SHIFT
+        MOV     r4, r1, LSL r4
+
+        // PLLX_BASE.PLLX_DIVP
+        MOV     r0, r0, ASR #(APBDEV_PMC_SCRATCH3_0_CLK_RST_PLLX_BASE_PLLX_DIVP_SHIFT - APBDEV_PMC_SCRATCH3_0_CLK_RST_PLLX_BASE_PLLX_DIVN_SHIFT)
+        AND     r1, r0, #APBDEV_PMC_SCRATCH3_0_CLK_RST_PLLX_BASE_PLLX_DIVP_DEFAULT_MASK
+        ORR     r2, r2, r1, LSL #CLK_RST_CONTROLLER_PLLX_BASE_0_PLLX_DIVP_SHIFT
+        MOV     r4, r4, ASR r1
+
+        // PLLX_BASE.PLLX_BYPASS_ENABLE | PLLX_BASE.PLLX_ENABLE_DISABLE | PLLX_BASE.PLLX_REF_DIS_REF_ENABLE
+        ORR     r2, r2, #NV_DRF_DEF(CLK_RST_CONTROLLER, PLLX_BASE, PLLX_BYPASS, ENABLE) \
+                    _OR_ NV_DRF_DEF(CLK_RST_CONTROLLER, PLLX_BASE, PLLX_ENABLE, DISABLE) \
+                    _OR_ NV_DRF_DEF(CLK_RST_CONTROLLER, PLLX_BASE, PLLX_REF_DIS, REF_ENABLE)
+
+        // PLLX_MISC_DCCON must be set for frequencies > 600 MHz.
+        CMP     r4, #600
+        MOVLT   r3, #0
+        MOVGE   r3, #NV_DRF_DEF(CLK_RST_CONTROLLER,PLLX_MISC,PLLX_DCCON,DEFAULT)
+
+        // PLLX_MISC_LFCON
+        MOV     r0, r0, ASR #(APBDEV_PMC_SCRATCH3_0_CLK_RST_PLLX_MISC_LFCON_SHIFT - APBDEV_PMC_SCRATCH3_0_CLK_RST_PLLX_BASE_PLLX_DIVP_SHIFT)
+        AND     r1, r0, #APBDEV_PMC_SCRATCH3_0_CLK_RST_PLLX_MISC_LFCON_DEFAULT_MASK
+        ORR     r3, r3, r1, LSL #CLK_RST_CONTROLLER_PLLX_MISC_0_PLLX_LFCON_SHIFT
+
+        // PLLX_MISC_CPCON
+        MOV     r0, r0, ASR #(APBDEV_PMC_SCRATCH3_0_CLK_RST_PLLX_MISC_CPCON_SHIFT - APBDEV_PMC_SCRATCH3_0_CLK_RST_PLLX_MISC_LFCON_SHIFT)
+        AND     r1, r0, #APBDEV_PMC_SCRATCH3_0_CLK_RST_PLLX_MISC_LFCON_DEFAULT_MASK
+        ORR     r3, r3, r1, LSL #CLK_RST_CONTROLLER_PLLX_MISC_0_PLLX_CPCON_SHIFT
+
+        //-----------------------------------------------------------------
+        // Start PLL-X using the reconstituted values.
+        //-----------------------------------------------------------------
+
+        STR     r3, [r8, #CLK_RST_CONTROLLER_PLLX_MISC_0]
+        STR     r2, [r8, #CLK_RST_CONTROLLER_PLLX_BASE_0]
+        ORR     r2, r2, #NV_DRF_DEF(CLK_RST_CONTROLLER, PLLX_BASE, PLLX_ENABLE, ENABLE)
+        STR     r2, [r8, #CLK_RST_CONTROLLER_PLLX_BASE_0]
+        BIC     r2, r2, #NV_DRF_DEF(CLK_RST_CONTROLLER, PLLX_BASE, PLLX_BYPASS, ENABLE)
+        STR     r2, [r8, #CLK_RST_CONTROLLER_PLLX_BASE_0]
+
+        //-----------------------------------------------------------------
+        // Unhalt CPU0 at the flow controller.
+        //-----------------------------------------------------------------
+
+        MOV     r3, #0
+        STR     r3, [r6, #FLOW_CTLR_HALT_CPU_EVENTS_0]
+
+        //-----------------------------------------------------------------
+        // Take CPU0 out of reset (CPU1 is still held in reset).
+        //-----------------------------------------------------------------
+
+        LDR     r3, =NV_DRF_NUM(CLK_RST_CONTROLLER, RST_CPU_CMPLX_CLR, CLR_CPURESET0, 1) \
+                _OR_ NV_DRF_NUM(CLK_RST_CONTROLLER, RST_CPU_CMPLX_CLR, CLR_DBGRESET0, 1) \
+                _OR_ NV_DRF_NUM(CLK_RST_CONTROLLER, RST_CPU_CMPLX_CLR, CLR_DERESET0,  1)
+        STR     r3, [r8, #CLK_RST_CONTROLLER_RST_CPU_CMPLX_CLR_0]
+
+        //==================================================================
+        // The previous instruction starts CPU0 execution at the specified
+        // LP0 exit handler.
+        //-----------------------------------------------------------------
+        // END CPU COMPLEX INITIALIZATON
+        //==================================================================
+
+        B       AvpResume
+
+        LTORG
+        P2ALIGN(2)
+
+        //----------------------------------------------------------------------
+        // EVERYTHING ABOVE THIS POINT WILL BE OBFUSCATED WHEN THIS CODE EXITS
+        //----------------------------------------------------------------------
+
+End     LABEL   // Do not export this label
+
+
+//*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+//*!!!     NO LITERALS AFTER THIS POINT     !!!!!     NO LITERALS AFTER THIS POINT    !!!
+//*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+//-------------------------------------------------------------------------------
+// Now that the CPU-side code has been restored, resume the AVP-side execution.
+//-------------------------------------------------------------------------------
+
+AvpResume LABEL // Do not export this label
+
+        //------------------------------------------------------------------
+        // Obfuscate everything used to restore the OS.
+        //------------------------------------------------------------------
+
+        BL      Obfuscate
+
+#if     !DEBUG_HALT_AVP_ON_LP0_EXIT
+        //------------------------------------------------------------------
+        // Continue AVP with the "resume" address if one was provided.
+        // If address is invalid (0), halt the AVP.
+        //------------------------------------------------------------------
+
+normal_resume	LABEL
+        LDR     lr, [r5, #APBDEV_PMC_SCRATCH_FOR_AVP_RESUME_PTR_0]
+        CMP     lr, #0x0
+
+        //-----------------------------------------------------------------
+        // De-assert CPU complex reset.
+        //-----------------------------------------------------------------
+
+        MOV     r1, #NV_DRF_MASK(CLK_RST_CONTROLLER,RST_DEV_L_CLR,CLR_CPU_RST)
+        STR     r1, [r8, #CLK_RST_CONTROLLER_RST_DEV_L_CLR_0]
+
+        BXNE    lr
+
+#endif
+
+        //------------------------------------------------------------------
+        // Halt the AVP. If a JTAG event wakes up the AVP, just halt again.
+        //------------------------------------------------------------------
+
+AvpHalt LABEL   // Do not export this label
+
+        MOV     r3,     #NV_DRF_DEF(FLOW_CTLR, HALT_COP_EVENTS, MODE, FLOW_MODE_STOP)
+        ORR     r3, r3, #NV_DRF_NUM(FLOW_CTLR, HALT_COP_EVENTS, JTAG, 1)
+        STR     r3, [r6, #FLOW_CTLR_HALT_COP_EVENTS_0]
+        B       AvpHalt
+
+
+//-------------------------------------------------------------------------------
+// Prototype:
+//   Obfuscate
+//
+// Input:
+//   None
+//
+// Output:
+//   None
+//
+// Registers Used:
+//   R0-R3, R10, R11, LR
+//
+// Description:
+//   This subroutine obfuscates (clears) the sensitive portions of the code in
+//   this file before exiting.
+//-------------------------------------------------------------------------------
+
+Obfuscate LABEL // Do not export this label
+
+        //------------------------------------------------------------------
+        // Load up some zeros.
+        //------------------------------------------------------------------
+
+        MOV     r0, #0
+        MOV     r1, #0
+        MOV     r2, #0
+        MOV     r3, #0
+
+        //------------------------------------------------------------------
+        // Get the range of addresses to blast.
+        //------------------------------------------------------------------
+
+        ADD     r10, pc, #Start-(.+8)   // R10 = first location to clear
+        ADD     r11, pc, #End-(.+8)     // R11 = last location to clear
+
+#if     !DEBUG_DO_NOT_OBFUSCATE
+
+        //------------------------------------------------------------------
+        // Blast it.
+        //------------------------------------------------------------------
+
+BlastIt LABEL   // Do not export this label
+
+        STMIA   r10!, {r0-r3}
+        CMP     r10, r11
+        BLT     BlastIt
+
+#endif//!DEBUG_DO_NOT_OBFUSCATE
+
+        BX      lr
+
+
+
+
+//-------------------------------------------------------------------------------
+// Prototype:
+//   DoReset
+//
+// Input:
+//   None
+//
+// Output:
+//   None
+//
+// Registers Used:
+//   All
+//
+// Description:
+//   Execution comes here it something goes wrong. The chip is reset and a
+//   cold boot is performed.
+//-------------------------------------------------------------------------------
+
+        //------------------------------------------------------------------
+        // Something is wrong. For the sake of security, obfuscate this code
+        // and hit the chip reset.
+        //------------------------------------------------------------------
+
+DoReset LABEL   // Do not export this label
+
+        //------------------------------------------------------------------
+        // Obfuscate everything used to restore the OS.
+        //------------------------------------------------------------------
+
+        BL      Obfuscate
+
+        //------------------------------------------------------------------
+        // Hit the chip reset.
+        //------------------------------------------------------------------
+
+        MOV     r0, #NV_DRF_DEF(CLK_RST_CONTROLLER, RST_DEVICES_L, SWR_TRIG_SYS_RST, ENABLE)
+        STR     r0, [r8, #CLK_RST_CONTROLLER_RST_DEVICES_L_0]
+        B       .
+
+        LTORG   // Just in case someone didn't read the "no literals" warning above
+
+// Until this code is placed into the TrustZone hypervisor, it will be sitting
+// as plain-text in the non-secure bootloader. Use random meaninless strings
+// for the entry points to hide the true purpose of this code to make it a
+// little harder to identify from a symbol table entry.
+
+        EXPORT  xak81lsdmLKSqkl903zLjWpv1b3TfD78k3
+xak81lsdmLKSqkl903zLjWpv1b3TfD78k3   LABEL              // NvBlPowerExitLowPowerStateEnd
+
+        END
+

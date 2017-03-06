@@ -1,0 +1,11 @@
+fragment shader with default precision should succeed
+
+On success, you will see a series of "PASS" messages, followed by "TEST COMPLETE".
+
+test: fragment shader with default precision should succeed
+default vertex shader
+test fragment shaderPASS fragment shader with default precision should succeed
+PASS successfullyParsed is true
+
+TEST COMPLETE
+

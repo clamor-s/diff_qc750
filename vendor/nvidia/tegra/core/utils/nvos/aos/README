@@ -1,0 +1,4 @@
+AOS has only been compiled/tested with RVDS.
+
+The dlmalloc in this directory has lots of compiliation warnings, to disable them use:  --diag_error 47,68,88,167,174,188,223,550,3017 --diag_remark 111,177,236
+

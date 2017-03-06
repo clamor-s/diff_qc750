@@ -1,0 +1,3 @@
+NvDdkSpifBlockDevInit
+NvDdkSpifBlockDevDeinit
+NvDdkSpifBlockDevOpen

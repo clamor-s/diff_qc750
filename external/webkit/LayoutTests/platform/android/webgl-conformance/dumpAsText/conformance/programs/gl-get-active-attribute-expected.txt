@@ -1,0 +1,29 @@
+Tests getActiveAttrib for various types
+
+On success, you will see a series of "PASS" messages, followed by "TEST COMPLETE".
+
+PASS getError was expected value: NO_ERROR : no errors from setup
+PASS type must be FLOAT was FLOAT
+PASS size must be 1 was 1
+PASS getError was expected value: NO_ERROR : no errors from setup
+PASS type must be FLOAT_VEC2 was FLOAT_VEC2
+PASS size must be 1 was 1
+PASS getError was expected value: NO_ERROR : no errors from setup
+PASS type must be FLOAT_VEC3 was FLOAT_VEC3
+PASS size must be 1 was 1
+PASS getError was expected value: NO_ERROR : no errors from setup
+PASS type must be FLOAT_VEC4 was FLOAT_VEC4
+PASS size must be 1 was 1
+PASS getError was expected value: NO_ERROR : no errors from setup
+PASS type must be FLOAT_MAT2 was FLOAT_MAT2
+PASS size must be 1 was 1
+PASS getError was expected value: NO_ERROR : no errors from setup
+PASS type must be FLOAT_MAT3 was FLOAT_MAT3
+PASS size must be 1 was 1
+PASS getError was expected value: NO_ERROR : no errors from setup
+PASS type must be FLOAT_MAT4 was FLOAT_MAT4
+PASS size must be 1 was 1
+PASS successfullyParsed is true
+
+TEST COMPLETE
+

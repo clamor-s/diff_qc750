@@ -1,0 +1,21 @@
+This test ensures that the WebGL context has all the methods in the specification.
+
+On success, you will see a series of "PASS" messages, followed by "TEST COMPLETE".
+
+
+Canvas.getContext
+PASS All WebGL methods found.
+Also found the following extra methods:
+drawingBufferWidth
+drawingBufferHeight
+compressedTexImage2D
+compressedTexSubImage2D
+getExtension
+getSupportedExtensions
+isContextLost
+releaseShaderCompiler
+
+PASS successfullyParsed is true
+
+TEST COMPLETE
+

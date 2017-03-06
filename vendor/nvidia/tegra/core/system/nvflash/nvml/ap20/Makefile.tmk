@@ -1,0 +1,38 @@
+################################### tell Emacs this is a -*- makefile-gmake -*-
+#
+# Copyright (c) 2011-2012 NVIDIA CORPORATION.  All Rights Reserved.
+#
+# NVIDIA CORPORATION and its licensors retain all intellectual property
+# and proprietary rights in and to this software, related documentation
+# and any modifications thereto.  Any use, reproduction, disclosure or
+# distribution of this software and related documentation without an express
+# license agreement from NVIDIA CORPORATION is strictly prohibited.
+#
+# tmake for SW Mobile component makefile
+#
+# nvflash_miniloader_ap20: static target executable
+#
+###############################################################################
+ifdef NV_COMPONENT_FLAG_STATIC_EXECUTABLE_SECTION
+include $(NV_BUILD_START_COMPONENT)
+
+# include common parts
+_MINILOADER_SOC := ap20
+_MINILOADER_SOC_FAMILY := ap20
+include $(NV_COMPONENT_DIR)/../Makefile.common.tmk
+
+# SOC specific parts
+NV_COMPONENT_CFLAGS += \
+	-DAES_KEYSCHED_LOCK_WAR_BUG_598910=1
+        -DSE_AES_KEYSCHED_READ_LOCK=0
+        -DNAND_SUPPORT=1
+        -DNO_BOOTROM=0
+
+include $(NV_BUILD_STATIC_EXECUTABLE)
+endif
+
+# Local Variables:
+# indent-tabs-mode: t
+# tab-width: 8
+# End:
+# vi: set tabstop=8 noexpandtab:

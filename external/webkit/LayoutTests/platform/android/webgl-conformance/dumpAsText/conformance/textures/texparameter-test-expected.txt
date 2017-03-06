@@ -1,0 +1,11 @@
+ 
+Tests TexParameter works as expected
+
+On success, you will see a series of "PASS" messages, followed by "TEST COMPLETE".
+
+
+PASS rendered as expected
+PASS successfullyParsed is true
+
+TEST COMPLETE
+

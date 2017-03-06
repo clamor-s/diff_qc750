@@ -1,0 +1,13 @@
+CONSOLE MESSAGE: line 24: *** Error compiling shader '[object WebGLShader]':ERROR: 0:11: '[]' : Index expression must be constant
+
+fragment shader with arbitrary indexing expression should fail
+
+On success, you will see a series of "PASS" messages, followed by "TEST COMPLETE".
+
+test: fragment shader with arbitrary indexing expression should fail
+default vertex shader
+test fragment shaderPASS fragment shader with arbitrary indexing expression should fail
+PASS successfullyParsed is true
+
+TEST COMPLETE
+

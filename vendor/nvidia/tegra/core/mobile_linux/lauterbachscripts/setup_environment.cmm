@@ -1,0 +1,165 @@
+; Lauterbach TRACE32 debugger script to set up paths and global environment variables used by other scripts.
+
+; For NVIDIA internal use only. Customers should not use this script
+; unless NVIDIA explicitly directs them to do so.
+
+
+; Change case of the user configuration variables to what we expect.
+&TARGET_OS=STRING.LWR("&TARGET_OS")
+&TARGET_OS_SKU=STRING.UPR("&TARGET_OS_SKU")
+&TARGET_SOC=STRING.LWR("&TARGET_SOC")
+&TARGET_BOARD=STRING.LWR("&TARGET_BOARD")
+
+; Global variables used by other scripts:
+;
+;   BACKDOOR_HANDOFF    bootloader backdoor to OS hand-off function
+;   BOOT_HANDOFF        bootloader to OS hand-off function
+;   FASTBOOT            path to fastboot (bootloader) executable image
+;   KERNEL              path to OS (kernel) executable image
+;   KERNEL_ELF          path to OS (kernel) symbols
+;   KERNEL_LOAD_PHYS    OS (kernel) physical load address
+;   MACHINE_ID          kernel machine id
+;   MINILOADER          path to miniloader executable image
+;   NOR_LOAD_ADDR       NOR load address for bootloader
+;   OS_HANDOFF          actual OS hand-off function
+;   RAMDISK             Path to RAMDISK image
+;   RAMDISK_ADDR        Address of RAMDISK image
+;   TAGS_ADDR           Address of TAGS
+;   USE_ONCHIP_BRKPT    Use onchip breakpoints for CPU run-control
+
+GLOBAL &BACKDOOR_HANDOFF
+GLOBAL &BOOT_HANDOFF
+GLOBAL &FASTBOOT
+GLOBAL &KERNEL
+GLOBAL &KERNEL_ELF
+GLOBAL &KERNEL_LOAD_PHYS
+GLOBAL &MACHINE_ID
+GLOBAL &MINILOADER
+GLOBAL &OS_HANDOFF
+GLOBAL &NOR_LOAD_ADDR
+GLOBAL &RAMDISK
+GLOBAL &RAMDISK_ADDR
+GLOBAL &TAGS_ADDR
+GLOBAL &USE_ONCHIP_BRKPT
+GLOBAL &ENABLE_DCC_WINDOW
+
+&ENABLE_DCC_WINDOW="FALSE"
+
+&MACHINE_ID=0xD05   ; Generic Tegra machine id (MUST BE HEXADECIMAL FORMAT!)
+
+IF "&TARGET_BOARD"=="harmony"
+(
+  &MACHINE_ID=0xAAB
+)
+ELSE IF "&TARGET_BOARD"=="ventana"
+(
+  &MACHINE_ID=0xB6F
+)
+ELSE IF "&TARGET_BOARD"=="aruba2"
+(
+  &MACHINE_ID=0xD6D
+  &ENABLE_DCC_WINDOW="TRUE"
+)
+ELSE IF "&TARGET_BOARD"=="cardhu"
+(
+  &MACHINE_ID=0xD6C
+)
+ELSE IF "&TARGET_BOARD"=="enterprise"
+(
+  &MACHINE_ID=0xD6B
+)
+else
+(
+  &MACHINE_ID=0xD05
+)
+
+; Enable on-chip breakpoints if the debugger has trouble setting soft breakpoints
+&USE_ONCHIP_BRKPT="FALSE"
+
+IF "&TARGET_OS"=="gnu_linux"
+(
+  ; do nothing
+)
+ELSE IF "&TARGET_OS"=="rvds"
+(
+  ; do nothing
+)
+ELSE IF "&TARGET_OS"!="android"
+(
+  PRINT "TARGET_OS=&TARGET_OS not supported by this script"
+  STOP
+)
+
+IF "&BUILD_FLAVOR"=="debug"
+(
+  ; do nothing
+)
+ELSE IF "&BUILD_FLAVOR"=="release"
+(
+  ; do nothing
+)
+ELSE IF "&BUILD_FLAVOR"==""
+(
+  &BUILD_FLAVOR="debug"
+)
+ELSE
+(
+  PRINT "BUILD_FLAVOR=&BUILD_FLAVOR is invalid"
+  STOP
+)
+
+; Set addresses that are specific to this OS.
+IF "&TARGET_SOC"=="ap20"
+(
+  &KERNEL_LOAD_PHYS="0x00A00800"
+  &NOR_LOAD_ADDR="0xD0000800"
+  &RAMDISK_ADDR=0x05000000
+  &TAGS_ADDR=0x00000100
+  &BOOT_HANDOFF="NvAbootToKernelHandoff"
+  &BACKDOOR_HANDOFF="NvAbootToKernelHandoff"
+)
+ELSE IF "&TARGET_SOC"=="t30"
+(
+  &KERNEL_LOAD_PHYS="0x80A00800"
+  &KERNEL_LOAD_PHYS="0x80A00800"
+  &NOR_LOAD_ADDR="0x48000800"
+  &RAMDISK_ADDR=0x85000000
+  &TAGS_ADDR=0x80000100
+  &BOOT_HANDOFF="NvAbootToKernelHandoff"
+  &BACKDOOR_HANDOFF="DoBackdoorLoad"
+)
+ELSE
+(
+  PRINT "TARGET_SOC=&TARGET_SOC is not valid"
+  STOP
+)
+
+IF "&TARGET_OS"=="gnu_linux"
+(
+  ; Paths for LDK, assumes initramfs.cpio.gz is in TOP/core/_out/ (needs to be copied there)
+  &KERNEL="&TOP/core/_out/&(BUILD_FLAVOR)_tegra3_defconfig/arch/arm/boot/zImage"
+  &KERNEL_ELF="&TOP/core/_out/&(BUILD_FLAVOR)_tegra3_defconfig/vmlinux"
+  &RAMDISK="&TOP/core/_out/initramfs.cpio.gz"
+  &FASTBOOT="&TOP/core/_out/&(BUILD_FLAVOR)_nv&(TARGET_SOC)_aos_armv6/fastboot"
+  &MINILOADER="&TOP/core/_out/&(BUILD_FLAVOR)_nv&(TARGET_SOC)_rvds_armv4/nvml_server.axf"
+)
+ELSE IF "&TARGET_OS"=="android"
+(
+  IF "&BUILD_FLAVOR"=="debug"
+  (
+    &KERNEL="&TOP/out/debug/target/product/&TARGET_BOARD/obj/KERNEL/arch/arm/boot/zImage"
+    &KERNEL_ELF="&TOP/out/debug/target/product/&TARGET_BOARD/obj/KERNEL/vmlinux"
+    &RAMDISK="&TOP/out/debug/target/product/&TARGET_BOARD/nvtest_ramdisk.img"
+    &FASTBOOT="&TOP/out/debug/target/product/&TARGET_BOARD/obj/EXECUTABLES/bootloader_intermediates/bootloader.elf"
+    &MINILOADER="&TOP/out/debug/target/product/&TARGET_BOARD/obj/EXECUTABLES/nvflash_miniloader_&(TARGET_SOC)_intermediates/nvflash_miniloader_&(TARGET_SOC).elf"
+  )
+  ELSE
+  (
+    &KERNEL="&TOP/out/target/product/&TARGET_BOARD/obj/KERNEL/arch/arm/boot/zImage"
+    &KERNEL_ELF="&TOP/out/target/product/&TARGET_BOARD/obj/KERNEL/vmlinux"
+    &RAMDISK="&TOP/out/target/product/&TARGET_BOARD/nvtest_ramdisk.img"
+    &FASTBOOT="&TOP/out/target/product/&TARGET_BOARD/obj/EXECUTABLES/bootloader_intermediates/bootloader.elf"
+    &MINILOADER="&TOP/out/target/product/&TARGET_BOARD/obj/EXECUTABLES/nvflash_miniloader_&(TARGET_SOC)_intermediates/nvflash_miniloader_&(TARGET_SOC).elf"
+  )
+)
+enddo

@@ -1,0 +1,11 @@
+[core]
+	repositoryformatversion = 0
+	filemode = true
+	bare = false
+	logallrefupdates = true
+[remote "origin"]
+	fetch = +refs/heads/*:refs/remotes/origin/*
+	url = https://github.com/TI-OpenLink/compat-wireless.git
+[branch "linux-3.1.y"]
+	remote = origin
+	merge = refs/heads/linux-3.1.y

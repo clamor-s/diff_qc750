@@ -1,0 +1,29 @@
+<body>
+<!-- you should see one image without opacity and two images with similar opacity -->
+<img id="img" style="-webkit-transform: translateZ(0px);" src="../resources/simple_image.png" />
+<pre style="opacity:0" id="layerTree"></pre>
+<script type="text/javascript">
+var iterations = 1000;
+var img = document.getElementById("img");
+if (window.layoutTestController) {
+    layoutTestController.dumpAsText(true);
+    layoutTestController.waitUntilDone();
+}
+function switchTransform() {
+    if (iterations--) {
+        if (img.style.webkitTransform)
+           img.style.webkitTransform = "";
+        else
+           img.style.webkitTransform = "translateZ(0px)";
+
+        setTimeout(switchTransform, 2);
+    } else {
+        if (window.layoutTestController) {
+            document.getElementById('layerTree').innerHTML = layoutTestController.layerTreeAsText();
+            layoutTestController.notifyDone();
+        }
+    }
+}
+switchTransform();
+</script>
+</body>

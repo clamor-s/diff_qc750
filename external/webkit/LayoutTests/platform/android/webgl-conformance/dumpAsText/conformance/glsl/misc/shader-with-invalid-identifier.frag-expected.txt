@@ -1,0 +1,13 @@
+CONSOLE MESSAGE: line 24: *** Error compiling shader '[object WebGLShader]':ERROR: 0:3: 'gl_' : reserved built-in name 
+
+fragment shader with gl_ identifier should fail
+
+On success, you will see a series of "PASS" messages, followed by "TEST COMPLETE".
+
+test: fragment shader with gl_ identifier should fail
+default vertex shader
+test fragment shaderPASS fragment shader with gl_ identifier should fail
+PASS successfullyParsed is true
+
+TEST COMPLETE
+

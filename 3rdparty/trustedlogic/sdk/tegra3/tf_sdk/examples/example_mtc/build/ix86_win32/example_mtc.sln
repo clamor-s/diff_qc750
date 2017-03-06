@@ -1,0 +1,20 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2005
+Project("{E0531AFC-B2FE-43B5-A527-5C146F8CCFC9}") = "example_mtc", "example_mtc.vcproj", "{C670AF3E-3676-4495-A066-33DCE32283F5}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C670AF3E-3676-4495-A066-33DCE32283F5}.Debug|Win32.ActiveCfg = Debug|Win32
+		{C670AF3E-3676-4495-A066-33DCE32283F5}.Debug|Win32.Build.0 = Debug|Win32
+		{C670AF3E-3676-4495-A066-33DCE32283F5}.Release|Win32.ActiveCfg = Release|Win32
+		{C670AF3E-3676-4495-A066-33DCE32283F5}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

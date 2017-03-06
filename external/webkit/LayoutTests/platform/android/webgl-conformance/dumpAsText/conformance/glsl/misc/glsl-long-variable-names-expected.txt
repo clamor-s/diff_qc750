@@ -1,0 +1,61 @@
+Verify that shader long variable names works fine if they are within 256 characters.
+
+On success, you will see a series of "PASS" messages, followed by "TEST COMPLETE".
+
+Test same long uniform name in both vertex shader and fragment shader
+PASS gl is non-null.
+PASS gl.getError() is gl.NO_ERROR
+PASS prog is non-null.
+PASS valueLoc is non-null.
+PASS gl.getProgramParameter(prog, gl.ACTIVE_UNIFORMS) is 1
+PASS activeUniform is non-null.
+PASS activeUniform.type is gl.FLOAT
+PASS activeUniform.size is 1
+PASS activeUniform.name is 'value01234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890'
+PASS drawing is correct
+PASS gl.getError() is gl.NO_ERROR
+
+Test long uniform array name
+PASS gl is non-null.
+PASS gl.getError() is gl.NO_ERROR
+PASS prog is non-null.
+PASS redLoc is non-null.
+PASS greenLoc is non-null.
+PASS gl.getProgramParameter(prog, gl.ACTIVE_UNIFORMS) is 1
+PASS activeUniform is non-null.
+PASS activeUniform.type is gl.FLOAT
+PASS activeUniform.size is 2
+PASS activeUniform.name is 'color01234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567[0]'
+PASS drawing is correct
+PASS gl.getError() is gl.NO_ERROR
+
+Test long varying name
+PASS gl is non-null.
+PASS gl.getError() is gl.NO_ERROR
+PASS prog is non-null.
+PASS drawing is correct
+PASS gl.getError() is gl.NO_ERROR
+
+Test long local variable name
+PASS gl is non-null.
+PASS gl.getError() is gl.NO_ERROR
+PASS prog is non-null.
+PASS drawing is correct
+PASS gl.getError() is gl.NO_ERROR
+
+Test long attribute name
+PASS gl is non-null.
+PASS gl.getError() is gl.NO_ERROR
+PASS prog is non-null.
+PASS gl.getProgramParameter(prog, gl.ACTIVE_ATTRIBUTES) is 1
+PASS activeAttrib is non-null.
+PASS activeAttrib.size is 1
+PASS activeAttrib.type is gl.FLOAT_VEC3
+PASS activeAttrib.name is 'vPosition0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456'
+PASS drawing is correct
+PASS gl.getError() is gl.NO_ERROR
+
+PASS successfullyParsed is true
+
+TEST COMPLETE
+

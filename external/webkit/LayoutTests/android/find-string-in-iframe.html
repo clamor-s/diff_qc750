@@ -1,0 +1,33 @@
+<html>
+<head>
+<meta name="viewport" content="width=480"/>
+<style>
+iframe {
+  width: 300px;
+  height: 200px;
+}
+</style>
+</head>
+<body>
+<p>find</p>
+<iframe src="resources/find-string-in-iframe-contents.html">
+</iframe>
+<script>
+if (window.layoutTestController) {
+    layoutTestController.dumpAsText(true);
+    layoutTestController.waitUntilDone();
+}
+
+window.onload = function() {
+    window.setTimeout(function() {
+        layoutTestController.showFindDialog("find");
+        layoutTestController.findNext(true);
+        layoutTestController.findNext(true);
+        window.setTimeout(function() {
+            layoutTestController.notifyDone();
+        }, 1000);
+    }, 100);
+};
+</script>
+</body>
+</html>

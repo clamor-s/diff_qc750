@@ -1,0 +1,14 @@
+SE-AES Verify Test
+==================
+
+Test users to include their test source files
+here to run the test. For e.g.
+se_test.c:
+
+and modify the makefiles accordingly by replacing
+the stub file includes.
+
+
+How to run:
+===========
+./nvflash --odm runsediag <Instance or any value> --bl bootloader.bin --go

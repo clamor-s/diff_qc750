@@ -1,0 +1,14 @@
+This test ensures WebGL implementations handle bool uniforms in a OpenGL ES 2.0 spec compliant way
+
+On success, you will see a series of "PASS" messages, followed by "TEST COMPLETE".
+
+
+NOTE: Some OpenGL drivers do not handle this correctly
+
+Checking gl.uniform1f with bool.
+PASS getError was expected value: NO_ERROR : should be able to set bool with gl.uniform1f
+
+PASS successfullyParsed is true
+
+TEST COMPLETE
+

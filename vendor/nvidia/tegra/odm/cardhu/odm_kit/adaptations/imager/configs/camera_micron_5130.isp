@@ -1,0 +1,523 @@
+## global configurations
+##
+global.configType = 1;
+global.configVersion = 0x100;
+
+## isp functionality attributes
+## - Some blocks have detailed control entries below.
+## - Turning a block's attribute to FALSE will cause corresponding control entries to be ignored. 
+##
+ap15Function.opticalBlack = TRUE;
+ap15Function.deknee = FALSE;
+ap15Function.lensShading = TRUE;
+ap15Function.colorCorrection = TRUE;
+ap15Function.noiseControl1 = TRUE;
+ap15Function.badPixel = TRUE;
+ap15Function.noiseControl2 = FALSE;
+ap15Function.gammaCorrection = TRUE;
+ap15Function.demosaic = TRUE;
+ap15Function.colorArtifactReduction = TRUE;
+ap15Function.edgeEnhance = TRUE;
+ap15Function.programmableDemosaic = FALSE;
+
+## bad pixel concealment
+##
+## If a pixel value is highly deviated from its surrounding pixels, the pixel is considered
+## as a bad pixel.  The deviation is defined in terms of the percentage of the average value
+## of the pixel surrounding.  Two ratio coefficients are used: if the pixel is at flat area,
+## LT_COEF is used, otherwise if it's at edge region, UT_COEF is used.
+## If the average of pixel surround is lower than BP_DARK, it's considered at shadow region,
+## and BP_DARK instead of average value will be used to calculate deviation threshold.
+##
+## - darkLevel in U10.0
+## - upperThreshold: U1.3 ratio for Upper-threshold
+## - lowerThreshold: U1.3 ratio for Lower-threshold
+##
+badPixel.darkLevel = 0;
+badPixel.upperThreshold = 1.0;
+badPixel.lowerThreshold = 0.125;
+
+## edge enhancement
+##
+## Edge enhancement is done by (1) extracting high frequency component (HF) of the pixel,
+## (2) amplifying the HF if the extracted value is "large" (i.e., coring), and
+## (3) adding the amplified HF back to the Y channel of the pixel.
+##
+## - gCoreLimit: U6.0, specifies the minimum coring level.  The coring level increases when pixel surround's brightness level goes up
+## - gCoreScale: Scaling factor range of GCORELIMIT. 0 = range [1,4.5], 1 = range [1,8.5], 2 = range [1,16.5], 3 = range [1,32.5].
+##   0 = CORE4
+##   1 = CORE8
+##   2 = CORE16
+##   3 = CORE32
+## 'gCoreScale' specifies the influence of the brightness level to the coring level.
+## The higher the 'gCoreScale' is, the larger the coring level grows under the same brightness
+##
+## - enhCoef: Gain factor of edge enhancement Multiply this value to the edge signal.
+##            In U2.3; combined with a posible fixed gain value of 1 or 4, can go up to 4*3.875=15.5.
+##
+##
+edgeEnhance.enhCoef = 1.75;
+edgeEnhance.gCoreScale = 32;
+edgeEnhance.gCoreLimit = 8;
+
+## ae control
+##
+## - sensor gain value corresponding to ISO100
+## - sensor gain adjustments
+## - noise reduction table
+##   -- column-wise is higher lux to low lux;
+##   -- row-wise is small sensor gain to larger gain value
+##
+
+ae.noiseReduction[0] = { 3, 3, 3, 3, 3, 4, 4 };
+ae.noiseReduction[1] = { 3, 3, 3, 3, 3, 4, 4 };
+ae.noiseReduction[2] = { 3, 3, 3, 3, 4, 4, 4 };
+ae.noiseReduction[3] = { 3, 3, 3, 4, 4, 4, 4 };
+ae.gainForISO100 = 1.00;          # ISO100 equates to this gain
+
+## optical black
+## - valid value for OB adjustments are integer value in [-1024,1023]
+##
+opticalBlack.mode = 0;
+opticalBlack.manualBiasR =  42;
+opticalBlack.manualBiasGR = 42;
+opticalBlack.manualBiasGB = 42;
+opticalBlack.manualBiasB =  42;
+
+# Calibration for the Gain, per Channel for this sensor, for optimal linear response
+ae.PerChannelGainAdjustment = {3.98589449, 2.03147004, 2.0, 2.28266739};
+
+# Lens shading data
+lensShading.leftPatchWidth = 642;
+lensShading.centerPatchWidth  = 1296;
+## lensShading.rightPatchWidth   = 654; 
+lensShading.topPatchHeight = 548;
+lensShading.middlePatchHeight = 968;
+## lensShading.bottomPatchHeight = 420; 
+lensShading.leftPatchDeltaUMSB   = 0x0;
+lensShading.leftPatchDeltaULSB   = 0x330a5e1;
+lensShading.centerPatchDeltaUMSB = 0x0;
+lensShading.centerPatchDeltaULSB = 0x1948b0f;
+lensShading.rightPatchDeltaUMSB  = 0x0;
+lensShading.rightPatchDeltaULSB  = 0x321a9e2;
+lensShading.topPatchDeltaVMSB    = 0x0;
+lensShading.topPatchDeltaVLSB    = 0x3bcbadc;
+lensShading.middlePatchDeltaVMSB = 0x0;
+lensShading.middlePatchDeltaVLSB = 0x21d9ead;
+lensShading.bottomPatchDeltaVMSB = 0x0;
+lensShading.bottomPatchDeltaVLSB = 0x4e04e04;
+lensShading.controlPointR[0][0]  = 4.36433;
+lensShading.controlPointGR[0][0] = 3.06815;
+lensShading.controlPointGB[0][0] = 2.72707;
+lensShading.controlPointB[0][0]  = 2.68196;
+lensShading.controlPointR[1][0]  = 4.05301;
+lensShading.controlPointGR[1][0] = 2.89574;
+lensShading.controlPointGB[1][0] = 2.54625;
+lensShading.controlPointB[1][0]  = 2.49968;
+lensShading.controlPointR[2][0]  = 3.55567;
+lensShading.controlPointGR[2][0] = 2.65595;
+lensShading.controlPointGB[2][0] = 2.38966;
+lensShading.controlPointB[2][0]  = 2.29028;
+lensShading.controlPointR[3][0]  = 3.3577;
+lensShading.controlPointGR[3][0] = 2.55179;
+lensShading.controlPointGB[3][0] = 2.25643;
+lensShading.controlPointB[3][0]  = 2.19852;
+lensShading.controlPointR[4][0]  = 2.92769;
+lensShading.controlPointGR[4][0] = 2.35266;
+lensShading.controlPointGB[4][0] = 2.01217;
+lensShading.controlPointB[4][0]  = 2.03086;
+lensShading.controlPointR[5][0]  = 2.88897;
+lensShading.controlPointGR[5][0] = 2.31454;
+lensShading.controlPointGB[5][0] = 2.00525;
+lensShading.controlPointB[5][0]  = 2.01275;
+lensShading.controlPointR[6][0]  = 3.1365;
+lensShading.controlPointGR[6][0] = 2.3241;
+lensShading.controlPointGB[6][0] = 2.12533;
+lensShading.controlPointB[6][0]  = 2.06901;
+lensShading.controlPointR[7][0]  = 3.2344;
+lensShading.controlPointGR[7][0] = 2.33705;
+lensShading.controlPointGB[7][0] = 2.18529;
+lensShading.controlPointB[7][0]  = 2.11145;
+lensShading.controlPointR[8][0]  = 3.17882;
+lensShading.controlPointGR[8][0] = 2.15009;
+lensShading.controlPointGB[8][0] = 2.12633;
+lensShading.controlPointB[8][0]  = 1.85234;
+lensShading.controlPointR[9][0]  = 4.1311;
+lensShading.controlPointGR[9][0] = 2.77186;
+lensShading.controlPointGB[9][0] = 2.63029;
+lensShading.controlPointB[9][0]  = 2.58898;
+lensShading.controlPointR[0][1]  = 4.11524;
+lensShading.controlPointGR[0][1] = 2.83203;
+lensShading.controlPointGB[0][1] = 2.56347;
+lensShading.controlPointB[0][1]  = 2.51452;
+lensShading.controlPointR[1][1]  = 3.67312;
+lensShading.controlPointGR[1][1] = 2.64666;
+lensShading.controlPointGB[1][1] = 2.21318;
+lensShading.controlPointB[1][1]  = 2.16011;
+lensShading.controlPointR[2][1]  = 3.24232;
+lensShading.controlPointGR[2][1] = 2.40231;
+lensShading.controlPointGB[2][1] = 2.1018;
+lensShading.controlPointB[2][1]  = 2.23171;
+lensShading.controlPointR[3][1]  = 3.02622;
+lensShading.controlPointGR[3][1] = 2.3078;
+lensShading.controlPointGB[3][1] = 1.96345;
+lensShading.controlPointB[3][1]  = 2.13123;
+lensShading.controlPointR[4][1]  = 2.62919;
+lensShading.controlPointGR[4][1] = 2.11133;
+lensShading.controlPointGB[4][1] = 1.71574;
+lensShading.controlPointB[4][1]  = 1.97792;
+lensShading.controlPointR[5][1]  = 2.51599;
+lensShading.controlPointGR[5][1] = 2.00493;
+lensShading.controlPointGB[5][1] = 1.69587;
+lensShading.controlPointB[5][1]  = 1.80039;
+lensShading.controlPointR[6][1]  = 2.78165;
+lensShading.controlPointGR[6][1] = 2.05755;
+lensShading.controlPointGB[6][1] = 1.91035;
+lensShading.controlPointB[6][1]  = 1.93759;
+lensShading.controlPointR[7][1]  = 2.91752;
+lensShading.controlPointGR[7][1] = 2.0719;
+lensShading.controlPointGB[7][1] = 1.98903;
+lensShading.controlPointB[7][1]  = 1.9802;
+lensShading.controlPointR[8][1]  = 3.41709;
+lensShading.controlPointGR[8][1] = 2.4017;
+lensShading.controlPointGB[8][1] = 2.11803;
+lensShading.controlPointB[8][1]  = 2.23495;
+lensShading.controlPointR[9][1]  = 2.51544;
+lensShading.controlPointGR[9][1] = 1.5632;
+lensShading.controlPointGB[9][1] = 1.90501;
+lensShading.controlPointB[9][1]  = 1.61611;
+lensShading.controlPointR[0][2]  = 3.47771;
+lensShading.controlPointGR[0][2] = 2.4127;
+lensShading.controlPointGB[0][2] = 2.24168;
+lensShading.controlPointB[0][2]  = 2.21866;
+lensShading.controlPointR[1][2]  = 3.02571;
+lensShading.controlPointGR[1][2] = 2.1445;
+lensShading.controlPointGB[1][2] = 2.03159;
+lensShading.controlPointB[1][2]  = 2.00423;
+lensShading.controlPointR[2][2]  = 2.64112;
+lensShading.controlPointGR[2][2] = 2.08136;
+lensShading.controlPointGB[2][2] = 1.81131;
+lensShading.controlPointB[2][2]  = 1.87644;
+lensShading.controlPointR[3][2]  = 2.41422;
+lensShading.controlPointGR[3][2] = 1.9441;
+lensShading.controlPointGB[3][2] = 1.68323;
+lensShading.controlPointB[3][2]  = 1.77171;
+lensShading.controlPointR[4][2]  = 1.97507;
+lensShading.controlPointGR[4][2] = 1.72497;
+lensShading.controlPointGB[4][2] = 1.45947;
+lensShading.controlPointB[4][2]  = 1.57866;
+lensShading.controlPointR[5][2]  = 1.98189;
+lensShading.controlPointGR[5][2] = 1.69466;
+lensShading.controlPointGB[5][2] = 1.4493;
+lensShading.controlPointB[5][2]  = 1.56677;
+lensShading.controlPointR[6][2]  = 2.31394;
+lensShading.controlPointGR[6][2] = 1.76551;
+lensShading.controlPointGB[6][2] = 1.60603;
+lensShading.controlPointB[6][2]  = 1.66565;
+lensShading.controlPointR[7][2]  = 2.45616;
+lensShading.controlPointGR[7][2] = 1.80214;
+lensShading.controlPointGB[7][2] = 1.67855;
+lensShading.controlPointB[7][2]  = 1.71277;
+lensShading.controlPointR[8][2]  = 2.73077;
+lensShading.controlPointGR[8][2] = 1.85257;
+lensShading.controlPointGB[8][2] = 1.81544;
+lensShading.controlPointB[8][2]  = 1.80344;
+lensShading.controlPointR[9][2]  = 2.88351;
+lensShading.controlPointGR[9][2] = 1.93331;
+lensShading.controlPointGB[9][2] = 1.92486;
+lensShading.controlPointB[9][2]  = 1.87746;
+lensShading.controlPointR[0][3]  = 3.23325;
+lensShading.controlPointGR[0][3] = 2.22509;
+lensShading.controlPointGB[0][3] = 2.0962;
+lensShading.controlPointB[0][3]  = 2.04768;
+lensShading.controlPointR[1][3]  = 2.68868;
+lensShading.controlPointGR[1][3] = 1.93182;
+lensShading.controlPointGB[1][3] = 1.85128;
+lensShading.controlPointB[1][3]  = 1.80086;
+lensShading.controlPointR[2][3]  = 2.32448;
+lensShading.controlPointGR[2][3] = 1.80923;
+lensShading.controlPointGB[2][3] = 1.63269;
+lensShading.controlPointB[2][3]  = 1.68626;
+lensShading.controlPointR[3][3]  = 2.06873;
+lensShading.controlPointGR[3][3] = 1.67762;
+lensShading.controlPointGB[3][3] = 1.48983;
+lensShading.controlPointB[3][3]  = 1.55891;
+lensShading.controlPointR[4][3]  = 1.59583;
+lensShading.controlPointGR[4][3] = 1.44291;
+lensShading.controlPointGB[4][3] = 1.25029;
+lensShading.controlPointB[4][3]  = 1.34706;
+lensShading.controlPointR[5][3]  = 1.64556;
+lensShading.controlPointGR[5][3] = 1.42589;
+lensShading.controlPointGB[5][3] = 1.23546;
+lensShading.controlPointB[5][3]  = 1.34941;
+lensShading.controlPointR[6][3]  = 2.00924;
+lensShading.controlPointGR[6][3] = 1.53412;
+lensShading.controlPointGB[6][3] = 1.43306;
+lensShading.controlPointB[6][3]  = 1.48375;
+lensShading.controlPointR[7][3]  = 2.17316;
+lensShading.controlPointGR[7][3] = 1.5892;
+lensShading.controlPointGB[7][3] = 1.51926;
+lensShading.controlPointB[7][3]  = 1.54644;
+lensShading.controlPointR[8][3]  = 2.46003;
+lensShading.controlPointGR[8][3] = 1.66854;
+lensShading.controlPointGB[8][3] = 1.63933;
+lensShading.controlPointB[8][3]  = 1.64142;
+lensShading.controlPointR[9][3]  = 2.69513;
+lensShading.controlPointGR[9][3] = 1.76262;
+lensShading.controlPointGB[9][3] = 1.79583;
+lensShading.controlPointB[9][3]  = 1.74566;
+lensShading.controlPointR[0][4]  = 2.72378;
+lensShading.controlPointGR[0][4] = 1.82254;
+lensShading.controlPointGB[0][4] = 1.79918;
+lensShading.controlPointB[0][4]  = 1.70796;
+lensShading.controlPointR[1][4]  = 2.11416;
+lensShading.controlPointGR[1][4] = 1.51821;
+lensShading.controlPointGB[1][4] = 1.51894;
+lensShading.controlPointB[1][4]  = 1.47529;
+lensShading.controlPointR[2][4]  = 1.60859;
+lensShading.controlPointGR[2][4] = 1.26831;
+lensShading.controlPointGB[2][4] = 1.23876;
+lensShading.controlPointB[2][4]  = 1.25187;
+lensShading.controlPointR[3][4]  = 1.36948;
+lensShading.controlPointGR[3][4] = 1.13744;
+lensShading.controlPointGB[3][4] = 1.10211;
+lensShading.controlPointB[3][4]  = 1.13168;
+lensShading.controlPointR[4][4]  = 0.91895;
+lensShading.controlPointGR[4][4] = 0.896222;
+lensShading.controlPointGB[4][4] = 0.833682;
+lensShading.controlPointB[4][4]  = 0.908169;
+lensShading.controlPointR[5][4]  = 0.917784;
+lensShading.controlPointGR[5][4] = 0.853898;
+lensShading.controlPointGB[5][4] = 0.821481;
+lensShading.controlPointB[5][4]  = 0.881819;
+lensShading.controlPointR[6][4]  = 1.39752;
+lensShading.controlPointGR[6][4] = 1.07692;
+lensShading.controlPointGB[6][4] = 1.07954;
+lensShading.controlPointB[6][4]  = 1.12323;
+lensShading.controlPointR[7][4]  = 1.60633;
+lensShading.controlPointGR[7][4] = 1.15895;
+lensShading.controlPointGB[7][4] = 1.18865;
+lensShading.controlPointB[7][4]  = 1.21866;
+lensShading.controlPointR[8][4]  = 1.93316;
+lensShading.controlPointGR[8][4] = 1.27169;
+lensShading.controlPointGB[8][4] = 1.28581;
+lensShading.controlPointB[8][4]  = 1.31753;
+lensShading.controlPointR[9][4]  = 2.34447;
+lensShading.controlPointGR[9][4] = 1.44741;
+lensShading.controlPointGB[9][4] = 1.54854;
+lensShading.controlPointB[9][4]  = 1.49357;
+lensShading.controlPointR[0][5]  = 2.90467;
+lensShading.controlPointGR[0][5] = 1.83344;
+lensShading.controlPointGB[0][5] = 1.84067;
+lensShading.controlPointB[0][5]  = 1.81646;
+lensShading.controlPointR[1][5]  = 2.12995;
+lensShading.controlPointGR[1][5] = 1.39992;
+lensShading.controlPointGB[1][5] = 1.45831;
+lensShading.controlPointB[1][5]  = 1.37203;
+lensShading.controlPointR[2][5]  = 1.68918;
+lensShading.controlPointGR[2][5] = 1.21079;
+lensShading.controlPointGB[2][5] = 1.25023;
+lensShading.controlPointB[2][5]  = 1.22576;
+lensShading.controlPointR[3][5]  = 1.37997;
+lensShading.controlPointGR[3][5] = 1.06039;
+lensShading.controlPointGB[3][5] = 1.07639;
+lensShading.controlPointB[3][5]  = 1.08212;
+lensShading.controlPointR[4][5]  = 0.862519;
+lensShading.controlPointGR[4][5] = 0.802186;
+lensShading.controlPointGB[4][5] = 0.783977;
+lensShading.controlPointB[4][5]  = 0.833643;
+lensShading.controlPointR[5][5]  = 0.984954;
+lensShading.controlPointGR[5][5] = 0.845839;
+lensShading.controlPointGB[5][5] = 0.836177;
+lensShading.controlPointB[5][5]  = 0.874183;
+lensShading.controlPointR[6][5]  = 1.43541;
+lensShading.controlPointGR[6][5] = 1.0161;
+lensShading.controlPointGB[6][5] = 1.08886;
+lensShading.controlPointB[6][5]  = 1.06652;
+lensShading.controlPointR[7][5]  = 1.62763;
+lensShading.controlPointGR[7][5] = 1.10513;
+lensShading.controlPointGB[7][5] = 1.19951;
+lensShading.controlPointB[7][5]  = 1.15493;
+lensShading.controlPointR[8][5]  = 2.02613;
+lensShading.controlPointGR[8][5] = 1.22237;
+lensShading.controlPointGB[8][5] = 1.37946;
+lensShading.controlPointB[8][5]  = 1.29676;
+lensShading.controlPointR[9][5]  = 2.19779;
+lensShading.controlPointGR[9][5] = 1.33407;
+lensShading.controlPointGB[9][5] = 1.48069;
+lensShading.controlPointB[9][5]  = 1.43324;
+lensShading.controlPointR[0][6]  = 3.36094;
+lensShading.controlPointGR[0][6] = 2.21667;
+lensShading.controlPointGB[0][6] = 2.13194;
+lensShading.controlPointB[0][6]  = 2.105;
+lensShading.controlPointR[1][6]  = 2.82514;
+lensShading.controlPointGR[1][6] = 1.94188;
+lensShading.controlPointGB[1][6] = 1.92507;
+lensShading.controlPointB[1][6]  = 1.80779;
+lensShading.controlPointR[2][6]  = 2.37609;
+lensShading.controlPointGR[2][6] = 1.67995;
+lensShading.controlPointGB[2][6] = 1.6689;
+lensShading.controlPointB[2][6]  = 1.59488;
+lensShading.controlPointR[3][6]  = 2.11042;
+lensShading.controlPointGR[3][6] = 1.52644;
+lensShading.controlPointGB[3][6] = 1.51855;
+lensShading.controlPointB[3][6]  = 1.45016;
+lensShading.controlPointR[4][6]  = 1.61269;
+lensShading.controlPointGR[4][6] = 1.2557;
+lensShading.controlPointGB[4][6] = 1.25698;
+lensShading.controlPointB[4][6]  = 1.20115;
+lensShading.controlPointR[5][6]  = 1.62042;
+lensShading.controlPointGR[5][6] = 1.23099;
+lensShading.controlPointGB[5][6] = 1.24504;
+lensShading.controlPointB[5][6]  = 1.18137;
+lensShading.controlPointR[6][6]  = 1.98469;
+lensShading.controlPointGR[6][6] = 1.3859;
+lensShading.controlPointGB[6][6] = 1.43289;
+lensShading.controlPointB[6][6]  = 1.37743;
+lensShading.controlPointR[7][6]  = 2.15322;
+lensShading.controlPointGR[7][6] = 1.45076;
+lensShading.controlPointGB[7][6] = 1.5157;
+lensShading.controlPointB[7][6]  = 1.46548;
+lensShading.controlPointR[8][6]  = 2.43665;
+lensShading.controlPointGR[8][6] = 1.55891;
+lensShading.controlPointGB[8][6] = 1.62531;
+lensShading.controlPointB[8][6]  = 1.58598;
+lensShading.controlPointR[9][6]  = 2.61613;
+lensShading.controlPointGR[9][6] = 1.65249;
+lensShading.controlPointGB[9][6] = 1.74938;
+lensShading.controlPointB[9][6]  = 1.71466;
+lensShading.controlPointR[0][7]  = 3.57484;
+lensShading.controlPointGR[0][7] = 2.3893;
+lensShading.controlPointGB[0][7] = 2.27203;
+lensShading.controlPointB[0][7]  = 2.24213;
+lensShading.controlPointR[1][7]  = 3.15338;
+lensShading.controlPointGR[1][7] = 2.22262;
+lensShading.controlPointGB[1][7] = 2.16758;
+lensShading.controlPointB[1][7]  = 2.03367;
+lensShading.controlPointR[2][7]  = 2.73975;
+lensShading.controlPointGR[2][7] = 1.92054;
+lensShading.controlPointGB[2][7] = 1.87748;
+lensShading.controlPointB[2][7]  = 1.78101;
+lensShading.controlPointR[3][7]  = 2.47077;
+lensShading.controlPointGR[3][7] = 1.76381;
+lensShading.controlPointGB[3][7] = 1.73756;
+lensShading.controlPointB[3][7]  = 1.632;
+lensShading.controlPointR[4][7]  = 1.99362;
+lensShading.controlPointGR[4][7] = 1.46803;
+lensShading.controlPointGB[4][7] = 1.49939;
+lensShading.controlPointB[4][7]  = 1.37812;
+lensShading.controlPointR[5][7]  = 1.91388;
+lensShading.controlPointGR[5][7] = 1.43471;
+lensShading.controlPointGB[5][7] = 1.43753;
+lensShading.controlPointB[5][7]  = 1.33661;
+lensShading.controlPointR[6][7]  = 2.27282;
+lensShading.controlPointGR[6][7] = 1.56944;
+lensShading.controlPointGB[6][7] = 1.60741;
+lensShading.controlPointB[6][7]  = 1.53416;
+lensShading.controlPointR[7][7]  = 2.40675;
+lensShading.controlPointGR[7][7] = 1.63144;
+lensShading.controlPointGB[7][7] = 1.66959;
+lensShading.controlPointB[7][7]  = 1.61496;
+lensShading.controlPointR[8][7]  = 2.61855;
+lensShading.controlPointGR[8][7] = 1.71662;
+lensShading.controlPointGB[8][7] = 1.74892;
+lensShading.controlPointB[8][7]  = 1.72781;
+lensShading.controlPointR[9][7]  = 2.82093;
+lensShading.controlPointGR[9][7] = 1.80693;
+lensShading.controlPointGB[9][7] = 1.88664;
+lensShading.controlPointB[9][7]  = 1.85536;
+lensShading.controlPointR[0][8]  = 3.74027;
+lensShading.controlPointGR[0][8] = 2.64315;
+lensShading.controlPointGB[0][8] = 2.60088;
+lensShading.controlPointB[0][8]  = 2.46205;
+lensShading.controlPointR[1][8]  = 3.8572;
+lensShading.controlPointGR[1][8] = 2.40049;
+lensShading.controlPointGB[1][8] = 2.10427;
+lensShading.controlPointB[1][8]  = 2.11732;
+lensShading.controlPointR[2][8]  = 3.19921;
+lensShading.controlPointGR[2][8] = 2.23335;
+lensShading.controlPointGB[2][8] = 2.14045;
+lensShading.controlPointB[2][8]  = 2.0599;
+lensShading.controlPointR[3][8]  = 2.98668;
+lensShading.controlPointGR[3][8] = 2.07028;
+lensShading.controlPointGB[3][8] = 2.00488;
+lensShading.controlPointB[3][8]  = 1.90118;
+lensShading.controlPointR[4][8]  = 2.52872;
+lensShading.controlPointGR[4][8] = 1.76952;
+lensShading.controlPointGB[4][8] = 1.7532;
+lensShading.controlPointB[4][8]  = 1.64892;
+lensShading.controlPointR[5][8]  = 2.57908;
+lensShading.controlPointGR[5][8] = 1.85619;
+lensShading.controlPointGB[5][8] = 1.82346;
+lensShading.controlPointB[5][8]  = 1.76864;
+lensShading.controlPointR[6][8]  = 2.67979;
+lensShading.controlPointGR[6][8] = 1.86214;
+lensShading.controlPointGB[6][8] = 1.82555;
+lensShading.controlPointB[6][8]  = 1.8475;
+lensShading.controlPointR[7][8]  = 2.74368;
+lensShading.controlPointGR[7][8] = 1.86637;
+lensShading.controlPointGB[7][8] = 1.84681;
+lensShading.controlPointB[7][8]  = 1.89663;
+lensShading.controlPointR[8][8]  = 2.70799;
+lensShading.controlPointGR[8][8] = 2.0492;
+lensShading.controlPointGB[8][8] = 2.08623;
+lensShading.controlPointB[8][8]  = 2.0337;
+lensShading.controlPointR[9][8]  = 2.98135;
+lensShading.controlPointGR[9][8] = 1.85373;
+lensShading.controlPointGB[9][8] = 1.8319;
+lensShading.controlPointB[9][8]  = 1.9867;
+lensShading.controlPointR[0][9]  = 5.32589;
+lensShading.controlPointGR[0][9] = 3.66976;
+lensShading.controlPointGB[0][9] = 3.33083;
+lensShading.controlPointB[0][9]  = 3.23812;
+lensShading.controlPointR[1][9]  = 3.87497;
+lensShading.controlPointGR[1][9] = 2.7382;
+lensShading.controlPointGB[1][9] = 2.59429;
+lensShading.controlPointB[1][9]  = 2.56812;
+lensShading.controlPointR[2][9]  = 3.71848;
+lensShading.controlPointGR[2][9] = 2.76905;
+lensShading.controlPointGB[2][9] = 2.52384;
+lensShading.controlPointB[2][9]  = 2.43351;
+lensShading.controlPointR[3][9]  = 3.43448;
+lensShading.controlPointGR[3][9] = 2.58639;
+lensShading.controlPointGB[3][9] = 2.34985;
+lensShading.controlPointB[3][9]  = 2.29263;
+lensShading.controlPointR[4][9]  = 2.93564;
+lensShading.controlPointGR[4][9] = 2.26236;
+lensShading.controlPointGB[4][9] = 2.04626;
+lensShading.controlPointB[4][9]  = 2.04198;
+lensShading.controlPointR[5][9]  = 2.68533;
+lensShading.controlPointGR[5][9] = 1.96923;
+lensShading.controlPointGB[5][9] = 1.86968;
+lensShading.controlPointB[5][9]  = 1.76677;
+lensShading.controlPointR[6][9]  = 2.94437;
+lensShading.controlPointGR[6][9] = 2.12729;
+lensShading.controlPointGB[6][9] = 2.05326;
+lensShading.controlPointB[6][9]  = 1.94644;
+lensShading.controlPointR[7][9]  = 3.0692;
+lensShading.controlPointGR[7][9] = 2.19531;
+lensShading.controlPointGB[7][9] = 2.11569;
+lensShading.controlPointB[7][9]  = 2.01053;
+lensShading.controlPointR[8][9]  = 3.34479;
+lensShading.controlPointGR[8][9] = 2.23437;
+lensShading.controlPointGB[8][9] = 2.2496;
+lensShading.controlPointB[8][9]  = 2.17437;
+lensShading.controlPointR[9][9]  = 3.80501;
+lensShading.controlPointGR[9][9] = 2.611;
+lensShading.controlPointGB[9][9] = 2.5559;
+lensShading.controlPointB[9][9]  = 2.51302;
+
+# Data for AWB and Color Correction
+colorCorrection.srgbMatrix[0] = {1.34654862732, -0.0892672635866, 0.113455914048 };
+colorCorrection.srgbMatrix[1] = {-0.145784124122, 1.43303133029, -0.715360963654 };
+colorCorrection.srgbMatrix[2] = {-0.200764503193, -0.343764066704, 1.60190504961 };
+awb.GrayLineSlope = -1.26813098991;
+awb.GrayLineIntercept = 2.15997525187;
+awb.CCTtoU = {0.000108199278008, 0.164565613404};
+awb.UtoCCT = {8911.05417001, -1279.76149889};
+awb.GrayLineSoftClampSlopeBeforeFirstPoint = 0.0;
+awb.GrayLineSoftClampSlopeAfterLastPoint = 0.5;
+awb.NumGrayLineSoftClampPoints = 3;
+awb.GrayLineSoftClamp[0] = {0.489163447428 , 0.489163447428 }; # Tungsten limit
+awb.GrayLineSoftClamp[1] = {0.867860920457 , 0.867860920457 }; # Daylight limit
+awb.GrayLineSoftClamp[2] = {1.24655839349 , 0.867860920457 }; # Deep blue limit

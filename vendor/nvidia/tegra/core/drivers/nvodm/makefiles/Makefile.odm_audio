@@ -1,0 +1,7 @@
+MODULE_NAME := libnvodm_audiocodec
+
+MODULE_SUFFIX := $(LIB_SUFFIX)
+
+MODULE_IN_EBOOT := oal
+
+include $(TEGRA_TOP)/core/drivers/nvodm/makefiles/Makefile.odm_common

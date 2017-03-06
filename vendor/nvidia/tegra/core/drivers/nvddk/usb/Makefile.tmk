@@ -1,0 +1,84 @@
+################################### tell Emacs this is a -*- makefile-gmake -*-
+#
+# Copyright (c) 2012, NVIDIA CORPORATION.  All rights reserved.
+#
+# NVIDIA CORPORATION and its licensors retain all intellectual property
+# and proprietary rights in and to this software, related documentation
+# and any modifications thereto.  Any use, reproduction, disclosure or
+# distribution of this software and related documentation without an express
+# license agreement from NVIDIA CORPORATION is strictly prohibited.
+#
+# tmake for SW Mobile component makefile
+#
+# libnvddk_usbphy library component makefile
+#
+###############################################################################
+
+#------------------------------------------------------------------------------
+# Common definitions
+#------------------------------------------------------------------------------
+_common_sources                := \
+	../usb/device/nvddk_usbf.c \
+	../usb/device/nvddk_usbf_priv.c \
+	../usb/host/nvddk_usbh.c \
+	../usb/host/nvddk_usbh_priv_ap20.c \
+	../usb/host/nvddk_usbh_priv.c \
+	../usb/host/nvddk_usbh_priv_t30.c \
+	../usb/nvddk_usbphy_ap20.c \
+	../usb/nvddk_usbphy.c \
+	../usb/nvddk_usbphy_t30.c \
+	../usb/otg/nvddk_usbotg.c
+_common_includes               := ../../hwinc
+_common_cflags                 := -DNV_USE_FUSE_CLOCK_ENABLE=0
+
+ifeq ($(NV_TARGET_BOOTLOADER_PINMUX),kernel)
+_common_cflags += -DSET_KERNEL_PINMUX
+endif
+
+#------------------------------------------------------------------------------
+# Static library
+#------------------------------------------------------------------------------
+ifdef NV_COMPONENT_FLAG_STATIC_LIBRARY_SECTION
+include $(NV_BUILD_START_COMPONENT)
+
+NV_COMPONENT_NAME              := libnvddk_usbphy
+NV_COMPONENT_OWN_INTERFACE_DIR := .
+NV_COMPONENT_SOURCES           := $(_common_sources)
+NV_COMPONENT_INCLUDES          := $(_common_includes)
+NV_COMPONENT_CFLAGS            += $(_common_cflags)
+
+include $(NV_BUILD_STATIC_LIBRARY)
+endif
+
+#------------------------------------------------------------------------------
+# Shared library
+#------------------------------------------------------------------------------
+ifdef NV_COMPONENT_FLAG_SHARED_LIBRARY_SECTION
+include $(NV_BUILD_START_COMPONENT)
+
+NV_COMPONENT_NAME              := nvddk_usbphy
+NV_COMPONENT_OWN_INTERFACE_DIR := .
+NV_COMPONENT_SOURCES           := $(_common_sources)
+NV_COMPONENT_INCLUDES          := $(_common_includes)
+NV_COMPONENT_CFLAGS            += $(_common_cflags)
+NV_COMPONENT_NEEDED_INTERFACE_DIRS := \
+	../../../utils/nvos \
+	../../nvodm/misc \
+	../../nvodm/query \
+	../../nvrm
+
+include $(NV_BUILD_SHARED_LIBRARY)
+endif
+
+#------------------------------------------------------------------------------
+# Cleanup
+#------------------------------------------------------------------------------
+_common_sources  :=
+_common_includes :=
+_common_cflags   :=
+
+# Local Variables:
+# indent-tabs-mode: t
+# tab-width: 8
+# End:
+# vi: set tabstop=8 noexpandtab:

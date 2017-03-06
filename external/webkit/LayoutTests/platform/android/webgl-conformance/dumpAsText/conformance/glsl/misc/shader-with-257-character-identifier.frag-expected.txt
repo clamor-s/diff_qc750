@@ -1,0 +1,14 @@
+CONSOLE MESSAGE: line 24: *** Error compiling shader '[object WebGLShader]':ERROR: 0:3: '' : BUFFER OVERFLOW 
+ERROR: 0:6: '' : BUFFER OVERFLOW 
+
+shader that uses 257 character identifier should fail
+
+On success, you will see a series of "PASS" messages, followed by "TEST COMPLETE".
+
+test: shader that uses 257 character identifier should fail
+default vertex shader
+test fragment shaderPASS shader that uses 257 character identifier should fail
+PASS successfullyParsed is true
+
+TEST COMPLETE
+

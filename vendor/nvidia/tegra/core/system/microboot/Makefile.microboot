@@ -1,0 +1,72 @@
+#
+# Copyright (c) 2010 - 2012 NVIDIA Corporation.  All rights reserved.
+#
+# NVIDIA Corporation and its licensors retain all intellectual property
+# and proprietary rights in and to this software, related documentation
+# and any modifications thereto.  Any use, reproduction, disclosure or
+# distribution of this software and related documentation without an express
+# license agreement from NVIDIA Corporation is strictly prohibited.
+#
+
+TARGET_PRODUCT = $(filter whistler harmony, $(notdir $(wildcard ../../../odm_kit/*)))
+
+LCINCS += -I../../drivers/hwinc
+LCINCS += -I../../drivers/hwinc/ap20
+LCINCS += -I../../drivers/nvrm/nvrmkernel/core/common
+LCINCS += -I../../include
+LCINCS += -I../../system/nvpartmgr
+LCINCS += -I../../utils/nvos/aos
+LCINCS += -I../../../core/include
+LCINCS += -I../../../core/drivers/nvboot/ap20/include
+LCINCS += -I../../../core/utils/nvos/aos
+LCINCS += -I../../../odm_kit/$(TARGET_DEVICE)/adaptations
+LCINCS += -I../../../odm_kit/$(TARGET_DEVICE)/adaptations/pmu
+LCINCS += -I../../../odm_kit/$(TARGET_DEVICE)/adaptations/tmon
+
+LCDEFS += -DWIN_INTERFACE_CUSTOM
+LCDEFS += -UDEBUG
+LCDEFS += -U_DEBUG
+LCDEFS += -DNDEBUG
+LCDEFS += -DNV_DEBUG=0
+LCDEFS += -DNVODM_BOARD_IS_FPGA=0
+LCDEFS += -D__thumb
+LCDEFS += -mthumb-interwork
+LCDEFS += -mthumb
+
+C_FILES += microboot.c
+
+LIBS += prebuilt/microboot_aes.o
+LIBS += prebuilt/microboot_hash.o
+LIBS += prebuilt/microboot_devmgr.o
+LIBS += prebuilt/microboot_fuse.o
+LIBS += prebuilt/microboot_reader.o
+LIBS += prebuilt/microboot_utils.o
+LIBS += prebuilt/microboot_clk_rst.o
+LIBS += prebuilt/microboot_priv.o
+LIBS += prebuilt/microboot_uart.o
+LIBS += prebuilt/microboot_usbf.o
+LIBS += prebuilt/microboot_warm_boot_0.o
+LIBS += prebuilt/aes_keyschedule_lock.o
+LIBS += prebuilt/se_aes_keyschedule_lock.o
+LIBS += prebuilt/microboot_sdmmc.o
+LIBS += prebuilt/libnvbct.a
+LIBS += prebuilt/libavpmain.a
+LIBS += prebuilt/libnvodm_services.a
+LIBS += prebuilt/libnvboot_clocks.a
+LIBS += prebuilt/libnvboot_fuse.a
+LIBS += prebuilt/libnvboot_nand.a
+LIBS += prebuilt/libnvboot_pads.a
+LIBS += prebuilt/libnvboot_reset.a
+LIBS += prebuilt/libnvboot_sdram.a
+LIBS += prebuilt/libnvboot_spi_flash.a
+LIBS += prebuilt/libnvboot_util.a
+LIBS += prebuilt/libnvboot_pmc.a
+
+LINKOPTS += -lm
+LINKOPTS += -lc
+LINKOPTS += -Wl,--gc-sections
+LINKOPTS += -Wl,-Map,microboot.map
+
+SCATTER_FILE := prebuilt/microboot.x
+USE_GCC := 1
+TARGET := microboot

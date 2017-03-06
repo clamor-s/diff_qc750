@@ -1,0 +1,11 @@
+vertex shader with default precision should succeed
+
+On success, you will see a series of "PASS" messages, followed by "TEST COMPLETE".
+
+test: vertex shader with default precision should succeed
+test vertex shader
+default fragment shaderPASS vertex shader with default precision should succeed
+PASS successfullyParsed is true
+
+TEST COMPLETE
+

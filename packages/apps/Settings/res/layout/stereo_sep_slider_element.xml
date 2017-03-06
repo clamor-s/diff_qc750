@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+ * Copyright (c) 2011 NVIDIA Corporation.  All Rights Reserved.
+ *
+ * NVIDIA Corporation and its licensors retain all intellectual property and
+ * proprietary rights in and to this software and related documentation.  Any
+ * use, reproduction, disclosure or distribution of this software and related
+ * documentation without an express license agreement from NVIDIA Corporation
+ * is strictly prohibited.
+-->
+
+<merge
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:systemui="http://schemas.android.com/apk/res/com.android.settings"
+    >
+    <TableLayout
+        android:id="@+id/sterepsep_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="10dip">
+        <TableRow>
+            <TextView
+                android:textStyle="bold"
+                android:text="@string/hdmi_3d_stereo_separation_label"/>
+        </TableRow>
+        <TableRow>
+            <TextView
+                android:id="@+id/hdmi_3d_stereo_separation_val"/>
+        </TableRow>
+    </TableLayout>
+
+    <SeekBar
+        android:id="@+id/hdmi_3d_stereo_separation_slider"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/sterepsep_label"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp">
+    </SeekBar>
+</merge>

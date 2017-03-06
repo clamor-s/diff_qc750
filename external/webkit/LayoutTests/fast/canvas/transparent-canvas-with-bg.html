@@ -1,0 +1,51 @@
+<html>
+<head>
+<style type="text/css">
+div {
+    width: 100px;
+    height: 100px;
+    background-color: #88ee88;
+}
+canvas {
+    background-color: #ff0000;
+    opacity: 0.5;
+}
+</style>
+<script type="text/javascript">
+function dumpTree() {
+    if (window.layoutTestController) {
+        window.layoutTestController.notifyDone();
+    }
+}
+
+function testCanvas(framesLeft) {
+    ctx = document.getElementById('c').getContext("2d");
+    ctx.fillStyle = "#000000";
+    ctx.fillRect(0,0,100,100);
+    // green should show through the black canvas.
+    // no red (yellow) should be visible.
+
+    framesLeft--;
+    if (framesLeft == 0 && window.layoutTestController) {
+        setTimeout(dumpTree, 16);
+    } else {
+        setTimeout(function() { testCanvas(framesLeft); }, 16);
+    }
+}
+
+function runTest() {
+    if (window.layoutTestController) {
+        window.layoutTestController.dumpAsText(true);
+        window.layoutTestController.waitUntilDone();
+    }
+    testCanvas(3);
+}
+</script>
+</head>
+
+<body onload="runTest();">
+<div>
+<canvas width="100" height="100" id="c"></canvas>
+</div>
+</body>
+</html>

@@ -1,0 +1,147 @@
+Testing GLSL feature: lessThan
+
+On success, you will see a series of "PASS" messages, followed by "TEST COMPLETE".
+
+
+Testing: lessThan(bvec2, bvec2) in vertex shader
+
+reference vertex shader
+reference fragment shader
+test vertex shader
+test fragment shader
+FAIL *** Error compiling shader '[object WebGLShader]':ERROR: 0:6: '_base' : syntax error 
+
+FAIL *** Error loading shader '[object WebGLShader]':INVALID_VALUE
+FAIL Error in program linking:
+L1003: Can't link program, because it does not contain a vertex shader
+FAIL getError expected: NO_ERROR. Was INVALID_VALUE : no errors from draw
+FAIL *** Error loading shader '[object WebGLShader]':INVALID_OPERATION
+FAIL *** Error loading shader '[object WebGLShader]':INVALID_VALUE
+FAIL Error in program linking:
+L1003: Can't link program, because it does not contain a vertex shader
+FAIL getError expected: NO_ERROR. Was INVALID_VALUE : no errors from draw
+
+ref
+
+test
+
+PASS images are the same
+
+Testing: lessThan(bvec3, bvec3) in vertex shader
+
+reference vertex shader
+reference fragment shader
+test vertex shader
+test fragment shader
+FAIL *** Error loading shader '[object WebGLShader]':INVALID_OPERATION
+FAIL *** Error loading shader '[object WebGLShader]':INVALID_VALUE
+FAIL Error in program linking:
+L1003: Can't link program, because it does not contain a vertex shader
+FAIL getError expected: NO_ERROR. Was INVALID_VALUE : no errors from draw
+FAIL *** Error loading shader '[object WebGLShader]':INVALID_OPERATION
+FAIL *** Error loading shader '[object WebGLShader]':INVALID_VALUE
+FAIL Error in program linking:
+L1003: Can't link program, because it does not contain a vertex shader
+FAIL getError expected: NO_ERROR. Was INVALID_VALUE : no errors from draw
+
+ref
+
+test
+
+PASS images are the same
+
+Testing: lessThan(bvec4, bvec4) in vertex shader
+
+reference vertex shader
+reference fragment shader
+test vertex shader
+test fragment shader
+FAIL *** Error loading shader '[object WebGLShader]':INVALID_OPERATION
+FAIL *** Error loading shader '[object WebGLShader]':INVALID_VALUE
+FAIL Error in program linking:
+L1003: Can't link program, because it does not contain a vertex shader
+FAIL getError expected: NO_ERROR. Was INVALID_VALUE : no errors from draw
+FAIL *** Error loading shader '[object WebGLShader]':INVALID_OPERATION
+FAIL *** Error loading shader '[object WebGLShader]':INVALID_VALUE
+FAIL Error in program linking:
+L1003: Can't link program, because it does not contain a vertex shader
+FAIL getError expected: NO_ERROR. Was INVALID_VALUE : no errors from draw
+
+ref
+
+test
+
+PASS images are the same
+
+Testing: lessThan(bvec2, bvec2) in fragment shader
+
+reference vertex shader
+reference fragment shader
+test vertex shader
+test fragment shader
+FAIL *** Error loading shader '[object WebGLShader]':INVALID_OPERATION
+FAIL *** Error loading shader '[object WebGLShader]':INVALID_VALUE
+FAIL Error in program linking:
+L1003: Can't link program, because it does not contain a vertex shader
+FAIL getError expected: NO_ERROR. Was INVALID_VALUE : no errors from draw
+FAIL *** Error loading shader '[object WebGLShader]':INVALID_OPERATION
+FAIL *** Error loading shader '[object WebGLShader]':INVALID_VALUE
+FAIL Error in program linking:
+L1003: Can't link program, because it does not contain a vertex shader
+FAIL getError expected: NO_ERROR. Was INVALID_VALUE : no errors from draw
+
+ref
+
+test
+
+PASS images are the same
+
+Testing: lessThan(bvec3, bvec3) in fragment shader
+
+reference vertex shader
+reference fragment shader
+test vertex shader
+test fragment shader
+FAIL *** Error loading shader '[object WebGLShader]':INVALID_OPERATION
+FAIL *** Error loading shader '[object WebGLShader]':INVALID_VALUE
+FAIL Error in program linking:
+L1003: Can't link program, because it does not contain a vertex shader
+FAIL getError expected: NO_ERROR. Was INVALID_VALUE : no errors from draw
+FAIL *** Error loading shader '[object WebGLShader]':INVALID_OPERATION
+FAIL *** Error loading shader '[object WebGLShader]':INVALID_VALUE
+FAIL Error in program linking:
+L1003: Can't link program, because it does not contain a vertex shader
+FAIL getError expected: NO_ERROR. Was INVALID_VALUE : no errors from draw
+
+ref
+
+test
+
+PASS images are the same
+
+Testing: lessThan(bvec4, bvec4) in fragment shader
+
+reference vertex shader
+reference fragment shader
+test vertex shader
+test fragment shader
+FAIL *** Error loading shader '[object WebGLShader]':INVALID_OPERATION
+FAIL *** Error loading shader '[object WebGLShader]':INVALID_VALUE
+FAIL Error in program linking:
+L1003: Can't link program, because it does not contain a vertex shader
+FAIL getError expected: NO_ERROR. Was INVALID_VALUE : no errors from draw
+FAIL *** Error loading shader '[object WebGLShader]':INVALID_OPERATION
+FAIL *** Error loading shader '[object WebGLShader]':INVALID_VALUE
+FAIL Error in program linking:
+L1003: Can't link program, because it does not contain a vertex shader
+FAIL getError expected: NO_ERROR. Was INVALID_VALUE : no errors from draw
+
+ref
+
+test
+
+PASS images are the same
+PASS successfullyParsed is true
+
+TEST COMPLETE
+

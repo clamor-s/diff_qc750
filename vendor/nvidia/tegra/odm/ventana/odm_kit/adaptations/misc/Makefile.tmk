@@ -1,0 +1,37 @@
+################################### tell Emacs this is a -*- makefile-gmake -*-
+#
+# Copyright (c) 2011-2012, NVIDIA CORPORATION.  All rights reserved.
+#
+# NVIDIA CORPORATION and its licensors retain all intellectual property
+# and proprietary rights in and to this software, related documentation
+# and any modifications thereto.  Any use, reproduction, disclosure or
+# distribution of this software and related documentation without an express
+# license agreement from NVIDIA CORPORATION is strictly prohibited.
+#
+# tmake for SW Mobile component makefile
+#
+# nvodm_misc static library component makefile (ventana)
+#
+###############################################################################
+
+ifdef NV_COMPONENT_FLAG_STATIC_LIBRARY_SECTION
+include $(NV_BUILD_START_COMPONENT)
+
+NV_COMPONENT_NAME              := libnvodm_misc
+NV_COMPONENT_OWN_INTERFACE_DIR := .
+ifeq ($(NV_TARGET_BOOTLOADER_PINMUX),kernel)
+NV_COMPONENT_CFLAGS += -DSET_KERNEL_PINMUX
+endif
+NV_COMPONENT_SOURCES           := \
+	nvodm_kbc.c \
+	nvodm_sdio.c \
+	nvodm_uart.c \
+	nvodm_usbulpi.c
+
+include $(NV_BUILD_STATIC_LIBRARY)
+endif
+
+# Local Variables:
+# indent-tabs-mode: t
+# tab-width: 8
+# End:

@@ -1,0 +1,23 @@
+
+"eks_encrypt_keys.py" is for creating encrypted key storage(EKS) which is a separate partition in device.
+The output of the script is "eks.dat" which should be copied to $OUT to be flashed.
+
+== Example 1. Creating EKS partition which has wmdrm, playready, hdcp and widevine keys ==
+python eks_encrypt_keys.py
+--wmdrmpd_cert=../keys/data/wmdrm/wmdrm_model_certificate.der
+--wmdrmpd_key=../keys/data/wmdrm/wmdrm_model_key.dat
+--prdy_cert=../keys/data/playready/NvTegra3ModelCert.dat
+--prdy_key=../keys/data/playready/NvTegra3ModelKey.dat
+--sbk=00000000000000000000000000000000
+--hdcp_key=../keys/data/hdcp/struct.txt
+--widevine_key=../keys/data/widevine/wv_good_key.dat
+
+== Example 2. Creating EKS partition which has hdcp and widevine keys ==
+python eks_encrypt_keys.py
+--sbk=00000000000000000000000000000000
+--hdcp_key=../keys/data/hdcp/struct.txt
+--widevine_key=../keys/data/widevine/wv_good_key.dat
+
+== Example 3. Creating EKS partition which has no key in it ==
+python eks_encrypt_keys.py
+--sbk=00000000000000000000000000000000

@@ -1,0 +1,3 @@
+C_FILES += ../audiocodec_hal.c
+C_FILES += ../nvodm_codec_ad1937.c
+C_FILES += ../nvodm_codec_dirana.c

@@ -1,0 +1,12 @@
+NvOdmAudioCodecGetPortCaps@1
+NvOdmAudioCodecGetOutputPortCaps@2
+NvOdmAudioCodecOpen@3
+NvOdmAudioCodecClose@4
+NvOdmAudioCodecGetPortPcmCaps@5
+NvOdmAudioCodecSetVolume@6
+NvOdmAudioCodecSetMuteControl@7
+NvOdmAudioCodecSetConfiguration@8
+NvOdmAudioCodecGetConfiguration@9
+NvOdmAudioCodecSetPowerState@10
+NvOdmAudioCodecSetPowerMode@11
+NvOdmAudioCodecSetOperationMode@12

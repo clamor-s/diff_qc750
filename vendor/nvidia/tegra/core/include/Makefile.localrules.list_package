@@ -1,0 +1,48 @@
+# Don't build header files in our HOST_BUILD; better to be on the safe side and
+# only have one make invocation that has a rule for building them
+ifneq ($(HOST_BUILD),1)
+
+$(HOST_OUTDIR)/%.h: %.idl
+	@$(ECHO) "Dummy target $@"
+
+endif
+
+ifeq ($(TARGET_OS_WINDOWS),1)
+$(TARGETS): $(OUTDIR)/%$(IMPLIB_SUFFIX): $(OUTDIR)/%.def
+	@$(ECHO) "--release[target][$@]=$<"
+
+# Special rules for creating certain special .def files
+
+$(OUTDIR)/libnvrm_graphics.def: $(TEGRA_TOP)/core/drivers/nvrm/graphics/libnvrm_graphics_stub.export
+$(OUTDIR)/libnvrm_graphics.def: $(TEGRA_TOP)/core/drivers/nvrm/graphics/libnvrm_graphics.export
+
+$(OUTDIR)/libnvrm.def: $(TEGRA_TOP)/core/drivers/nvrm/libnvrm.export
+$(OUTDIR)/libnvrm.def: $(TEGRA_TOP)/core/drivers/nvrm/libnvrm_stub.export
+
+else
+ifeq ($(TARGET_OS),linux)
+$(OUTDIR)/%.c: %.export
+	@$(ECHO) "Dummy rule $@"
+
+ifeq ($(BUILD_STUBS),1)
+$(OUTDIR)/libnvodm_kernel_query.c: $(TEGRA_TOP)/core/drivers/nvodm/libnvodm_query.export
+
+$(OUTDIR)/libnvrm_impl.c: $(TEGRA_TOP)/core/drivers/nvrm/libnvrm.export
+$(OUTDIR)/libnvrm_impl.c: $(TEGRA_TOP)/core/drivers/nvrm/libnvrm_stub.export
+
+$(OUTDIR)/libnvrm_graphics_impl.c: $(TEGRA_TOP)/core/drivers/nvrm/graphics/libnvrm_graphics.export
+$(OUTDIR)/libnvrm_graphics_impl.c: $(TEGRA_TOP)/core/drivers/nvrm/graphics/libnvrm_graphics_stub.export
+
+$(OUTDIR)/libnvstormgr_stub.c: $(TEGRA_TOP)/core/system/nvstormgr/libnvstormgr.export
+
+endif
+
+$(OUTDIR)/libnvrm_graphics.c: $(TEGRA_TOP)/core/drivers/nvrm/graphics/libnvrm_graphics.export
+$(OUTDIR)/libnvrm_graphics.c: $(TEGRA_TOP)/core/drivers/nvrm/graphics/libnvrm_graphics_stub.export
+
+$(OUTDIR)/libnvrm.c: $(TEGRA_TOP)/core/drivers/nvrm/libnvrm.export
+$(OUTDIR)/libnvrm.c: $(TEGRA_TOP)/core/drivers/nvrm/libnvrm_stub.export
+
+$(TARGETS): $(OUTDIR)/%$(IMPLIB_SUFFIX): $(OUTDIR)/%$(OBJ_SUFFIX)
+endif
+endif

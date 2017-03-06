@@ -1,0 +1,11 @@
+NvOdmImagerGetDevices@1
+NvOdmImagerReleaseDevices@2
+NvOdmImagerOpen@3
+NvOdmImagerClose@4
+
+NvOdmImagerGetCapabilities@5
+NvOdmImagerListSensorModes@6
+NvOdmImagerSetSensorMode@7
+NvOdmImagerSetPowerLevel@8
+NvOdmImagerSetParameter@9
+NvOdmImagerGetParameter@10

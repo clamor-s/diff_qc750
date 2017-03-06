@@ -1,0 +1,453 @@
+#Copyright (c) 2011-2012 NVIDIA Corporation.  All Rights Reserved.
+#
+#NVIDIA Corporation and its licensors retain all intellectual property and
+#proprietary rights in and to this software and related documentation.  Any
+#use, reproduction, disclosure or distribution of this software and related
+#documentation without an express license agreement from NVIDIA Corporation
+#is strictly prohibited.
+
+import init.nv_dev_board.usb.rc
+
+on early-init
+    mount debugfs debugfs /sys/kernel/debug
+
+on init
+    mkdir /mnt/shell/emulated 0700 shell shell
+    mkdir /storage/emulated 0555 root root
+    mkdir /storage/sdcard1 0555 root root
+
+    export APP2SD_STORAGE_OBB /storage/sdcard1/Android/obb
+    export APP2SD_STORAGE /storage/sdcard1
+    export EXTERNAL_STORAGE /storage/emulated/legacy
+    export EMULATED_STORAGE_SOURCE /mnt/shell/emulated
+    export EMULATED_STORAGE_TARGET /storage/emulated
+
+    # Support legacy paths
+    symlink /storage/emulated/legacy /sdcard
+    symlink /storage/emulated/legacy /mnt/sdcard
+    symlink /storage/emulated/legacy /storage/sdcard0
+    mkdir /forever 0644 system system
+    symlink /mnt/shell/emulated/0 /storage/emulated/legacy
+
+    # create directory for mounting usb drives
+    mkdir /mnt/usbdrive 0666 system system
+    symlink /mnt/usbdrive /usbdrive
+
+on fs
+    setprop ro.crypto.tmpfs_options size=128m,mode=0771,uid=1000,gid=1000
+    setprop ro.crypto.umount_sd false
+    # PLEASE DO NOT REMOVE NVSI SYMLINK! IF CHANGES ARE NEEDED PLEASE ENSURE THAT NVSI SYMLINK IS ALWAYS CREATED.
+    # Mount system to allow NVSI symlink
+    mount ext4 /dev/block/platform/sdhci-tegra.3/by-name/APP /system rw
+    # Create NVSI filter symlink
+    symlink /data/data/com.nvidia.NvCPLSvc/files/com.nvidia.nvsiutilv1.xml /system/etc/permissions/com.nvidia.nvsiutilv1.xml
+    chmod 0755 /system/etc/permissions/com.nvidia.nvsiutilv1.xml
+    mount_all /fstab.qc750
+
+on post-fs-data
+		mkdir /data/addon_res 0770 system system
+
+    mkdir /data/misc/wifi 0770 wifi wifi
+    mkdir /data/misc/wifi/sockets 0770 wifi wifi
+    mkdir /data/misc/dhcp 0770 dhcp dhcp
+    mkdir /data/nvcam 0700 media camera
+    mkdir /data/misc/compass 0777 system system
+    chown system system /data/misc/compass
+    chown dhcp dhcp /data/misc/dhcp
+    chown wifi wifi /data/misc/wifi
+    chown wifi wifi /data/misc/wifi/wpa_supplicant.conf
+    chown wifi wifi /data/misc/wifi/hostapd.conf
+    
+    setprop ro.crypto.keyfile.userdata /dev/block/platform/sdhci-tegra.3/by-name/MDA
+
+    mkdir /data/misc/wminput 0776 system system
+
+    mkdir /data/media 0770 media_rw media_rw
+
+    # Set indication (checked by vold) that we have finished this action
+    setprop vold.post_fs_data_done 1
+    
+    chmod 0777 system/bin/wifi_cal_conv_mac.sh
+    chown system system /forever
+    mkdir /forever/misc 0774 system system
+    mkdir /forever/misc/gsensor 0777 system system
+    mkdir /forever/misc/wifi 0770 wifi wifi
+    mkdir /forever/mac 0775 system system
+    mkdir /forever/mac/bluetooth 0775 bluetooth net_bt_stack
+    mkdir /forever/mac/wifi 0775 wifi wifi
+
+    mkdir /forever/addon 0770 system system
+    mount ext4 /dev/block/platform/sdhci-tegra.3/by-name/UDB /forever/addon rw
+    chown system system /forever/addon
+
+    chown system system /sys/class/accelemeter/dmard06/enable_acc
+		chown system system /sys/class/accelemeter/dmard06/delay_acc
+
+on boot
+
+# bluetooth
+    # bluetooth MAC address programming
+    setprop ro.bt.bdaddr_path "/forever/mac/bluetooth/bluetoothadress"
+    chown bluetooth net_bt_stack /forever/mac/bluetooth/bluetoothadress
+    mkdir /data/misc/bluetoothd 0770 bluetooth bluetooth
+    mkdir /data/misc/bluetooth 0770 system system
+    
+    # bluetooth
+    # bluetooth MAC address programming
+    chmod 0660 /sys/class/rfkill/rfkill0/state
+    chmod 0660 /sys/class/rfkill/rfkill0/type
+    chown bluetooth bluetooth /sys/class/rfkill/rfkill0/state
+    chown bluetooth bluetooth /sys/class/rfkill/rfkill0/type
+
+# NFC
+   #setprop ro.nfc.port "I2C"
+
+# backlight
+    chown system system /sys/class/backlight/pwm-backlight/brightness
+
+# didim
+    chown system system /sys/class/graphics/fb0/device/smartdimmer/enable
+    chown system system /sys/class/graphics/fb0/device/smartdimmer/aggressiveness
+
+# power
+    chown system system /sys/kernel/tegra_cap/core_cap_level
+    chown system system /sys/kernel/tegra_cap/core_cap_state
+    chown system system /sys/module/cpu_tegra/parameters/cpu_user_cap
+
+# Power management settings
+    write /sys/module/cpu_tegra3/parameters/no_lp 0
+    #write /sys/module/tegra3_emc/parameters/emc_enable 0
+    #write /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq 1000000
+
+    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor conservative
+    write /sys/devices/system/cpu/cpu1/cpufreq/scaling_governor conservative
+    write /sys/devices/system/cpu/cpu2/cpufreq/scaling_governor conservative
+    write /sys/devices/system/cpu/cpu3/cpufreq/scaling_governor conservative
+
+    write /sys/devices/system/cpu/cpufreq/conservative/up_threshold 95
+    write /sys/devices/system/cpu/cpufreq/conservative/down_threshold 75
+    write /sys/devices/system/cpu/cpufreq/conservative/freq_step 3
+
+    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor interactive
+    write /sys/devices/system/cpu/cpu1/cpufreq/scaling_governor interactive
+    write /sys/devices/system/cpu/cpu2/cpufreq/scaling_governor interactive
+    write /sys/devices/system/cpu/cpu3/cpufreq/scaling_governor interactive
+    write /sys/devices/system/cpu/cpufreq/interactive/boost_factor 2
+    write /sys/devices/system/cpu/cpufreq/interactive/sustain_load 80
+    write /sys/module/cpu_tegra3/parameters/auto_hotplug 1
+    #write /sys/module/cpuidle_t3/parameters/lp2_0_in_idle 0
+    write /sys/module/cpuidle/parameters/lp2_in_idle 1
+    chown system system /sys/devices/system/cpu/cpufreq/interactive/go_maxspeed_load
+    chown system system /sys/devices/system/cpu/cpufreq/interactive/max_boost
+
+# Default Read Ahead value for sdcards
+    write /sys/block/mmcblk0/queue/read_ahead_kb 2048
+    write /sys/block/mmcblk1/queue/read_ahead_kb 2048
+
+# Wiimote connect status
+    write /data/misc/wminput/connected 0
+    chmod 0666 /data/misc/wminput/connected
+
+# GPS init
+    #write /sys/class/gpio/export 162
+    #write /sys/class/gpio/gpio162/value 0
+    #write /sys/class/gpio/gpio162/direction out
+    #chown root system /sys/class/gpio/gpio162/value
+    #chmod 0664 /sys/class/gpio/gpio162/value
+    #write /sys/class/gpio/export 163
+    #write /sys/class/gpio/gpio163/direction out
+    #write /sys/class/gpio/gpio163/value 1
+    #chown root system /sys/class/gpio/gpio163/value
+    #chmod 0664 /sys/class/gpio/gpio163/value
+
+#add by vin for usi_3g_module
+    write /sys/class/gpio/export 194
+    write /sys/class/gpio/gpio194/direction out
+    write /sys/class/gpio/gpio194/value 1
+    chown root system /sys/class/gpio/gpio194/value
+    chmod 0666 /sys/class/gpio/gpio194/value
+
+# Load wifi drivers (all except wl12xx_sdio)
+    insmod /system/lib/modules/compat/compat.ko
+    insmod /system/lib/modules/compat/cfg80211.ko
+    insmod /system/lib/modules/compat/mac80211.ko
+    insmod /system/lib/modules/compat/wl12xx.ko
+
+    mkdir /data/gps/ 0770 gps gps
+    mkdir /data/gps/ 0770 gps gps
+    chmod 0771 /data/gps/
+    chown gps gps /data/gps/
+    chmod 0666 /dev/tigps
+
+# BB mapping symbolic name to the logging ttyACM port
+    symlink /dev/ttyACM2 /dev/log_modem
+
+on property:ro.debuggable=1
+    # EMC debug interface
+    chmod 666 /sys/kernel/debug/tegra_emc/eack_state
+
+  
+service akmd /system/bin/akmd8975_service -m 3
+    disabled
+    user akmd
+    group akmd
+   
+on property:persist.akm8975.akmd=1
+    start akmd
+    
+service bootUpdate /system/bin/bootUpdate
+    class core0
+    user root
+    group root
+    oneshot
+
+service wpa_supplicant /system/bin/wpa_supplicant \
+    -Dnl80211 -iwlan0 -c /data/misc/wifi/wpa_supplicant.conf
+#   we will start as root and wpa_supplicant will switch to user wifi
+#   after setting up the capabilities required for WEXT
+#   user wifi
+#   group wifi inet keystore
+    class main
+    socket wpa_wlan0 dgram 660 wifi wifi
+    disabled
+    oneshot
+
+service p2p_supplicant /system/bin/wpa_supplicant \
+    -Dnl80211 -iwlan0 -c /data/misc/wifi/wpa_supplicant.conf -N \
+    -Dnl80211 -ip2p0 -c/data/misc/wifi/p2p_supplicant.conf
+#   we will start as root and wpa_supplicant will switch to user wifi
+#   after setting up the capabilities required for WEXT
+#   user wifi
+#   group wifi inet keystore
+    class main
+    socket wpa_wlan0 dgram 660 wifi wifi
+    disabled
+    oneshot
+
+#TI-ST
+service uim /system/bin/uim-sysfs
+    class core
+    user root
+    group root
+    oneshot
+
+service dhcpcd_wlan0 /system/bin/dhcpcd -aABKL
+    class main
+    disabled
+    oneshot
+
+service dhcpcd_wlan1 /system/bin/dhcpcd -aABKL
+    class main
+    disabled
+    oneshot
+
+service dhcpcd_p2p /system/bin/dhcpcd -aABKL
+    class main
+    disabled
+    oneshot
+
+service dhcpcd_eth0 /system/bin/dhcpcd -ABKL -f/system/etc/dhcpcd/dhcpcd.conf
+     class main
+     disabled
+     oneshot
+
+service dhcpcd_bnep0 /system/bin/dhcpcd -ABKL
+    class main
+    disabled
+    oneshot
+
+service iprenew_wlan0 /system/bin/dhcpcd -n
+    class main
+    disabled
+    oneshot
+
+service iprenew_p2p /system/bin/dhcpcd -n
+    class main
+    disabled
+    oneshot
+
+service iprenew_eth0 /system/bin/dhcpcd -n
+    class main
+    disabled
+    oneshot
+
+service hostapd_bin  /system/bin/hostapd -dd /data/misc/wifi/hostapd.conf
+    socket wpa_wlan1 dgram 660 wifi wifi
+    disabled
+    oneshot
+
+on property:wlan.driver.status=ok
+    chown wifi wifi /sys/devices/platform/wl1271/bt_coex_state
+
+service sdcard /system/bin/sdcard /data/media /mnt/shell/emulated 1023 1023
+    class late_start
+
+# bugreport is triggered by the VOLUME-DOWN and VOLUME-UP keys
+service bugreport /system/bin/dumpstate -d -v -o /data/storage/bugreports/bugreport
+    class main
+    disabled
+    oneshot
+    keycodes 115 114
+
+#add by vin for USI_3g_module
+# add rild service
+service ril-daemon /system/bin/rild -l /system/lib/usiuna-ril.so -- -d /dev/ttyUSB0
+    class main
+    socket rild stream 660 root radio
+    socket rild-debug stream 660 radio system
+    user root
+    group radio cache inet misc audio sdcard_r sdcard_rw log
+    disabled
+
+# service pppd service
+service pppd_gprs /system/bin/logwrapper /etc/ppp/call-pppd
+    class main
+    user root
+    group radio cache inet misc
+    disabled
+    oneshot
+    
+on property:ro.boot.module_3g_config=1
+    start ril-daemon
+  
+    
+# Mount usb drives as /usbdrive. Generally usb drives are formatted with FAT
+# filesystem, so we support FAT as of now.
+on device-added-/sys/block/sda
+  mount vfat /dev/block/sda /mnt/usbdrive
+
+on device-removed-/sys/block/sda
+  umount /mnt/usbdrive
+
+# Prepare TF service
+import init.tf.rc
+
+# Enable NvCpuD, and set it to never poll config again
+on boot
+    setprop nvcpud.enabled true
+    setprop nvcpud.config_refresh_ms -1
+
+service nvcpud /system/bin/nvcpud
+    class main
+    user root
+    group root
+
+#Raydium touch setting
+#service rm_ts_service    /system/bin/rm_ts_server
+#    class main
+
+#Synaptics touch, allow low power mode
+#on boot
+#    write /sys/devices/sensor00/fn01/nosleep 0
+
+# create filesystems if necessary
+service setup_fs /system/bin/setup_fs \
+        /dev/block/platform/sdhci-tegra.3/by-name/UDA \
+        /dev/block/platform/sdhci-tegra.3/by-name/CAC \
+        /dev/block/platform/sdhci-tegra.3/by-name/UDD
+    class core
+    user root
+    group root
+    oneshot
+
+service add_p2p_iface /system/bin/iw phy0 interface add p2p0 type managed
+    disabled
+    class main
+    user root
+    group root
+    oneshot
+
+service wifi_set_mac /system/bin/calibrator set nvs_mac /data/misc/wifi/wl1271-nvs.bin
+    disabled
+    class main
+    user root
+    group root
+    oneshot
+
+service wifi_calibrate /system/bin/calibrator plt autocalibrate2 wlan0 \
+        /etc/firmware/ti-connectivity/TQS_S_2.6.ini /data/misc/wifi/wl1271-nvs.bin
+    disabled
+    class main
+    user root
+    group root
+    oneshot
+
+# Second boot and onwards
+on property:persist.wlan.ti.calibrated=1
+    insmod /system/lib/modules/compat/wl12xx_sdio.ko
+    start add_p2p_iface
+
+service wifi_convert_mac /system/bin/logwrapper /system/bin/wifi_cal_conv_mac.sh
+    disabled
+    class main
+    user root
+    group root
+    oneshot
+    
+service wifi_address /system/bin/logwrapper /system/bin/wifi_address.sh
+    disabled
+    class main
+    user root
+    group root
+    oneshot
+
+service wifi_channel /system/bin/logwrapper /system/bin/wifi_channel.sh
+    disabled
+    class main
+    user root
+    group root
+    oneshot
+
+on property:ro.keenhi.country=*
+		start wifi_channel
+
+
+service wifii_udp_port /system/bin/logwrapper /system/bin/udp_port_any.sh
+    disabled
+    class main
+    user root
+    group root
+    oneshot
+
+on property:init.svc.wpa_supplicant=running
+		start wifii_udp_port
+
+# Very first boot. This case should be below the above case in init.rc so that
+# the above case, does not get executed on first boot. Very first boot is setting
+# persist.wlan.ti.calibrated=1 which triggers the above case.
+on property:persist.wlan.ti.calibrated=0
+#		start wifi_convert_mac
+    start add_p2p_iface
+    setprop persist.wlan.ti.calibrated 1
+
+on property:persist.service.bdroid.wifi=*
+		start wifi_convert_mac
+    
+#    insmod /system/lib/modules/compat/wl12xx_sdio.ko
+#gps
+service navl_server /system/bin/navd --android_log NAVD  -p3 -nav\"-c/system/etc/gps/config/pathconfigfile.txt\"
+    disabled
+    class main
+    user gps
+    group system
+    oneshot
+    
+service pm_service_check /system/bin/pm_service check
+    class core
+    user root
+    group root
+    oneshot
+
+service pm_service_clear /system/bin/pm_service clear
+    user root
+    group root
+    disabled
+    oneshot
+
+on property:sys.kh.addon.mount=true
+    mount ext4 /dev/block/platform/sdhci-tegra.3/by-name/UDB /data/addon_res wait rw ,data=writeback,nodelalloc
+    chown system system /data/addon_res
+    setprop sys.kh.addon.mount_state true
+ 
+ 
+ 

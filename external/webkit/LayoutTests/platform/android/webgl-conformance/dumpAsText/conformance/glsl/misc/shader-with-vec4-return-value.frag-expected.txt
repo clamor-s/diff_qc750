@@ -1,0 +1,11 @@
+Shader with vec4 return value from function call should succeed
+
+On success, you will see a series of "PASS" messages, followed by "TEST COMPLETE".
+
+test: Shader with vec4 return value from function call should succeed
+default vertex shader
+test fragment shaderPASS Shader with vec4 return value from function call should succeed
+PASS successfullyParsed is true
+
+TEST COMPLETE
+

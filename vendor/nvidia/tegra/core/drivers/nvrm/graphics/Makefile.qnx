@@ -1,0 +1,40 @@
+#
+# Copyright (c) 2011 - 2012 NVIDIA Corporation.  All rights reserved.
+#
+# NVIDIA Corporation and its licensors retain all intellectual property
+# and proprietary rights in and to this software, related documentation
+# and any modifications thereto.  Any use, reproduction, disclosure or
+# distribution of this software and related documentation without an express
+# license agreement from NVIDIA Corporation is strictly prohibited.
+#
+
+GRAPHICS_STUB := $(OUTPUT_DIRNAME)/libnvrm_graphics$(DLL_SUFFIX)
+GRAPHICS_IMPL := $(OUTPUT_DIRNAME)/libnvrm_graphics_impl$(DLL_SUFFIX)
+
+TARGETS := $(GRAPHICS_STUB) $(GRAPHICS_IMPL)
+
+LCINCS += $(NVLIB_COMMON_INCLUDES)
+LCINCS += -I$(TEGRA_TOP)/core/drivers/nvrm/graphics
+LCINCS += -I$(TEGRA_TOP)/core/drivers/nvrm/graphics/common
+
+C_FILES :=
+C_FILES += common/nvrm_disasm.c
+C_FILES += common/nvrm_stream.c
+C_FILES += common/nvsched.c
+C_FILES += common/nvrm_channel_qnx.c
+C_FILES += ap20/ap20sched.c
+C_FILES += ap20/ap20rm_stream_parse.c
+OBJS := $(patsubst %.c,$(OUTDIR)/%$(OBJ_SUFFIX),$(notdir $(C_FILES)))
+
+default: $(TARGETS)
+	$(NV_INSTALL) -l $(TARGETS) $(INSTALL_TARGET)
+
+$(GRAPHICS_STUB): $(OBJS)
+$(GRAPHICS_STUB): $(NVLIB_NVOS)
+$(GRAPHICS_STUB): $(NVLIB_NVRM_KERNEL)
+
+$(GRAPHICS_IMPL): $(OBJS)
+$(GRAPHICS_IMPL): $(NVLIB_NVOS)
+$(GRAPHICS_IMPL): $(NVLIB_NVRM_IMPL)
+
+include $(TEGRA_TOP)/core-private/make/Makefile.rules

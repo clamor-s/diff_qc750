@@ -1,0 +1,58 @@
+#
+# Copyright (c) 2012, NVIDIA CORPORATION.  All rights reserved.
+#
+# NVIDIA Corporation and its licensors retain all intellectual property
+# and proprietary rights in and to this software, related documentation
+# and any modifications thereto.  Any use, reproduction, disclosure or
+# distribution of this software and related documentation without an express
+# license agreement from NVIDIA Corporation is strictly prohibited.
+#
+include $(TOPDIR)/../core-private/make/Makefile.defs
+
+
+ifeq ($(MODULE_NAME),libnvodm_query_static)
+  LIB := $(OUTDIR)/$(MODULE_NAME)$(LIB_SUFFIX)
+  TARGETS := $(LIB)
+else
+  LIB := $(OUTDIR)/$(MODULE_NAME)$(DLL_OR_LIB_SUFFIX)
+  TARGETS := $(addprefix $(OUTDIR)/$(MODULE_NAME),$(DLL_OR_LIB_SUFFIXES))
+endif
+
+LCINCS += $(NVLIB_COMMON_INCLUDES)
+
+ifeq ($(NV_TARGET_BOOTLOADER_PINMUX),kernel)
+LCDEFS += -DSET_KERNEL_PINMUX
+endif
+#OUTDIR := _out/$(BUILD_FLAVOR)_$(TARGET_OS)_$(TARGET_CPU)_nvap
+
+C_FILES :=
+C_FILES += ../nvodm_query.c
+C_FILES += ../nvodm_query_discovery.c
+C_FILES += ../nvodm_query_nand.c
+C_FILES += ../nvodm_query_gpio.c
+C_FILES += ../nvodm_query_pinmux.c
+C_FILES += ../nvodm_query_kbc.c
+
+OBJS := $(patsubst %.c,$(OUTDIR)/%$(OBJ_SUFFIX),$(notdir $(C_FILES)))
+
+default: $(LIB)
+	$(NV_INSTALL) -l $(TARGETS) $(NVODMLIB_INSTALL_TARGET)
+
+$(TARGETS): $(OBJS)
+
+$(TARGETS): $(OUTDIR)/libnvodm_query.def
+
+# non-static version needs to know all the dependent libraries.
+ifneq ($(MODULE_NAME),libnvodm_query_static)
+  ifeq ($(NV_DEF_USE_DLL),1)
+    $(TARGETS): $(NVLIB_NVOS)
+    $(TARGETS): $(NVLIB_NVODM_SERVICES)
+    $(TARGETS): $(NVLIB_NVRM)
+  endif
+endif
+
+$(OUTDIR)/libnvodm_query.def: ../libnvodm_query.export $(OUTDIR)/dummy.txt $(GET_EXPORTS)
+	$(PYTHON) $(GET_EXPORTS) $(MAKE_EXPORT_FILE_FLAGS) $(BUILD_FLAVOR) $(TARGET_OS) $(TARGET_CPU) $< >$@
+
+include $(TOPDIR)/../core-private/make/Makefile.rules
+

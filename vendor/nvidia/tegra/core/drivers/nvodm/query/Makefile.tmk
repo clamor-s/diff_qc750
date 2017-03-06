@@ -1,0 +1,51 @@
+################################### tell Emacs this is a -*- makefile-gmake -*-
+#
+# Copyright (c) 2012 NVIDIA CORPORATION.  All Rights Reserved.
+#
+# NVIDIA CORPORATION and its licensors retain all intellectual property
+# and proprietary rights in and to this software, related documentation
+# and any modifications thereto.  Any use, reproduction, disclosure or
+# distribution of this software and related documentation without an express
+# license agreement from NVIDIA CORPORATION is strictly prohibited.
+#
+# tmake for SW Mobile
+#
+# Shared library libnvodm_query component makefile
+#
+###############################################################################
+
+ifdef NV_COMPONENT_FLAG_SHARED_LIBRARY_SECTION
+include $(NV_BUILD_START_COMPONENT)
+
+NV_COMPONENT_NAME              := nvodm_query
+NV_COMPONENT_OWN_INTERFACE_DIR := .
+NV_COMPONENT_SOURCES           :=
+
+NV_COMPONENT_NEEDED_INTERFACE_DIRS := \
+	../../nvrm \
+	../../../utils/nvos \
+
+NV_COMPONENT_NEEDED_STATIC_INTERFACE_DIRS := \
+	../services
+
+ifeq ($(NV_TARGET_REFERENCE_BOARD),cardhu)
+NV_COMPONENT_NEEDED_STATIC_INTERFACE_DIRS += \
+	$(NV_SOURCE)/core-private/drivers/nvddk/fuse
+else ifeq ($(NV_TARGET_REFERENCE_BOARD),enterprise)
+NV_COMPONENT_NEEDED_STATIC_INTERFACE_DIRS += \
+	../../../system/nvbct
+endif
+
+NV_COMPONENT_ODM_WHOLE_STATIC       := \
+	query
+
+include $(NV_SOURCE)/customers/nvidia-partner/Makefile.odm.tmk
+
+include $(NV_BUILD_SHARED_LIBRARY)
+endif
+
+# Local Variables:
+# indent-tabs-mode: t
+# tab-width: 8
+# End:
+# vi: set tabstop=8 noexpandtab:

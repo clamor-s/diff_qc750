@@ -1,0 +1,62 @@
+################################### tell Emacs this is a -*- makefile-gmake -*-
+#
+# Copyright (c) 2011-2012 NVIDIA CORPORATION.  All Rights Reserved.
+#
+# NVIDIA CORPORATION and its licensors retain all intellectual property
+# and proprietary rights in and to this software, related documentation
+# and any modifications thereto.  Any use, reproduction, disclosure or
+# distribution of this software and related documentation without an express
+# license agreement from NVIDIA CORPORATION is strictly prohibited.
+#
+# tmake for SW Mobile component makefile
+#
+# libnvapputil: shared library, ... ???
+#
+###############################################################################
+
+_common_sources := \
+	nvaurand.c \
+	nvaugetopt.c \
+	nvaureadline.c \
+	nvauerr.c \
+	nvauprintf.c \
+	nvau_hashtable.c \
+	nvau_token.c
+
+ifeq ($(NV_HOST_OS),windows)
+_common_sources += nvauproc_win32.c
+else
+_common_sources += nvauproc_linux.c
+endif
+
+ifdef NV_COMPONENT_FLAG_STATIC_LIBRARY_SECTION
+include $(NV_BUILD_START_COMPONENT)
+
+NV_COMPONENT_NAME              := libnvapputil
+NV_COMPONENT_OWN_INTERFACE_DIR := .
+NV_COMPONENT_SOURCES           := $(_common_sources)
+NV_COMPONENT_CFLAGS            += -DNV_DEF_USE_FLOAT=1
+
+include $(NV_BUILD_STATIC_LIBRARY)
+endif
+
+ifdef NV_COMPONENT_FLAG_SHARED_LIBRARY_SECTION
+include $(NV_BUILD_START_COMPONENT)
+
+NV_COMPONENT_NAME                  := nvapputil
+NV_COMPONENT_OWN_INTERFACE_DIR     := .
+NV_COMPONENT_SOURCES               := $(_common_sources)
+NV_COMPONENT_CFLAGS                += -DNV_DEF_USE_FLOAT=1
+NV_COMPONENT_NEEDED_INTERFACE_DIRS := \
+	../nvos
+
+include $(NV_BUILD_SHARED_LIBRARY)
+endif
+
+# variable cleanup
+_common_sources :=
+
+# Local Variables:
+# indent-tabs-mode: t
+# tab-width: 8
+# End:

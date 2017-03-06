@@ -1,0 +1,14 @@
+CONSOLE MESSAGE: line 24: *** Error compiling shader '[object WebGLShader]':ERROR: 0:2: '' :  testing123 testing123 
+
+Checks shader with error directive
+
+On success, you will see a series of "PASS" messages, followed by "TEST COMPLETE".
+
+test: error directive causes error
+default vertex shader
+test fragment shaderPASS error directive causes error
+
+PASS successfullyParsed is true
+
+TEST COMPLETE
+

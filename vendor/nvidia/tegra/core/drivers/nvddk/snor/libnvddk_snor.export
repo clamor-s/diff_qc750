@@ -1,0 +1,10 @@
+NvDdkSnorOpen
+NvDdkSnorClose
+NvDdkSnorRead
+NvDdkSnorWrite
+NvDdkSnorErase
+NvDdkSnorGetDeviceInfo
+NvDdkSnorBlockDevOpen
+NvDdkSnorGetLockedRegions
+NvDdkSnorBlockDevInit
+NvDdkSnorBlockDevDeinit

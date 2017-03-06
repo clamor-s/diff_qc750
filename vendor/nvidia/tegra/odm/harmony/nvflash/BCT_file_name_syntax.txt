@@ -1,0 +1,22 @@
+
+
+BCT file name syntax:
+----------------------
+
+ <<platform>>_<<cpu_clock_rate>>MHz_<<DDR_part_number>>_<<DDR_clock_rate>>MHz__<<DDR_size>>MB_<<storage_media>>_<<storage_media_part_number>>.bct
+
+ <<platform>>         = Concorde, Whistler, Harmony, etc.  
+ <<cpu_clock_rate>>   = 12, 26, etc.
+ <<DDR_part_number>>  = K4X1G323PD-8GC6,H5MS1G22MFP-J3M/H8BCS0SJ0MCP, etc.
+ <<DDR_clock_rate>>   = 133, 166, etc.
+ <<DDR_size>>         = 128, 256, etc.
+ <<storage_media>>    = Nand, emmc, etc.
+ <<storage_media_part_number>> = K5E2G16ACM-D060,K9LBG08UOM-PCB0,KMCME0000M-B998, etc. //Optional in case of MCP package as it will be same as DDR_part_number
+
+
+storage_media(Nand) syntax
+---------------------------
+
+PageSize-AddressLength-Nand-Sequential/Interleave
+
+Example:  2K8NandS  -   2kB PageSize 8BitNand Sequential

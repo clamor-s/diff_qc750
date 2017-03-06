@@ -1,0 +1,11 @@
+fragment shader that uses GL_ES preprocessor symbol should succeed
+
+On success, you will see a series of "PASS" messages, followed by "TEST COMPLETE".
+
+test: fragment shader that uses GL_ES preprocessor symbol should succeed
+default vertex shader
+test fragment shaderPASS fragment shader that uses GL_ES preprocessor symbol should succeed
+PASS successfullyParsed is true
+
+TEST COMPLETE
+

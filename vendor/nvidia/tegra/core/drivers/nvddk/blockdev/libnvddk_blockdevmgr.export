@@ -1,0 +1,3 @@
+NvDdkBlockDevMgrInit
+NvDdkBlockDevMgrDeinit
+NvDdkBlockDevMgrDeviceOpen

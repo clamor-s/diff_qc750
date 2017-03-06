@@ -1,0 +1,14 @@
+CONSOLE MESSAGE: line 24: *** Error compiling shader '[object WebGLShader]':ERROR: 0:124: 'foo' : syntax error 
+
+shader with line directive returns error at proper line
+
+On success, you will see a series of "PASS" messages, followed by "TEST COMPLETE".
+
+test: vertex shader uses #line directive should report correct line
+test vertex shader
+default fragment shaderPASS vertex shader uses #line directive should report correct line
+
+PASS successfullyParsed is true
+
+TEST COMPLETE
+

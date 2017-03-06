@@ -1,0 +1,23 @@
+layer at (0,0) size 800x600
+  RenderView at (0,0) size 800x600
+layer at (431,0) size 369x600
+  RenderBlock {HTML} at (0,0) size 369x600
+    RenderBody {BODY} at (21,8) size 332x584
+      RenderBlock {H1} at (0,0) size 48x584
+        RenderText {#text} at (5,0) size 38x304
+          text run at (5,0) width 304: "This text is vertical!"
+      RenderBlock {H2} at (69,0) size 36x584
+        RenderText {#text} at (4,0) size 28x109
+          text run at (4,0) width 109: "INSANE!"
+      RenderBlock {P} at (124,0) size 144x584
+        RenderText {#text} at (2,0) size 139x572
+          text run at (2,0) width 544: "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod"
+          text run at (26,0) width 569: "tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,"
+          text run at (50,0) width 511: "quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo"
+          text run at (74,0) width 553: "consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum"
+          text run at (98,0) width 572: "dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident,"
+          text run at (122,0) width 429: "sunt in culpa qui officia deserunt mollit anim id est laborum."
+      RenderBlock {P} at (284,0) size 48x584
+        RenderText {#text} at (2,0) size 43x576
+          text run at (2,0) width 576: "\x{6625}\x{82B1}\x{79CB}\x{6708}\x{4F55}\x{6642}\x{4E86}\x{FF0C}\x{5F80}\x{4E8B}\x{77E5}\x{591A}\x{5C11}\x{3002}\x{5C0F}\x{6A13}\x{6628}\x{591C}\x{53C8}\x{6771}\x{98A8}\x{FF0C}\x{6545}\x{570B}\x{4E0D}\x{582A}\x{56DE}\x{9996}\x{6708}\x{660E}\x{4E2D}\x{3002}\x{96D5}\x{6B04}\x{7389}\x{780C}"
+          text run at (26,0) width 448: "\x{61C9}\x{7336}\x{5728}\x{FF0C}\x{53EA}\x{662F}\x{6731}\x{984F}\x{6539}\x{3002}\x{554F}\x{541B}\x{80FD}\x{6709}\x{5E7E}\x{591A}\x{6101}\x{FF0C}\x{6070}\x{4F3C}\x{4E00}\x{6C5F}\x{6625}\x{6C34}\x{5411}\x{6771}\x{6D41}\x{3002}"

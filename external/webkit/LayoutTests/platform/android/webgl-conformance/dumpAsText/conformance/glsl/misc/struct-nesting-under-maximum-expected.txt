@@ -1,0 +1,11 @@
+shader with struct nesting less than maximum in WebGL spec should succeed
+
+On success, you will see a series of "PASS" messages, followed by "TEST COMPLETE".
+
+test: shader with struct nesting less than maximum in WebGL spec should succeed
+test vertex shader
+default fragment shaderPASS shader with struct nesting less than maximum in WebGL spec should succeed
+PASS successfullyParsed is true
+
+TEST COMPLETE
+

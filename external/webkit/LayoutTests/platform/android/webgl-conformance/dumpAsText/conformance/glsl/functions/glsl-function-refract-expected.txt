@@ -1,0 +1,144 @@
+Testing GLSL feature: refract
+
+On success, you will see a series of "PASS" messages, followed by "TEST COMPLETE".
+
+
+Testing: refract(float,float,float) in vertex shader
+
+reference vertex shader
+reference fragment shader
+test vertex shader
+test fragment shader
+PASS getError was expected value: NO_ERROR : no errors from draw
+PASS getError was expected value: NO_ERROR : no errors from draw
+
+ref
+
+test
+
+diff
+
+FAIL images are different
+
+Testing: refract(vec2,vec2,float) in vertex shader
+
+reference vertex shader
+reference fragment shader
+test vertex shader
+test fragment shader
+PASS getError was expected value: NO_ERROR : no errors from draw
+PASS getError was expected value: NO_ERROR : no errors from draw
+
+ref
+
+test
+
+diff
+
+FAIL images are different
+
+Testing: refract(vec3,vec3,float) in vertex shader
+
+reference vertex shader
+reference fragment shader
+test vertex shader
+test fragment shader
+PASS getError was expected value: NO_ERROR : no errors from draw
+PASS getError was expected value: NO_ERROR : no errors from draw
+
+ref
+
+test
+
+diff
+
+FAIL images are different
+
+Testing: refract(vec4,vec4,float) in vertex shader
+
+reference vertex shader
+reference fragment shader
+test vertex shader
+test fragment shader
+PASS getError was expected value: NO_ERROR : no errors from draw
+PASS getError was expected value: NO_ERROR : no errors from draw
+
+ref
+
+test
+
+diff
+
+FAIL images are different
+
+Testing: refract(float,float,float) in fragment shader
+
+reference vertex shader
+reference fragment shader
+test vertex shader
+test fragment shader
+PASS getError was expected value: NO_ERROR : no errors from draw
+PASS getError was expected value: NO_ERROR : no errors from draw
+
+ref
+
+test
+
+diff
+
+FAIL images are different
+
+Testing: refract(vec2,vec2,float) in fragment shader
+
+reference vertex shader
+reference fragment shader
+test vertex shader
+test fragment shader
+PASS getError was expected value: NO_ERROR : no errors from draw
+PASS getError was expected value: NO_ERROR : no errors from draw
+
+ref
+
+test
+
+diff
+
+FAIL images are different
+
+Testing: refract(vec3,vec3,float) in fragment shader
+
+reference vertex shader
+reference fragment shader
+test vertex shader
+test fragment shader
+PASS getError was expected value: NO_ERROR : no errors from draw
+PASS getError was expected value: NO_ERROR : no errors from draw
+
+ref
+
+test
+
+diff
+
+FAIL images are different
+
+Testing: refract(vec4,vec4,float) in fragment shader
+
+reference vertex shader
+reference fragment shader
+test vertex shader
+test fragment shader
+PASS getError was expected value: NO_ERROR : no errors from draw
+PASS getError was expected value: NO_ERROR : no errors from draw
+
+ref
+
+test
+
+diff
+
+FAIL images are different
+PASS successfullyParsed is true
+
+TEST COMPLETE
+

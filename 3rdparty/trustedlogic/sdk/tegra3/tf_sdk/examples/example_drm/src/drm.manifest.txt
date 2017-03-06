@@ -1,0 +1,10 @@
+config.s.serviceID: 13f616f9-8572-4a6f-a1f1-03aa9b05f9ee
+config.s.lazy_instantiation: true
+config.s.multi_instance: false
+config.s.multi_session: true
+config.s.multi_command: true
+config.s.default_stack_size: 1024
+config.s.heap_size: 4096
+smx.name: DRM_SAMPLE
+smx.vendor: Trusted Logic S.A.
+smx.description: A simplistic DRM example that uses SSDI

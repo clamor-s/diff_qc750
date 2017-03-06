@@ -1,0 +1,64 @@
+################################### tell Emacs this is a -*- makefile-gmake -*-
+#
+# Copyright (c) 2011-2012 NVIDIA CORPORATION.  All Rights Reserved.
+#
+# NVIDIA CORPORATION and its licensors retain all intellectual property
+# and proprietary rights in and to this software, related documentation
+# and any modifications thereto.  Any use, reproduction, disclosure or
+# distribution of this software and related documentation without an express
+# license agreement from NVIDIA CORPORATION is strictly prohibited.
+#
+# tmake for SW Mobile component makefile
+#
+# libnvtestresults static and shared libraries component makefile
+#
+###############################################################################
+
+_common_broken_code_flags      := \
+	sign-compare \
+	missing-field-initializers
+
+# Static lib
+ifdef NV_COMPONENT_FLAG_STATIC_LIBRARY_SECTION
+include $(NV_BUILD_START_COMPONENT)
+
+NV_COMPONENT_NAME              := libnvtestresults
+NV_COMPONENT_OWN_INTERFACE_DIR := .
+NV_COMPONENT_SOURCES           := \
+	nvresults.c
+
+ifeq ($(NV_BUILD_CONFIGURATION_IS_ANDROID),1)
+NV_COMPONENT_HAS_BROKEN_CODE   := \
+	$(_common_broken_code_flags)
+endif
+
+include $(NV_BUILD_STATIC_LIBRARY)
+endif
+
+# Shared lib
+ifdef NV_COMPONENT_FLAG_SHARED_LIBRARY_SECTION
+include $(NV_BUILD_START_COMPONENT)
+
+NV_COMPONENT_NAME              := nvtestresults
+NV_COMPONENT_OWN_INTERFACE_DIR := .
+NV_COMPONENT_SOURCES           := \
+	nvresults.c
+NV_COMPONENT_NEEDED_INTERFACE_DIRS := \
+	$(NV_SOURCE)/core/utils/nvos \
+	$(NV_SOURCE)/core/drivers/nvtestio
+
+ifeq ($(NV_BUILD_CONFIGURATION_IS_ANDROID),1)
+NV_COMPONENT_HAS_BROKEN_CODE   := \
+	$(_common_broken_code_flags)
+endif
+
+include $(NV_BUILD_SHARED_LIBRARY)
+endif
+
+# Local variable cleanup
+_common_broken_code_flags :=
+
+# Local Variables:
+# indent-tabs-mode: t
+# tab-width: 8
+# End:

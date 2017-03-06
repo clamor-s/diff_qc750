@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Tests whether surface texture dimensions are initalized before plugin starts rendering</title>
+</head>
+<body>
+<!--You should see green rect and no console output when test passes.-->
+<embed style="width:200px; height:200px" type="application/x-webkit-test-netscape" test="invalid-window-dimensions" onpaintevent="runTest()"></embed>
+
+<div id="status"></div>
+
+<script>
+    if (window.layoutTestController) {
+        layoutTestController.waitUntilDone();
+        layoutTestController.dumpAsText();
+    }
+
+    var embed = document.getElementsByTagName("embed")[0];
+
+    function runTest() {
+        embed.validateDimensions();
+        document.getElementById("status").innerHTML = "DONE";
+        if (window.layoutTestController)
+            layoutTestController.notifyDone();
+    }
+</script>
+</body>
+</html>

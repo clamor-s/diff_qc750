@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<LinearLayout android:id="@+id/LinearLayout01"
+android:layout_width="fill_parent"
+android:layout_height="fill_parent"
+xmlns:android="http://schemas.android.com/apk/res/android">
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:padding="5dp"
+    android:background="#7cb73c"
+    android:fadeScrollbars="true"
+    android:isScrollContainer="true"
+    android:scrollbars="vertical">
+
+    <TextView android:id="@+id/ErrorType"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:textColor="#000000"
+        android:textSize="37dp"
+        android:paddingTop="6dp"
+        android:paddingBottom="20dp">
+    </TextView>
+
+    <Button android:id="@+id/ButtonSettings"
+        android:layout_width="170dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ErrorType"
+        android:layout_alignTop="@+id/ButtonDisplayInfo"
+        android:layout_alignParentLeft="true"
+        android:textSize="17dp"
+        android:text="@string/ButtonTextSettings"
+        android:onClick="Settings">
+    </Button>
+
+    <Button android:id="@+id/ButtonDisplayInfo"
+        android:layout_width="170dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ErrorType"
+        android:layout_alignParentRight="true"
+        android:textSize="17dp"
+        android:text="@string/ButtonTextDisplayInfo"
+        android:onClick="DisplayInfo">
+    </Button>
+
+    <TextView android:id="@+id/Space"
+        android:layout_below="@+id/ButtonSettings"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:textColor="#006400"
+        android:text="@string/Space"
+        android:scaleType="centerInside"
+        android:gravity="center"
+        android:paddingBottom="15dp">
+    </TextView>
+
+    <Button
+        android:id="@+id/InsertMarker"
+        android:layout_below="@+id/Space"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:clickable="true"
+        android:textSize="17dp"
+        android:text="@string/InsertMarker"
+        android:onClick="InsertMarker" />
+
+    <TextView android:id="@+id/TextMarkerComment"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/InsertMarker"
+        android:text="@string/TextMarkerComment"
+        android:textColor="#000000"
+        android:textSize="20dp">
+    </TextView>
+
+    <EditText android:id="@+id/MarkerComment"
+        android:layout_width="fill_parent"
+        android:layout_height="40dp"
+        android:background="@android:drawable/editbox_background"
+        android:layout_below="@+id/TextMarkerComment">
+    </EditText>
+
+    <TextView android:id="@+id/Space2"
+        android:layout_below="@+id/MarkerComment"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/Space"
+        android:textColor="#006400"
+        android:scaleType="centerInside"
+        android:gravity="center"
+        android:paddingBottom="15dp">
+    </TextView>
+
+    <TextView android:id="@+id/TextLogName"
+        android:layout_below="@+id/Space2"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:textColor="#000000"
+        android:textSize="20dp"
+        android:text="@string/TextLogName">
+    </TextView>
+
+    <EditText android:text="@+id/Dirname"
+        android:id="@+id/Dirname"
+        android:layout_marginTop="5dp"
+        android:layout_below="@+id/TextLogName"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+    </EditText>
+
+    <TextView android:id="@+id/TextComment"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/Dirname"
+        android:text="@string/TextComment"
+        android:textColor="#000000"
+        android:textSize="20dp">
+    </TextView>
+
+    <EditText android:id="@+id/Comment"
+        android:layout_width="fill_parent"
+        android:layout_height="80dp"
+        android:background="@android:drawable/editbox_background"
+        android:layout_below="@+id/TextComment">
+    </EditText>
+
+    <Button android:id="@+id/ButtonSave"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/Comment"
+        android:layout_alignTop="@+id/ButtonDiscard"
+        android:layout_alignParentLeft="true"
+        android:textSize="17dp"
+        android:text="@string/ButtonTextSave"
+        android:onClick="StoreLogs">
+    </Button>
+
+    <Button android:id="@+id/ButtonDiscard"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/Comment"
+        android:layout_alignParentRight="true"
+        android:textSize="17dp"
+        android:text="@string/ButtonTextDiscard"
+        android:onClick="DiscardLogs">
+    </Button>
+
+</RelativeLayout>
+</LinearLayout>

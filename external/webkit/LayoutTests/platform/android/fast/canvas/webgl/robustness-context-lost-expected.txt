@@ -1,0 +1,8 @@
+PASS drawing timed out in less than 4 seconds
+PASS result from readPixels after draw call timed out: 255 0 0 255
+PASS context is lost
+PASS context lost event was received
+PASS successfullyParsed is true
+
+TEST COMPLETE
+

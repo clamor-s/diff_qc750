@@ -1,0 +1,2 @@
+sm.client.id: 7fa33783-a4ca-441b-80c5-684add03bf10
+sm.service_manager.allow_manager_mode: true

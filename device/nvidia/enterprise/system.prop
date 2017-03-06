@@ -1,0 +1,64 @@
+ro.opengles.version = 131072
+wifi.interface=wlan0
+ap.interface=wlan1
+rild.libpath=/system/lib/libril-icera.so
+rild.libargs=-e rmnet0 -e rmnet0:0 -e rmnet0:1
+ro.sf.lcd_density=240
+
+keyguard.no_require_sim=true
+
+# Icera fild
+modem.fild.rootdir=/data/rfs
+modem.fild.blocksize=65528
+modem.fild.baudrate=3500000
+modem.fild.hif=0
+modem.fild.coredump=enabled
+modem.fild.coredumpdir=/data/rfs/data/debug
+modem.power.device=/sys/class/gpio/gpio32/value,0,1
+modem.power.usbdevice=/sys/devices/platform/tegra_usb_modem_power/load_host,0,1
+ro.ril.devicename=/dev/ttyACM1
+modem.powercontrol=enabled
+ro.ril.wake_lock_timeout=200000
+
+# Icera agpsd
+agpsd.lib_path=/system/lib/libagps-brcm4751.so
+agpsd.dev_path=/dev/ttyACM4
+
+# -----------------------------
+# speaker volume is from 20 to 31
+# this corresponds to -2dB to +8dB
+# -----------------------------
+audio.speaker.voice.0=20
+audio.speaker.voice.1=21
+audio.speaker.voice.2=24
+audio.speaker.voice.3=26
+audio.speaker.voice.4=28
+audio.speaker.voice.5=31
+# -----------------------------
+# earpiece volume is from 20 to 31
+# this corresponds to -2dB to +8dB
+# -----------------------------
+audio.earpiece.voice.0=20
+audio.earpiece.voice.1=21
+audio.earpiece.voice.2=24
+audio.earpiece.voice.3=26
+audio.earpiece.voice.4=28
+audio.earpiece.voice.5=31
+# -----------------------------------
+# headset volume is from 9 to 14
+# this corresponds to -34dB to -19dB
+# ----------------------------------
+audio.headset.voice.0=16
+audio.headset.voice.1=19
+audio.headset.voice.2=22
+audio.headset.voice.3=25
+audio.headset.voice.4=28
+audio.headset.voice.5=31
+persist.tegra.nvmmlite = 1
+
+#NFC
+debug.nfc.fw_download=false
+debug.nfc.se=false
+
+#support dynamic resolution change property
+ro.streaming.video.drs=true

@@ -1,0 +1,12 @@
+CONSOLE MESSAGE: line 24: *** Error loading shader '[object WebGLShader]':INVALID_VALUE
+Non ascii data in source should fail
+
+On success, you will see a series of "PASS" messages, followed by "TEST COMPLETE".
+
+test: Non ascii data in source should fail
+test vertex shader
+default fragment shaderPASS Non ascii data in source should fail
+PASS successfullyParsed is true
+
+TEST COMPLETE
+

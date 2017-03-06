@@ -1,0 +1,12 @@
+   should look as right pattern   
+   should look as right pattern   
+Verify that preserveDrawingBuffer attribute is honored.
+
+On success, you will see a series of "PASS" messages, followed by "TEST COMPLETE".
+
+PASS successfullyParsed is true
+PASS Rendered ok with preserveDrawingBuffer false.
+PASS Rendered ok with preserveDrawingBuffer true.
+
+TEST COMPLETE
+

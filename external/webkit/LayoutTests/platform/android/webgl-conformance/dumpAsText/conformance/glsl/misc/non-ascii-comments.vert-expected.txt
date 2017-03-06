@@ -1,0 +1,11 @@
+Non ascii comments in source should succeed
+
+On success, you will see a series of "PASS" messages, followed by "TEST COMPLETE".
+
+test: Non ascii comments in source should succeed
+test vertex shader
+default fragment shaderPASS Non ascii comments in source should succeed
+PASS successfullyParsed is true
+
+TEST COMPLETE
+

@@ -1,0 +1,6 @@
+gps_mode:msbased_mode:
+ee_support:no:
+st_support:no:
+hor_acc:80:
+loc_age:3:
+response_time:40:

@@ -1,0 +1,26 @@
+Verify renderbuffers are initialized to 0 before being read in WebGL
+
+On success, you will see a series of "PASS" messages, followed by "TEST COMPLETE".
+
+PASS internal buffers have been initialized to 0
+PASS getError was expected value: NO_ERROR : should be no error after renderbufferStorage(internalformat = RGBA4).
+PASS user buffers have been initialized to 0
+
+PASS internal buffers have been initialized to 0
+PASS getError was expected value: NO_ERROR : should be no error after renderbufferStorage(internalformat = RGBA4).
+PASS user buffers have been initialized to 0
+
+PASS internal buffers have been initialized to 0
+PASS getError was expected value: NO_ERROR : should be no error after renderbufferStorage(internalformat = RGBA4).
+PASS user buffers have been initialized to 0
+
+PASS internal buffers have been initialized to 0
+PASS getError was expected value: NO_ERROR : should be no error after renderbufferStorage(internalformat = RGBA4).
+PASS user buffers have been initialized to 0
+
+PASS clearColor is [0, 1, 0, 1]
+PASS getError was expected value: NO_ERROR : should be no errors
+PASS successfullyParsed is true
+
+TEST COMPLETE
+

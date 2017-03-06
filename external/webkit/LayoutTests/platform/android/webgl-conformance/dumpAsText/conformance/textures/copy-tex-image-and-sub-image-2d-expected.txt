@@ -1,0 +1,517 @@
+ 
+Verify copyTexImage2D and copyTexSubImage2D
+
+On success, you will see a series of "PASS" messages, followed by "TEST COMPLETE".
+
+Testing with antialias on
+PASS getError was expected value: NO_ERROR : During Initialization
+Testing copyTexImage2D
+PASS getError was expected value: NO_ERROR : using copyTexImage2D: x =-2, y = -2
+PASS 0, 0 should render 0,0,0,0 (+/-1)
+PASS 1, 0 should render 0,0,0,0 (+/-1)
+PASS 0, 1 should render 0,0,0,0 (+/-1)
+PASS 1, 1 should render 0,0,0,0 (+/-1)
+PASS getError was expected value: NO_ERROR : using copyTexSubImage2D: x =-2, y = -2
+PASS 0, 0 should render 0,0,0,0 (+/-1)
+PASS 1, 0 should render 0,0,0,0 (+/-1)
+PASS 0, 1 should render 0,0,0,0 (+/-1)
+PASS 1, 1 should render 0,0,0,0 (+/-1)
+PASS getError was expected value: NO_ERROR : using copyTexImage2D: x =-1, y = -2
+PASS 0, 0 should render 0,0,0,0 (+/-1)
+PASS 1, 0 should render 0,0,0,0 (+/-1)
+PASS 0, 1 should render 0,0,0,0 (+/-1)
+PASS 1, 1 should render 0,0,0,0 (+/-1)
+PASS getError was expected value: NO_ERROR : using copyTexSubImage2D: x =-1, y = -2
+PASS 0, 0 should render 0,0,0,0 (+/-1)
+PASS 1, 0 should render 0,0,0,0 (+/-1)
+PASS 0, 1 should render 0,0,0,0 (+/-1)
+PASS 1, 1 should render 0,0,0,0 (+/-1)
+PASS getError was expected value: NO_ERROR : using copyTexImage2D: x =0, y = -2
+PASS 0, 0 should render 0,0,0,0 (+/-1)
+PASS 1, 0 should render 0,0,0,0 (+/-1)
+PASS 0, 1 should render 0,0,0,0 (+/-1)
+PASS 1, 1 should render 0,0,0,0 (+/-1)
+PASS getError was expected value: NO_ERROR : using copyTexSubImage2D: x =0, y = -2
+PASS 0, 0 should render 0,0,0,0 (+/-1)
+PASS 1, 0 should render 0,0,0,0 (+/-1)
+PASS 0, 1 should render 0,0,0,0 (+/-1)
+PASS 1, 1 should render 0,0,0,0 (+/-1)
+PASS getError was expected value: NO_ERROR : using copyTexImage2D: x =1, y = -2
+PASS 0, 0 should render 0,0,0,0 (+/-1)
+PASS 1, 0 should render 0,0,0,0 (+/-1)
+PASS 0, 1 should render 0,0,0,0 (+/-1)
+PASS 1, 1 should render 0,0,0,0 (+/-1)
+PASS getError was expected value: NO_ERROR : using copyTexSubImage2D: x =1, y = -2
+PASS 0, 0 should render 0,0,0,0 (+/-1)
+PASS 1, 0 should render 0,0,0,0 (+/-1)
+PASS 0, 1 should render 0,0,0,0 (+/-1)
+PASS 1, 1 should render 0,0,0,0 (+/-1)
+PASS getError was expected value: NO_ERROR : using copyTexImage2D: x =2, y = -2
+PASS 0, 0 should render 0,0,0,0 (+/-1)
+PASS 1, 0 should render 0,0,0,0 (+/-1)
+PASS 0, 1 should render 0,0,0,0 (+/-1)
+PASS 1, 1 should render 0,0,0,0 (+/-1)
+PASS getError was expected value: NO_ERROR : using copyTexSubImage2D: x =2, y = -2
+PASS 0, 0 should render 0,0,0,0 (+/-1)
+PASS 1, 0 should render 0,0,0,0 (+/-1)
+PASS 0, 1 should render 0,0,0,0 (+/-1)
+PASS 1, 1 should render 0,0,0,0 (+/-1)
+PASS getError was expected value: NO_ERROR : using copyTexImage2D: x =-2, y = -1
+PASS 0, 0 should render 0,0,0,0 (+/-1)
+PASS 1, 0 should render 0,0,0,0 (+/-1)
+PASS 0, 1 should render 0,0,0,0 (+/-1)
+PASS 1, 1 should render 0,0,0,0 (+/-1)
+PASS getError was expected value: NO_ERROR : using copyTexSubImage2D: x =-2, y = -1
+PASS 0, 0 should render 0,0,0,0 (+/-1)
+PASS 1, 0 should render 0,0,0,0 (+/-1)
+PASS 0, 1 should render 0,0,0,0 (+/-1)
+PASS 1, 1 should render 0,0,0,0 (+/-1)
+PASS getError was expected value: NO_ERROR : using copyTexImage2D: x =-1, y = -1
+PASS 0, 0 should render 0,0,0,0 (+/-1)
+PASS 1, 0 should render 0,0,0,0 (+/-1)
+PASS 0, 1 should render 0,0,0,0 (+/-1)
+PASS 1, 1 should render 255,0,0,255 (+/-1)
+PASS getError was expected value: NO_ERROR : using copyTexSubImage2D: x =-1, y = -1
+PASS 0, 0 should render 0,0,0,0 (+/-1)
+PASS 1, 0 should render 0,0,0,0 (+/-1)
+PASS 0, 1 should render 0,0,0,0 (+/-1)
+PASS 1, 1 should render 0,255,0,255 (+/-1)
+PASS getError was expected value: NO_ERROR : using copyTexImage2D: x =0, y = -1
+PASS 0, 0 should render 0,0,0,0 (+/-1)
+PASS 1, 0 should render 0,0,0,0 (+/-1)
+PASS 0, 1 should render 0,0,255,255 (+/-1)
+PASS 1, 1 should render 0,0,255,255 (+/-1)
+PASS getError was expected value: NO_ERROR : using copyTexSubImage2D: x =0, y = -1
+PASS 0, 0 should render 0,0,0,0 (+/-1)
+PASS 1, 0 should render 0,0,0,0 (+/-1)
+PASS 0, 1 should render 127,127,127,127 (+/-1)
+PASS 1, 1 should render 127,127,127,127 (+/-1)
+PASS getError was expected value: NO_ERROR : using copyTexImage2D: x =1, y = -1
+PASS 0, 0 should render 0,0,0,0 (+/-1)
+PASS 1, 0 should render 0,0,0,0 (+/-1)
+PASS 0, 1 should render 255,0,0,255 (+/-1)
+PASS 1, 1 should render 0,0,0,0 (+/-1)
+PASS getError was expected value: NO_ERROR : using copyTexSubImage2D: x =1, y = -1
+PASS 0, 0 should render 0,0,0,0 (+/-1)
+PASS 1, 0 should render 0,0,0,0 (+/-1)
+PASS 0, 1 should render 0,255,0,255 (+/-1)
+PASS 1, 1 should render 0,0,0,0 (+/-1)
+PASS getError was expected value: NO_ERROR : using copyTexImage2D: x =2, y = -1
+PASS 0, 0 should render 0,0,0,0 (+/-1)
+PASS 1, 0 should render 0,0,0,0 (+/-1)
+PASS 0, 1 should render 0,0,0,0 (+/-1)
+PASS 1, 1 should render 0,0,0,0 (+/-1)
+PASS getError was expected value: NO_ERROR : using copyTexSubImage2D: x =2, y = -1
+PASS 0, 0 should render 0,0,0,0 (+/-1)
+PASS 1, 0 should render 0,0,0,0 (+/-1)
+PASS 0, 1 should render 0,0,0,0 (+/-1)
+PASS 1, 1 should render 0,0,0,0 (+/-1)
+PASS getError was expected value: NO_ERROR : using copyTexImage2D: x =-2, y = 0
+PASS 0, 0 should render 0,0,0,0 (+/-1)
+PASS 1, 0 should render 0,0,0,0 (+/-1)
+PASS 0, 1 should render 0,0,0,0 (+/-1)
+PASS 1, 1 should render 0,0,0,0 (+/-1)
+PASS getError was expected value: NO_ERROR : using copyTexSubImage2D: x =-2, y = 0
+PASS 0, 0 should render 0,0,0,0 (+/-1)
+PASS 1, 0 should render 0,0,0,0 (+/-1)
+PASS 0, 1 should render 0,0,0,0 (+/-1)
+PASS 1, 1 should render 0,0,0,0 (+/-1)
+PASS getError was expected value: NO_ERROR : using copyTexImage2D: x =-1, y = 0
+PASS 0, 0 should render 0,0,0,0 (+/-1)
+PASS 1, 0 should render 0,0,255,255 (+/-1)
+PASS 0, 1 should render 0,0,0,0 (+/-1)
+PASS 1, 1 should render 0,0,255,255 (+/-1)
+PASS getError was expected value: NO_ERROR : using copyTexSubImage2D: x =-1, y = 0
+PASS 0, 0 should render 0,0,0,0 (+/-1)
+PASS 1, 0 should render 127,127,127,127 (+/-1)
+PASS 0, 1 should render 0,0,0,0 (+/-1)
+PASS 1, 1 should render 127,127,127,127 (+/-1)
+PASS getError was expected value: NO_ERROR : using copyTexImage2D: x =0, y = 0
+PASS 0, 0 should render 255,0,0,255 (+/-1)
+PASS 1, 0 should render 255,0,0,255 (+/-1)
+PASS 0, 1 should render 255,0,0,255 (+/-1)
+PASS 1, 1 should render 255,0,0,255 (+/-1)
+PASS getError was expected value: NO_ERROR : using copyTexSubImage2D: x =0, y = 0
+PASS 0, 0 should render 0,255,0,255 (+/-1)
+PASS 1, 0 should render 0,255,0,255 (+/-1)
+PASS 0, 1 should render 0,255,0,255 (+/-1)
+PASS 1, 1 should render 0,255,0,255 (+/-1)
+PASS getError was expected value: NO_ERROR : using copyTexImage2D: x =1, y = 0
+PASS 0, 0 should render 0,0,255,255 (+/-1)
+PASS 1, 0 should render 0,0,0,0 (+/-1)
+PASS 0, 1 should render 0,0,255,255 (+/-1)
+PASS 1, 1 should render 0,0,0,0 (+/-1)
+PASS getError was expected value: NO_ERROR : using copyTexSubImage2D: x =1, y = 0
+PASS 0, 0 should render 127,127,127,127 (+/-1)
+PASS 1, 0 should render 0,0,0,0 (+/-1)
+PASS 0, 1 should render 127,127,127,127 (+/-1)
+PASS 1, 1 should render 0,0,0,0 (+/-1)
+PASS getError was expected value: NO_ERROR : using copyTexImage2D: x =2, y = 0
+PASS 0, 0 should render 0,0,0,0 (+/-1)
+PASS 1, 0 should render 0,0,0,0 (+/-1)
+PASS 0, 1 should render 0,0,0,0 (+/-1)
+PASS 1, 1 should render 0,0,0,0 (+/-1)
+PASS getError was expected value: NO_ERROR : using copyTexSubImage2D: x =2, y = 0
+PASS 0, 0 should render 0,0,0,0 (+/-1)
+PASS 1, 0 should render 0,0,0,0 (+/-1)
+PASS 0, 1 should render 0,0,0,0 (+/-1)
+PASS 1, 1 should render 0,0,0,0 (+/-1)
+PASS getError was expected value: NO_ERROR : using copyTexImage2D: x =-2, y = 1
+PASS 0, 0 should render 0,0,0,0 (+/-1)
+PASS 1, 0 should render 0,0,0,0 (+/-1)
+PASS 0, 1 should render 0,0,0,0 (+/-1)
+PASS 1, 1 should render 0,0,0,0 (+/-1)
+PASS getError was expected value: NO_ERROR : using copyTexSubImage2D: x =-2, y = 1
+PASS 0, 0 should render 0,0,0,0 (+/-1)
+PASS 1, 0 should render 0,0,0,0 (+/-1)
+PASS 0, 1 should render 0,0,0,0 (+/-1)
+PASS 1, 1 should render 0,0,0,0 (+/-1)
+PASS getError was expected value: NO_ERROR : using copyTexImage2D: x =-1, y = 1
+PASS 0, 0 should render 0,0,0,0 (+/-1)
+PASS 1, 0 should render 255,0,0,255 (+/-1)
+PASS 0, 1 should render 0,0,0,0 (+/-1)
+PASS 1, 1 should render 0,0,0,0 (+/-1)
+PASS getError was expected value: NO_ERROR : using copyTexSubImage2D: x =-1, y = 1
+PASS 0, 0 should render 0,0,0,0 (+/-1)
+PASS 1, 0 should render 0,255,0,255 (+/-1)
+PASS 0, 1 should render 0,0,0,0 (+/-1)
+PASS 1, 1 should render 0,0,0,0 (+/-1)
+PASS getError was expected value: NO_ERROR : using copyTexImage2D: x =0, y = 1
+PASS 0, 0 should render 0,0,255,255 (+/-1)
+PASS 1, 0 should render 0,0,255,255 (+/-1)
+PASS 0, 1 should render 0,0,0,0 (+/-1)
+PASS 1, 1 should render 0,0,0,0 (+/-1)
+PASS getError was expected value: NO_ERROR : using copyTexSubImage2D: x =0, y = 1
+PASS 0, 0 should render 127,127,127,127 (+/-1)
+PASS 1, 0 should render 127,127,127,127 (+/-1)
+PASS 0, 1 should render 0,0,0,0 (+/-1)
+PASS 1, 1 should render 0,0,0,0 (+/-1)
+PASS getError was expected value: NO_ERROR : using copyTexImage2D: x =1, y = 1
+PASS 0, 0 should render 255,0,0,255 (+/-1)
+PASS 1, 0 should render 0,0,0,0 (+/-1)
+PASS 0, 1 should render 0,0,0,0 (+/-1)
+PASS 1, 1 should render 0,0,0,0 (+/-1)
+PASS getError was expected value: NO_ERROR : using copyTexSubImage2D: x =1, y = 1
+PASS 0, 0 should render 0,255,0,255 (+/-1)
+PASS 1, 0 should render 0,0,0,0 (+/-1)
+PASS 0, 1 should render 0,0,0,0 (+/-1)
+PASS 1, 1 should render 0,0,0,0 (+/-1)
+PASS getError was expected value: NO_ERROR : using copyTexImage2D: x =2, y = 1
+PASS 0, 0 should render 0,0,0,0 (+/-1)
+PASS 1, 0 should render 0,0,0,0 (+/-1)
+PASS 0, 1 should render 0,0,0,0 (+/-1)
+PASS 1, 1 should render 0,0,0,0 (+/-1)
+PASS getError was expected value: NO_ERROR : using copyTexSubImage2D: x =2, y = 1
+PASS 0, 0 should render 0,0,0,0 (+/-1)
+PASS 1, 0 should render 0,0,0,0 (+/-1)
+PASS 0, 1 should render 0,0,0,0 (+/-1)
+PASS 1, 1 should render 0,0,0,0 (+/-1)
+PASS getError was expected value: NO_ERROR : using copyTexImage2D: x =-2, y = 2
+PASS 0, 0 should render 0,0,0,0 (+/-1)
+PASS 1, 0 should render 0,0,0,0 (+/-1)
+PASS 0, 1 should render 0,0,0,0 (+/-1)
+PASS 1, 1 should render 0,0,0,0 (+/-1)
+PASS getError was expected value: NO_ERROR : using copyTexSubImage2D: x =-2, y = 2
+PASS 0, 0 should render 0,0,0,0 (+/-1)
+PASS 1, 0 should render 0,0,0,0 (+/-1)
+PASS 0, 1 should render 0,0,0,0 (+/-1)
+PASS 1, 1 should render 0,0,0,0 (+/-1)
+PASS getError was expected value: NO_ERROR : using copyTexImage2D: x =-1, y = 2
+PASS 0, 0 should render 0,0,0,0 (+/-1)
+PASS 1, 0 should render 0,0,0,0 (+/-1)
+PASS 0, 1 should render 0,0,0,0 (+/-1)
+PASS 1, 1 should render 0,0,0,0 (+/-1)
+PASS getError was expected value: NO_ERROR : using copyTexSubImage2D: x =-1, y = 2
+PASS 0, 0 should render 0,0,0,0 (+/-1)
+PASS 1, 0 should render 0,0,0,0 (+/-1)
+PASS 0, 1 should render 0,0,0,0 (+/-1)
+PASS 1, 1 should render 0,0,0,0 (+/-1)
+PASS getError was expected value: NO_ERROR : using copyTexImage2D: x =0, y = 2
+PASS 0, 0 should render 0,0,0,0 (+/-1)
+PASS 1, 0 should render 0,0,0,0 (+/-1)
+PASS 0, 1 should render 0,0,0,0 (+/-1)
+PASS 1, 1 should render 0,0,0,0 (+/-1)
+PASS getError was expected value: NO_ERROR : using copyTexSubImage2D: x =0, y = 2
+PASS 0, 0 should render 0,0,0,0 (+/-1)
+PASS 1, 0 should render 0,0,0,0 (+/-1)
+PASS 0, 1 should render 0,0,0,0 (+/-1)
+PASS 1, 1 should render 0,0,0,0 (+/-1)
+PASS getError was expected value: NO_ERROR : using copyTexImage2D: x =1, y = 2
+PASS 0, 0 should render 0,0,0,0 (+/-1)
+PASS 1, 0 should render 0,0,0,0 (+/-1)
+PASS 0, 1 should render 0,0,0,0 (+/-1)
+PASS 1, 1 should render 0,0,0,0 (+/-1)
+PASS getError was expected value: NO_ERROR : using copyTexSubImage2D: x =1, y = 2
+PASS 0, 0 should render 0,0,0,0 (+/-1)
+PASS 1, 0 should render 0,0,0,0 (+/-1)
+PASS 0, 1 should render 0,0,0,0 (+/-1)
+PASS 1, 1 should render 0,0,0,0 (+/-1)
+PASS getError was expected value: NO_ERROR : using copyTexImage2D: x =2, y = 2
+PASS 0, 0 should render 0,0,0,0 (+/-1)
+PASS 1, 0 should render 0,0,0,0 (+/-1)
+PASS 0, 1 should render 0,0,0,0 (+/-1)
+PASS 1, 1 should render 0,0,0,0 (+/-1)
+PASS getError was expected value: NO_ERROR : using copyTexSubImage2D: x =2, y = 2
+PASS 0, 0 should render 0,0,0,0 (+/-1)
+PASS 1, 0 should render 0,0,0,0 (+/-1)
+PASS 0, 1 should render 0,0,0,0 (+/-1)
+PASS 1, 1 should render 0,0,0,0 (+/-1)
+
+Testing with antialias off
+PASS getError was expected value: NO_ERROR : During Initialization
+Testing copyTexImage2D
+PASS getError was expected value: NO_ERROR : using copyTexImage2D: x =-2, y = -2
+PASS 0, 0 should render 0,0,0,0 (+/-1)
+PASS 1, 0 should render 0,0,0,0 (+/-1)
+PASS 0, 1 should render 0,0,0,0 (+/-1)
+PASS 1, 1 should render 0,0,0,0 (+/-1)
+PASS getError was expected value: NO_ERROR : using copyTexSubImage2D: x =-2, y = -2
+PASS 0, 0 should render 0,0,0,0 (+/-1)
+PASS 1, 0 should render 0,0,0,0 (+/-1)
+PASS 0, 1 should render 0,0,0,0 (+/-1)
+PASS 1, 1 should render 0,0,0,0 (+/-1)
+PASS getError was expected value: NO_ERROR : using copyTexImage2D: x =-1, y = -2
+PASS 0, 0 should render 0,0,0,0 (+/-1)
+PASS 1, 0 should render 0,0,0,0 (+/-1)
+PASS 0, 1 should render 0,0,0,0 (+/-1)
+PASS 1, 1 should render 0,0,0,0 (+/-1)
+PASS getError was expected value: NO_ERROR : using copyTexSubImage2D: x =-1, y = -2
+PASS 0, 0 should render 0,0,0,0 (+/-1)
+PASS 1, 0 should render 0,0,0,0 (+/-1)
+PASS 0, 1 should render 0,0,0,0 (+/-1)
+PASS 1, 1 should render 0,0,0,0 (+/-1)
+PASS getError was expected value: NO_ERROR : using copyTexImage2D: x =0, y = -2
+PASS 0, 0 should render 0,0,0,0 (+/-1)
+PASS 1, 0 should render 0,0,0,0 (+/-1)
+PASS 0, 1 should render 0,0,0,0 (+/-1)
+PASS 1, 1 should render 0,0,0,0 (+/-1)
+PASS getError was expected value: NO_ERROR : using copyTexSubImage2D: x =0, y = -2
+PASS 0, 0 should render 0,0,0,0 (+/-1)
+PASS 1, 0 should render 0,0,0,0 (+/-1)
+PASS 0, 1 should render 0,0,0,0 (+/-1)
+PASS 1, 1 should render 0,0,0,0 (+/-1)
+PASS getError was expected value: NO_ERROR : using copyTexImage2D: x =1, y = -2
+PASS 0, 0 should render 0,0,0,0 (+/-1)
+PASS 1, 0 should render 0,0,0,0 (+/-1)
+PASS 0, 1 should render 0,0,0,0 (+/-1)
+PASS 1, 1 should render 0,0,0,0 (+/-1)
+PASS getError was expected value: NO_ERROR : using copyTexSubImage2D: x =1, y = -2
+PASS 0, 0 should render 0,0,0,0 (+/-1)
+PASS 1, 0 should render 0,0,0,0 (+/-1)
+PASS 0, 1 should render 0,0,0,0 (+/-1)
+PASS 1, 1 should render 0,0,0,0 (+/-1)
+PASS getError was expected value: NO_ERROR : using copyTexImage2D: x =2, y = -2
+PASS 0, 0 should render 0,0,0,0 (+/-1)
+PASS 1, 0 should render 0,0,0,0 (+/-1)
+PASS 0, 1 should render 0,0,0,0 (+/-1)
+PASS 1, 1 should render 0,0,0,0 (+/-1)
+PASS getError was expected value: NO_ERROR : using copyTexSubImage2D: x =2, y = -2
+PASS 0, 0 should render 0,0,0,0 (+/-1)
+PASS 1, 0 should render 0,0,0,0 (+/-1)
+PASS 0, 1 should render 0,0,0,0 (+/-1)
+PASS 1, 1 should render 0,0,0,0 (+/-1)
+PASS getError was expected value: NO_ERROR : using copyTexImage2D: x =-2, y = -1
+PASS 0, 0 should render 0,0,0,0 (+/-1)
+PASS 1, 0 should render 0,0,0,0 (+/-1)
+PASS 0, 1 should render 0,0,0,0 (+/-1)
+PASS 1, 1 should render 0,0,0,0 (+/-1)
+PASS getError was expected value: NO_ERROR : using copyTexSubImage2D: x =-2, y = -1
+PASS 0, 0 should render 0,0,0,0 (+/-1)
+PASS 1, 0 should render 0,0,0,0 (+/-1)
+PASS 0, 1 should render 0,0,0,0 (+/-1)
+PASS 1, 1 should render 0,0,0,0 (+/-1)
+PASS getError was expected value: NO_ERROR : using copyTexImage2D: x =-1, y = -1
+PASS 0, 0 should render 0,0,0,0 (+/-1)
+PASS 1, 0 should render 0,0,0,0 (+/-1)
+PASS 0, 1 should render 0,0,0,0 (+/-1)
+PASS 1, 1 should render 255,0,0,255 (+/-1)
+PASS getError was expected value: NO_ERROR : using copyTexSubImage2D: x =-1, y = -1
+PASS 0, 0 should render 0,0,0,0 (+/-1)
+PASS 1, 0 should render 0,0,0,0 (+/-1)
+PASS 0, 1 should render 0,0,0,0 (+/-1)
+PASS 1, 1 should render 0,255,0,255 (+/-1)
+PASS getError was expected value: NO_ERROR : using copyTexImage2D: x =0, y = -1
+PASS 0, 0 should render 0,0,0,0 (+/-1)
+PASS 1, 0 should render 0,0,0,0 (+/-1)
+PASS 0, 1 should render 0,0,255,255 (+/-1)
+PASS 1, 1 should render 0,0,255,255 (+/-1)
+PASS getError was expected value: NO_ERROR : using copyTexSubImage2D: x =0, y = -1
+PASS 0, 0 should render 0,0,0,0 (+/-1)
+PASS 1, 0 should render 0,0,0,0 (+/-1)
+PASS 0, 1 should render 127,127,127,127 (+/-1)
+PASS 1, 1 should render 127,127,127,127 (+/-1)
+PASS getError was expected value: NO_ERROR : using copyTexImage2D: x =1, y = -1
+PASS 0, 0 should render 0,0,0,0 (+/-1)
+PASS 1, 0 should render 0,0,0,0 (+/-1)
+PASS 0, 1 should render 255,0,0,255 (+/-1)
+PASS 1, 1 should render 0,0,0,0 (+/-1)
+PASS getError was expected value: NO_ERROR : using copyTexSubImage2D: x =1, y = -1
+PASS 0, 0 should render 0,0,0,0 (+/-1)
+PASS 1, 0 should render 0,0,0,0 (+/-1)
+PASS 0, 1 should render 0,255,0,255 (+/-1)
+PASS 1, 1 should render 0,0,0,0 (+/-1)
+PASS getError was expected value: NO_ERROR : using copyTexImage2D: x =2, y = -1
+PASS 0, 0 should render 0,0,0,0 (+/-1)
+PASS 1, 0 should render 0,0,0,0 (+/-1)
+PASS 0, 1 should render 0,0,0,0 (+/-1)
+PASS 1, 1 should render 0,0,0,0 (+/-1)
+PASS getError was expected value: NO_ERROR : using copyTexSubImage2D: x =2, y = -1
+PASS 0, 0 should render 0,0,0,0 (+/-1)
+PASS 1, 0 should render 0,0,0,0 (+/-1)
+PASS 0, 1 should render 0,0,0,0 (+/-1)
+PASS 1, 1 should render 0,0,0,0 (+/-1)
+PASS getError was expected value: NO_ERROR : using copyTexImage2D: x =-2, y = 0
+PASS 0, 0 should render 0,0,0,0 (+/-1)
+PASS 1, 0 should render 0,0,0,0 (+/-1)
+PASS 0, 1 should render 0,0,0,0 (+/-1)
+PASS 1, 1 should render 0,0,0,0 (+/-1)
+PASS getError was expected value: NO_ERROR : using copyTexSubImage2D: x =-2, y = 0
+PASS 0, 0 should render 0,0,0,0 (+/-1)
+PASS 1, 0 should render 0,0,0,0 (+/-1)
+PASS 0, 1 should render 0,0,0,0 (+/-1)
+PASS 1, 1 should render 0,0,0,0 (+/-1)
+PASS getError was expected value: NO_ERROR : using copyTexImage2D: x =-1, y = 0
+PASS 0, 0 should render 0,0,0,0 (+/-1)
+PASS 1, 0 should render 0,0,255,255 (+/-1)
+PASS 0, 1 should render 0,0,0,0 (+/-1)
+PASS 1, 1 should render 0,0,255,255 (+/-1)
+PASS getError was expected value: NO_ERROR : using copyTexSubImage2D: x =-1, y = 0
+PASS 0, 0 should render 0,0,0,0 (+/-1)
+PASS 1, 0 should render 127,127,127,127 (+/-1)
+PASS 0, 1 should render 0,0,0,0 (+/-1)
+PASS 1, 1 should render 127,127,127,127 (+/-1)
+PASS getError was expected value: NO_ERROR : using copyTexImage2D: x =0, y = 0
+PASS 0, 0 should render 255,0,0,255 (+/-1)
+PASS 1, 0 should render 255,0,0,255 (+/-1)
+PASS 0, 1 should render 255,0,0,255 (+/-1)
+PASS 1, 1 should render 255,0,0,255 (+/-1)
+PASS getError was expected value: NO_ERROR : using copyTexSubImage2D: x =0, y = 0
+PASS 0, 0 should render 0,255,0,255 (+/-1)
+PASS 1, 0 should render 0,255,0,255 (+/-1)
+PASS 0, 1 should render 0,255,0,255 (+/-1)
+PASS 1, 1 should render 0,255,0,255 (+/-1)
+PASS getError was expected value: NO_ERROR : using copyTexImage2D: x =1, y = 0
+PASS 0, 0 should render 0,0,255,255 (+/-1)
+PASS 1, 0 should render 0,0,0,0 (+/-1)
+PASS 0, 1 should render 0,0,255,255 (+/-1)
+PASS 1, 1 should render 0,0,0,0 (+/-1)
+PASS getError was expected value: NO_ERROR : using copyTexSubImage2D: x =1, y = 0
+PASS 0, 0 should render 127,127,127,127 (+/-1)
+PASS 1, 0 should render 0,0,0,0 (+/-1)
+PASS 0, 1 should render 127,127,127,127 (+/-1)
+PASS 1, 1 should render 0,0,0,0 (+/-1)
+PASS getError was expected value: NO_ERROR : using copyTexImage2D: x =2, y = 0
+PASS 0, 0 should render 0,0,0,0 (+/-1)
+PASS 1, 0 should render 0,0,0,0 (+/-1)
+PASS 0, 1 should render 0,0,0,0 (+/-1)
+PASS 1, 1 should render 0,0,0,0 (+/-1)
+PASS getError was expected value: NO_ERROR : using copyTexSubImage2D: x =2, y = 0
+PASS 0, 0 should render 0,0,0,0 (+/-1)
+PASS 1, 0 should render 0,0,0,0 (+/-1)
+PASS 0, 1 should render 0,0,0,0 (+/-1)
+PASS 1, 1 should render 0,0,0,0 (+/-1)
+PASS getError was expected value: NO_ERROR : using copyTexImage2D: x =-2, y = 1
+PASS 0, 0 should render 0,0,0,0 (+/-1)
+PASS 1, 0 should render 0,0,0,0 (+/-1)
+PASS 0, 1 should render 0,0,0,0 (+/-1)
+PASS 1, 1 should render 0,0,0,0 (+/-1)
+PASS getError was expected value: NO_ERROR : using copyTexSubImage2D: x =-2, y = 1
+PASS 0, 0 should render 0,0,0,0 (+/-1)
+PASS 1, 0 should render 0,0,0,0 (+/-1)
+PASS 0, 1 should render 0,0,0,0 (+/-1)
+PASS 1, 1 should render 0,0,0,0 (+/-1)
+PASS getError was expected value: NO_ERROR : using copyTexImage2D: x =-1, y = 1
+PASS 0, 0 should render 0,0,0,0 (+/-1)
+PASS 1, 0 should render 255,0,0,255 (+/-1)
+PASS 0, 1 should render 0,0,0,0 (+/-1)
+PASS 1, 1 should render 0,0,0,0 (+/-1)
+PASS getError was expected value: NO_ERROR : using copyTexSubImage2D: x =-1, y = 1
+PASS 0, 0 should render 0,0,0,0 (+/-1)
+PASS 1, 0 should render 0,255,0,255 (+/-1)
+PASS 0, 1 should render 0,0,0,0 (+/-1)
+PASS 1, 1 should render 0,0,0,0 (+/-1)
+PASS getError was expected value: NO_ERROR : using copyTexImage2D: x =0, y = 1
+PASS 0, 0 should render 0,0,255,255 (+/-1)
+PASS 1, 0 should render 0,0,255,255 (+/-1)
+PASS 0, 1 should render 0,0,0,0 (+/-1)
+PASS 1, 1 should render 0,0,0,0 (+/-1)
+PASS getError was expected value: NO_ERROR : using copyTexSubImage2D: x =0, y = 1
+PASS 0, 0 should render 127,127,127,127 (+/-1)
+PASS 1, 0 should render 127,127,127,127 (+/-1)
+PASS 0, 1 should render 0,0,0,0 (+/-1)
+PASS 1, 1 should render 0,0,0,0 (+/-1)
+PASS getError was expected value: NO_ERROR : using copyTexImage2D: x =1, y = 1
+PASS 0, 0 should render 255,0,0,255 (+/-1)
+PASS 1, 0 should render 0,0,0,0 (+/-1)
+PASS 0, 1 should render 0,0,0,0 (+/-1)
+PASS 1, 1 should render 0,0,0,0 (+/-1)
+PASS getError was expected value: NO_ERROR : using copyTexSubImage2D: x =1, y = 1
+PASS 0, 0 should render 0,255,0,255 (+/-1)
+PASS 1, 0 should render 0,0,0,0 (+/-1)
+PASS 0, 1 should render 0,0,0,0 (+/-1)
+PASS 1, 1 should render 0,0,0,0 (+/-1)
+PASS getError was expected value: NO_ERROR : using copyTexImage2D: x =2, y = 1
+PASS 0, 0 should render 0,0,0,0 (+/-1)
+PASS 1, 0 should render 0,0,0,0 (+/-1)
+PASS 0, 1 should render 0,0,0,0 (+/-1)
+PASS 1, 1 should render 0,0,0,0 (+/-1)
+PASS getError was expected value: NO_ERROR : using copyTexSubImage2D: x =2, y = 1
+PASS 0, 0 should render 0,0,0,0 (+/-1)
+PASS 1, 0 should render 0,0,0,0 (+/-1)
+PASS 0, 1 should render 0,0,0,0 (+/-1)
+PASS 1, 1 should render 0,0,0,0 (+/-1)
+PASS getError was expected value: NO_ERROR : using copyTexImage2D: x =-2, y = 2
+PASS 0, 0 should render 0,0,0,0 (+/-1)
+PASS 1, 0 should render 0,0,0,0 (+/-1)
+PASS 0, 1 should render 0,0,0,0 (+/-1)
+PASS 1, 1 should render 0,0,0,0 (+/-1)
+PASS getError was expected value: NO_ERROR : using copyTexSubImage2D: x =-2, y = 2
+PASS 0, 0 should render 0,0,0,0 (+/-1)
+PASS 1, 0 should render 0,0,0,0 (+/-1)
+PASS 0, 1 should render 0,0,0,0 (+/-1)
+PASS 1, 1 should render 0,0,0,0 (+/-1)
+PASS getError was expected value: NO_ERROR : using copyTexImage2D: x =-1, y = 2
+PASS 0, 0 should render 0,0,0,0 (+/-1)
+PASS 1, 0 should render 0,0,0,0 (+/-1)
+PASS 0, 1 should render 0,0,0,0 (+/-1)
+PASS 1, 1 should render 0,0,0,0 (+/-1)
+PASS getError was expected value: NO_ERROR : using copyTexSubImage2D: x =-1, y = 2
+PASS 0, 0 should render 0,0,0,0 (+/-1)
+PASS 1, 0 should render 0,0,0,0 (+/-1)
+PASS 0, 1 should render 0,0,0,0 (+/-1)
+PASS 1, 1 should render 0,0,0,0 (+/-1)
+PASS getError was expected value: NO_ERROR : using copyTexImage2D: x =0, y = 2
+PASS 0, 0 should render 0,0,0,0 (+/-1)
+PASS 1, 0 should render 0,0,0,0 (+/-1)
+PASS 0, 1 should render 0,0,0,0 (+/-1)
+PASS 1, 1 should render 0,0,0,0 (+/-1)
+PASS getError was expected value: NO_ERROR : using copyTexSubImage2D: x =0, y = 2
+PASS 0, 0 should render 0,0,0,0 (+/-1)
+PASS 1, 0 should render 0,0,0,0 (+/-1)
+PASS 0, 1 should render 0,0,0,0 (+/-1)
+PASS 1, 1 should render 0,0,0,0 (+/-1)
+PASS getError was expected value: NO_ERROR : using copyTexImage2D: x =1, y = 2
+PASS 0, 0 should render 0,0,0,0 (+/-1)
+PASS 1, 0 should render 0,0,0,0 (+/-1)
+PASS 0, 1 should render 0,0,0,0 (+/-1)
+PASS 1, 1 should render 0,0,0,0 (+/-1)
+PASS getError was expected value: NO_ERROR : using copyTexSubImage2D: x =1, y = 2
+PASS 0, 0 should render 0,0,0,0 (+/-1)
+PASS 1, 0 should render 0,0,0,0 (+/-1)
+PASS 0, 1 should render 0,0,0,0 (+/-1)
+PASS 1, 1 should render 0,0,0,0 (+/-1)
+PASS getError was expected value: NO_ERROR : using copyTexImage2D: x =2, y = 2
+PASS 0, 0 should render 0,0,0,0 (+/-1)
+PASS 1, 0 should render 0,0,0,0 (+/-1)
+PASS 0, 1 should render 0,0,0,0 (+/-1)
+PASS 1, 1 should render 0,0,0,0 (+/-1)
+PASS getError was expected value: NO_ERROR : using copyTexSubImage2D: x =2, y = 2
+PASS 0, 0 should render 0,0,0,0 (+/-1)
+PASS 1, 0 should render 0,0,0,0 (+/-1)
+PASS 0, 1 should render 0,0,0,0 (+/-1)
+PASS 1, 1 should render 0,0,0,0 (+/-1)
+
+PASS successfullyParsed is true
+
+TEST COMPLETE
+

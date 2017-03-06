@@ -1,0 +1,12 @@
+checks shader with long line succeeds
+
+On success, you will see a series of "PASS" messages, followed by "TEST COMPLETE".
+
+test: shader that uses long lines should succeed
+default vertex shader
+test fragment shaderPASS shader that uses long lines should succeed
+
+PASS successfullyParsed is true
+
+TEST COMPLETE
+

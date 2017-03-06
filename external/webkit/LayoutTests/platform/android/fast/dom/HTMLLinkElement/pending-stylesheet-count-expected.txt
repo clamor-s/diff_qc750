@@ -1,0 +1,24 @@
+layer at (0,0) size 800x600
+  RenderView at (0,0) size 800x600
+layer at (0,0) size 800x600
+  RenderBlock {HTML} at (0,0) size 800x600
+    RenderBody {BODY} at (8,8) size 784x584
+      RenderBlock {P} at (0,0) size 784x38
+        RenderText {#text} at (0,0) size 119x19
+          text run at (0,0) width 119: "This is a test for "
+        RenderInline {I} at (0,0) size 744x38
+          RenderInline {A} at (0,0) size 391x19 [color=#0000EE]
+            RenderText {#text} at (118,0) size 391x19
+              text run at (118,0) width 391: "http://bugzilla.opendarwin.org/show_bug.cgi?id=9252"
+          RenderText {#text} at (508,0) size 744x38
+            text run at (508,0) width 5: " "
+            text run at (512,0) width 232: "REGRESSION: Very odd roll-over"
+            text run at (0,19) width 213: "issues (content disappearing)"
+        RenderText {#text} at (212,19) size 6x19
+          text run at (212,19) width 6: "."
+      RenderBlock {P} at (0,54) size 784x19
+        RenderText {#text} at (0,0) size 277x19
+          text run at (0,0) width 277: "There should be a green square below."
+      RenderBlock {HR} at (0,89) size 784x2 [border: (1px inset #000000)]
+      RenderBlock {DIV} at (0,99) size 784x0
+      RenderBlock {DIV} at (0,99) size 100x100 [bgcolor=#008000]

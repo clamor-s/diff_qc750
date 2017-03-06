@@ -1,0 +1,19 @@
+TOPDIR := $(TEGRA_TOP)/core
+include $(TEGRA_TOP)/core-private/make/Makefile.defs
+include $(TEGRA_TOP)/core-private/make/Makefile.nvlibdefs
+
+EXECUTABLES := $(OUTDIR)/sample_thermal_app$(EXE_SUFFIX)
+C_FILES :=sample_thermal_app.c
+
+LCINCS += -I$(TOPDIR)/include
+
+NVLIB_TMON := $(OUTDIR)/libtmon$(DLL_OR_LIB_SUFFIX)
+OBJS := $(patsubst %.c,$(OUTDIR)/%$(OBJ_SUFFIX),$(notdir $(C_FILES)))
+
+default: $(EXECUTABLES)
+	$(NV_INSTALL) -l $(EXECUTABLES) $(INSTALL_TARGET)
+
+$(EXECUTABLES): $(OBJS)
+$(EXECUTABLES): $(NVLIB_TMON)
+
+include $(TOPDIR)/../core-private/make/Makefile.rules

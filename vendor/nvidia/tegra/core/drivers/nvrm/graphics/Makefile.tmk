@@ -1,0 +1,107 @@
+################################### tell Emacs this is a -*- makefile-gmake -*-
+#
+# Copyright (c) 2011-2012, NVIDIA CORPORATION.  All rights reserved.
+#
+# NVIDIA CORPORATION and its licensors retain all intellectual property
+# and proprietary rights in and to this software, related documentation
+# and any modifications thereto.  Any use, reproduction, disclosure or
+# distribution of this software and related documentation without an express
+# license agreement from NVIDIA CORPORATION is strictly prohibited.
+#
+# tmake for SW Mobile component makefile
+#
+# libnvrm_graphics: shared & static library
+#
+###############################################################################
+
+_common_sources := \
+	common/nvrm_disasm.c \
+	common/nvrm_stream.c \
+	common/nvsched.c \
+	ap20/ap20sched.c \
+	ap20/ap20rm_stream_parse.c
+
+#------------------------------------------------------------------------------
+# Static library
+#------------------------------------------------------------------------------
+ifdef NV_COMPONENT_FLAG_STATIC_LIBRARY_SECTION
+include $(NV_BUILD_START_COMPONENT)
+
+NV_COMPONENT_NAME                  := libnvrm_channel_impl
+NV_COMPONENT_OWN_INTERFACE_DIR     := .
+NV_COMPONENT_SOURCES               := \
+	$(_common_sources) \
+	common/nvrm_graphics_init.c \
+	ap20/ap20rm_hostintr.c \
+	ap20/ap20rm_hwcontext.c \
+	ap20/ap20rm_hwcontext_3d.c \
+	ap20/ap20rm_hwcontext_mpe.c \
+	ap20/ap20rm_channel.c
+NV_COMPONENT_INCLUDES              := \
+	. \
+	common \
+	../nvrmkernel/core/common \
+	../../hwinc
+
+ifeq ($(NV_BUILD_CONFIGURATION_IS_EMULATION),1)
+NV_COMPONENT_CFLAGS                += \
+	-DNVRM_TRANSPORT_IN_KERNEL=0
+else ifeq ($(NV_BUILD_CONFIGURATION_IS_CSIM),1)
+NV_COMPONENT_CFLAGS                += \
+	-DNVRM_TRANSPORT_IN_KERNEL=0
+else
+NV_COMPONENT_CFLAGS                += \
+	-DNVRM_TRANSPORT_IN_KERNEL=1
+endif
+
+include $(NV_BUILD_STATIC_LIBRARY)
+endif #NV_COMPONENT_FLAG_STATIC_LIBRARY_SECTION
+
+#------------------------------------------------------------------------------
+# Shared library
+#------------------------------------------------------------------------------
+ifdef NV_COMPONENT_FLAG_SHARED_LIBRARY_SECTION
+include $(NV_BUILD_START_COMPONENT)
+
+NV_COMPONENT_SOURCES               := \
+	$(_common_sources)
+NV_COMPONENT_INCLUDES              += \
+	$(NV_SOURCE)/$(NV_PATH) \
+	$(NV_SOURCE)/core/drivers/hwinc
+NV_COMPONENT_NAME                  := nvrm_graphics
+NV_COMPONENT_OWN_INTERFACE_DIR     := .
+NV_COMPONENT_NEEDED_INTERFACE_DIRS := \
+	.. \
+	../../../utils/nvos
+
+ifeq ($(NV_BUILD_CONFIGURATION_IS_ANDROID),1)
+NV_COMPONENT_SOURCES               += \
+	common/nvrm_channel_linux.c
+NV_COMPONENT_CFLAGS += \
+	-DNVRM_TRANSPORT_IN_KERNEL=1
+NV_COMPONENT_INCLUDES                += \
+	../nvrmkernel/core/common
+NV_COMPONENT_NEEDED_INTERFACE_DIRS   += \
+	$(NV_SOURCE)/tmake/external/android/log
+else ifeq ($(NV_BUILD_CONFIGURATION_IS_QNX),1)
+NV_COMPONENT_SOURCES               += \
+	common/nvrm_channel_qnx.c
+else
+NV_COMPONENT_SOURCES               += \
+	common/nvrm_channel_linux.c
+NV_COMPONENT_CFLAGS += \
+	-DNVRM_TRANSPORT_IN_KERNEL=1
+NV_COMPONENT_SYSTEM_SHARED_LIBRARIES += pthread
+endif
+
+include $(NV_BUILD_SHARED_LIBRARY)
+endif #NV_COMPONENT_FLAG_SHARED_LIBRARY_SECTION
+
+# variable cleanup
+_common_sources :=
+
+# Local Variables:
+# indent-tabs-mode: t
+# tab-width: 8
+# End:
+# vi: set tabstop=8 noexpandtab:

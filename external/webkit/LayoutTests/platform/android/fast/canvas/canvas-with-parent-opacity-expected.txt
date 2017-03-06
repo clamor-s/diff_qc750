@@ -1,0 +1,27 @@
+ (GraphicsLayer
+  (bounds 800.00 649.00)
+  (children 1
+    (GraphicsLayer
+      (bounds 800.00 649.00)
+      (children 2
+        (GraphicsLayer
+          (position 8.00 8.00)
+          (bounds 300.00 300.00)
+          (opacity 0.50)
+        )
+        (GraphicsLayer
+          (position 8.00 308.00)
+          (bounds 784.00 300.00)
+          (opacity 0.50)
+          (drawsContent 1)
+          (children 1
+            (GraphicsLayer
+              (bounds 300.00 300.00)
+            )
+          )
+        )
+      )
+    )
+  )
+)
+

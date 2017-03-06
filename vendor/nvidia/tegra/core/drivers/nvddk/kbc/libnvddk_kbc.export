@@ -1,0 +1,8 @@
+NvDdkKbcOpen
+NvDdkKbcClose
+NvDdkKbcStart
+NvDdkKbcStop
+NvDdkKbcSetRepeatTime
+NvDdkKbcGetKeyEvents
+NvDdkKbcSuspend
+NvDdkKbcResume

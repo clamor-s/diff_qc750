@@ -1,0 +1,40 @@
+<body>
+<!-- you should see two canvases with similar opacity-->
+<canvas style="opacity: 0.5" width="300" height="300"></canvas>
+<div style="-webkit-transform: translateZ(0px); opacity: 0.5;">
+<canvas width="300" height="300"></canvas>
+</div>
+<pre style="opacity:0" id="layerTree">
+layertree goes here.
+</pre>
+<script type="text/javascript">
+var framesLeft = 3;
+function runTest() {
+    var canvases = document.getElementsByTagName('canvas');
+    var ctx;
+    for (var i=0; i < canvases.length; ++i) {
+       ctx = canvases[i].getContext("2d");
+       ctx.fillStyle = "#0f0";
+       ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+       // green should show through the black canvas and black div in equal amounts
+    }
+    if (framesLeft--)
+        setTimeout(runTest, 16);
+    else
+        setTimeout(function() {
+            if (window.layoutTestController) {
+                document.getElementById('layerTree').innerHTML = layoutTestController.layerTreeAsText();
+                window.layoutTestController.notifyDone();
+            }
+        },100);
+}
+
+if (window.layoutTestController) {
+    window.layoutTestController.dumpAsText(true);
+    window.layoutTestController.waitUntilDone();
+}
+runTest();
+
+</script>
+</body>
+</html>

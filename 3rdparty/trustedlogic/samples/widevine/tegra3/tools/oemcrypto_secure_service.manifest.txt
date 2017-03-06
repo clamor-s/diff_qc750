@@ -1,0 +1,33 @@
+#
+# Copyright (c) 2011 NVIDIA Corporation.  All rights reserved.
+#
+# NVIDIA Corporation and its licensors retain all intellectual property
+# and proprietary rights in and to this software and related documentation
+# and any modifications thereto.  Any use, reproduction, disclosure or
+# distribution of this software and related documentation without an express
+# license agreement from NVIDIA Corporation is strictly prohibited.
+#
+
+#
+# Secure Service Manifest sample
+
+# config.s.serviceID: 00000000-0000-0000-0000-000000000000
+config.s.serviceID: 13f616f9-8572-4a6f-a1f1-03aa9b05f9ff
+config.s.lazy_instantiation: true
+config.s.multi_instance: false
+config.s.multi_session: true
+config.s.multi_command: true
+config.s.default_stack_size: 1024
+config.s.heap_size: 8192
+
+smx.name: SampleService
+smx.vendor: TRUSTED LOGIC
+smx.description: Sample Service
+
+# ============================================================================
+# Pattern for WV Keybox
+# ============================================================================
+# --- DO NOT MANUALLY EDIT THESE LINES ---
+config.data.widevine_key: deadbee5deadbee5deadbee5deadbee5deadbee5deadbee5deadbee5deadbee5deadbee5deadbee5deadbee5deadbee5deadbee5deadbee5deadbee5deadbee5deadbee5deadbee5deadbee5deadbee5deadbee5deadbee5deadbee5deadbee5deadbee5deadbee5deadbee5deadbee5deadbee5deadbee5deadbee5deadbee5deadbee5deadbee5deadbee5deadbee5deadbee5deadbee5deadbee5deadbee5deadbee5deadbee5deadbee5deadbee5deadbee5deadbee5deadbee5deadbee5deadbee5deadbee5deadbee5deadbee5deadbee5deadbee5deadbee5deadbee5deadbee5deadbee5deadbee5deadbee5deadbee5deadbee5deadbee5deadbee5deadbee5deadbee5deadbee5deadbee5deadbee5deadbee5deadbee5deadbee5deadbee5deadbee5deadbee5deadbee5deadbee5deadbee5deadbee5deadbee5deadbee5deadbee5deadbee5deadbee5deadbee5deadbee5deadbee5deadbee5deadbee5deadbee5deadbee5deadbee5deadbee5deadbee5deadbee5deadbee5deadbee5deadbee5deadbee5deadbee5deadbee5deadbee5deadbee5deadbee5deadbee5deadbee5deadbee5deadbee5deadbee5deadbee5deadbee5deadbee5deadbee5deadbee5deadbee5deadbee5deadbee5deadbee5deadbee5deadbee5deadbee5deadbee5deadbee5deadbee5deadbee5deadbee5deadbee5deadbee5
+config.data.widevine_key.size: 1024
+# --- DO NOT MANUALLY EDIT THESE LINES ---

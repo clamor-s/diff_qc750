@@ -1,0 +1,174 @@
+<html>
+<head>
+<title>WebGL shader robustness test</title>
+<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+<script src="../../js/resources/js-test-pre.js"></script>
+<script src="resources/webgl-test.js"> </script>
+<script id="fshader" type="x-shader/x-fragment">
+  precision highp float;
+  varying vec4 v[8];
+
+  void main() {
+    vec4 col = vec4(0.0);
+    for (int i = 0; i < 8; i++) {
+      col += vec4( sqrt(v[i].x), sqrt(v[i].y), sqrt(v[i].z), sqrt(v[i].w) );
+      col += vec4(  tan(v[i].x),  tan(v[i].y),  tan(v[i].z),  tan(v[i].w) );
+      col += vec4(  sin(v[i].x),  sin(v[i].y),  sin(v[i].z),  sin(v[i].w) );
+      col += vec4(  cos(v[i].x),  cos(v[i].y),  cos(v[i].z),  cos(v[i].w) );
+      col += vec4(  log(v[i].x),  log(v[i].y),  log(v[i].z),  log(v[i].w) );
+      col += vec4( acos(v[i].x + 0.1),  acos(v[i].y + 0.2), acos(v[i].z + 0.3), acos(v[i].w + 0.4) );
+      col += vec4( asin(v[i].x + 0.1),  asin(v[i].y + 0.2), asin(v[i].z + 0.3), asin(v[i].w + 0.4) );
+      col += vec4( atan(v[i].x + 0.1),  atan(v[i].y + 0.2), atan(v[i].z + 0.3), atan(v[i].w + 0.4) );
+      col += vec4(  pow(v[i].x,v[i].y), pow(v[i].y,v[i].z), pow(v[i].z,v[1].w), pow(v[i].w,v[1].x) );
+    }
+    gl_FragColor = col;
+  }
+</script>
+
+<script id="vshader" type="x-shader/x-vertex">
+  attribute vec2 pos;
+  attribute vec4 att;
+  varying   vec4 v[8];
+
+  void main() {
+    for (int i = 0; i < 8; i++)
+      v[i] = att;
+    gl_Position = vec4(pos, 0.0, 1.0);
+  }
+</script>
+
+
+<script type="text/javascript">
+  if (window.initNonKhronosFramework) {
+     initNonKhronosFramework(true);
+  }
+  window.jsTestIsAsync = true;
+
+  var canvas;
+  var gl;
+  var aVertexPos;
+  var aVertexAtt;
+  var contextLostEventReceived = false;
+  var contextLostChecked = false;
+  var pixBuffer = new ArrayBuffer(4);
+  var pixUint8 = new Uint8Array(pixBuffer);
+  var drawTime;
+  var maxDrawSecs = 4;
+  var scheduledCheck;
+
+  var vertexPositionBuffer;
+
+  // fill the viewport multiple times
+  var vertices = [
+       1.0,  1.0,
+      -1.0,  1.0,
+       1.0, -1.0,
+      -1.0, -1.0,
+       1.0,  1.0,
+      -1.0,  1.0,
+       1.0, -1.0,
+      -1.0, -1.0,
+  ];
+
+  var atts = [
+       1.0, 1.0, 1.0, 1.0,
+       0.0, 1.0, 1.0, 0.0,
+       0.0, 1.0, 1.0, 0.0,
+       1.0, 1.0, 1.0, 1.0,
+       1.0, 1.0, 1.0, 1.0,
+       0.0, 1.0, 1.0, 0.0,
+       0.0, 1.0, 1.0, 0.0,
+       1.0, 1.0, 1.0, 1.0,
+  ];
+
+  function checkContextLost() {
+    if (contextLostChecked)
+        return;
+
+    contextLostChecked = true;
+
+    if (drawTime < maxDrawSecs)
+        testPassed('drawing timed out in less than ' + maxDrawSecs + ' seconds');
+    else
+        testFailed('drawing did not time out in less than ' + maxDrawSecs + ' seconds');
+
+    testPassed("result from readPixels after draw call timed out: "
+                + pixUint8[0] + " " + pixUint8[1] + " " + pixUint8[2] + " " + pixUint8[3]);
+
+    if (gl.isContextLost())
+        testPassed("context is lost");
+    else
+        testFailed("context still intact, should be lost");
+
+    if (contextLostEventReceived)
+        testPassed("context lost event was received");
+    else
+        testFailed("no context lost event received");
+
+    finishJSTest();
+    nonKhronosFrameworkNotifyDone();
+  }
+
+  function drawScene() {
+    gl.viewport(0, 0, canvas.width, canvas.height);
+    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
+    gl.bindBuffer(gl.ARRAY_BUFFER, vertexPositionBuffer);
+    gl.vertexAttribPointer(aVertexPos, 2, gl.FLOAT, false, 0, 0);
+
+    var attBuffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, attBuffer);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(atts), gl.STATIC_DRAW);
+    gl.vertexAttribPointer(aVertexAtt, 4, gl.FLOAT, false, 0, 0);
+
+    var startTime = new Date().getTime();
+
+    gl.drawArrays(gl.TRIANGLE_STRIP, 0, 8); // This draw call should timeout.
+    gl.finish();
+
+    drawTime = (new Date().getTime() - startTime) / 1000;
+
+    gl.deleteBuffer(attBuffer);
+
+    // readPixels triggers a flush as a side effect.
+    // This can reveal bugs in robustness.
+    gl.readPixels(0, 0, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, pixUint8);
+
+    scheduledCheck = setTimeout(checkContextLost, 500); // Report results in case context lost event is not received
+  }
+
+  function handleContextLost(event) {
+    clearTimeout(scheduledCheck);
+    contextLostEventReceived = true;
+    checkContextLost();
+  }
+
+  function startDOSTest() {
+    canvas = document.getElementById("example");
+    canvas.addEventListener("webglcontextlost", handleContextLost, false);
+    gl = initWebGL("example", "vshader", "fshader", [ "pos", "att"], [ 1, 0, 0, 1 ], 1);
+    aVertexPos = 0;
+    aVertexAtt = 1;
+
+    gl.enableVertexAttribArray(aVertexPos);
+    gl.enableVertexAttribArray(aVertexAtt);
+
+    vertexPositionBuffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, vertexPositionBuffer);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
+
+    drawScene();
+  }
+
+</script>
+</head>
+
+<body onload="startDOSTest();">
+    <div id="description"></div>
+    <div id="console"></div>
+    <canvas id="example" style="border: none;" width="2048" height="2048"></canvas>
+</body>
+
+<script src="../../js/resources/js-test-post.js"></script>
+
+</html>

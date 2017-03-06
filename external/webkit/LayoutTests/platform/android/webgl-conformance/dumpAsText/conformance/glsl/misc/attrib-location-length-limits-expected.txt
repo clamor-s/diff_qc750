@@ -1,0 +1,24 @@
+CONSOLE MESSAGE: line 24: *** Error compiling shader '[object WebGLShader]':ERROR: 0:3: '' : BUFFER OVERFLOW 
+ERROR: 0:7: '' : BUFFER OVERFLOW 
+
+test attrib location length limit
+
+On success, you will see a series of "PASS" messages, followed by "TEST COMPLETE".
+
+Test attrib location underneath the length limit
+PASS gl.getProgramParameter(program, gl.LINK_STATUS) is true
+PASS attrib location should not be -1
+PASS getError was expected value: NO_ERROR : 
+Test attrib location over the length limit
+Shader compilation or link should fail
+PASS wtu.loadProgramFromScriptExpectError(gl, "badVertexShader", "fragmentShader") is null
+PASS getError was expected value: NO_ERROR : 
+Attempt to bind too-long attrib location should produce error
+PASS getError was expected value: INVALID_VALUE : 
+Attempt to fetch too-long attrib location should produce error
+PASS gl.getAttribLocation(program, "vPosition01234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567") is -1
+PASS getError was expected value: INVALID_VALUE : 
+PASS successfullyParsed is true
+
+TEST COMPLETE
+

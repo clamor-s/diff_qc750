@@ -1,0 +1,14 @@
+CONSOLE MESSAGE: line 24: *** Error compiling shader '[object WebGLShader]':WARNING: 0:2: extension 'GL_OES_standard_derivatives' is not supported
+ERROR: 0:6: 'dFdx' : no matching overloaded function found 
+
+fragment shader that uses dFdx should fail
+
+On success, you will see a series of "PASS" messages, followed by "TEST COMPLETE".
+
+test: fragment shader that uses dFdx should fail
+default vertex shader
+test fragment shaderPASS fragment shader that uses dFdx should fail
+PASS successfullyParsed is true
+
+TEST COMPLETE
+

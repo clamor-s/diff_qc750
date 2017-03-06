@@ -1,0 +1,14 @@
+CONSOLE MESSAGE: line 24: *** Error compiling shader '[object WebGLShader]':ERROR: 0:6: 'gl_ClipVertex' : undeclared identifier 
+ERROR: 0:6: 'assign' :  cannot convert from 'attribute highp 4-component vector of float' to 'float'
+
+vertex shader that uses gl_ClipVertex should fail
+
+On success, you will see a series of "PASS" messages, followed by "TEST COMPLETE".
+
+test: vertex shader that uses gl_ClipVertex should fail
+test vertex shader
+default fragment shaderPASS vertex shader that uses gl_ClipVertex should fail
+PASS successfullyParsed is true
+
+TEST COMPLETE
+

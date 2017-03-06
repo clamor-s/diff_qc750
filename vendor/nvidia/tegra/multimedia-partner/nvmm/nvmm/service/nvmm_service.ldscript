@@ -1,0 +1,36 @@
+;=============================================================================
+; 
+; Copyright (c) 2007 NVIDIA Corporation.  All rights reserved.
+;
+; NVIDIA Corporation and its licensors retain all intellectual property
+; and proprietary rights in and to this software, related documentation
+; and any modifications thereto.  Any use, reproduction, disclosure or
+; distribution of this software and related documentation without an express
+; license agreement from NVIDIA Corporation is strictly prohibited.
+;
+;=============================================================================
+; File Name :: nvmm_block.ldscript
+;
+; Purpose   :: armlink Scatter Loading description file
+;
+;    Scatter loading permits the developer to create a detailed 
+;    specification of both load-time and execution-time views of
+;    memory.
+;=============================================================================
+
+NVMM_SERVICE_IRAM_PREF 0x0000000 RELOC
+{
+	PREF_ROOT +0x0 
+	{
+            *(+RO, +RW,+ZI)
+	}
+}
+NVMM_SERVICE_IRAM_MAND 0x40000000 RELOC
+{
+	MAND_ROOT +0x0 
+	{
+            *.o(NVMM_SERVICE_IRAM_MAND)
+	}
+}
+
+

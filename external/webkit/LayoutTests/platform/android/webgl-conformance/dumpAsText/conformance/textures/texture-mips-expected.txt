@@ -1,0 +1,107 @@
+Checks mip issues
+
+On success, you will see a series of "PASS" messages, followed by "TEST COMPLETE".
+
+PASS canvas.width is 2
+PASS canvas.height is 2
+gl.createTexture()
+mips: 
+
+gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 16, 16, 0, gl.RGBA, gl.UNSIGNED_BYTE, cyan);
+mips: 
+
+PASS texture that is missing mips when TEXTURE_MIN_FILTER not NEAREST or LINEAR should draw with black
+gl.genreateMipmap(gl.TEXTURE_2D)
+mips: 
+
+PASS texture that has all mips should draw with cyan
+gl.texImage2D(gl.TEXTURE_2D, 4, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE, green);
+mips: 
+
+gl.texImage2D(gl.TEXTURE_2D, 3, gl.RGBA, 2, 2, 0, gl.RGBA, gl.UNSIGNED_BYTE, green);
+mips: 
+
+gl.texParameteri(TEXTURE_2D, TEXTURE_MIN_FILTER, LINEAR_MIPMAP_NEAREST)
+PASS texture that is only using the smallest 2 mips should draw with green
+PASS texture that is using only the largest 2 mips should draw with cyan
+gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE, red);
+mips: 
+
+PASS texture that is only using the top level even though other levels are defined should draw with red
+gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 2, 2, 0, gl.RGBA, gl.UNSIGNED_BYTE, blue);
+mips: 
+
+gl.genreateMipmap(gl.TEXTURE_2D)
+mips: 
+
+PASS texture that is only using the top 2 levels even though other levels are defined should draw with blue
+gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 16, 16, 0, gl.RGBA, gl.UNSIGNED_BYTE, blue);
+mips: 
+
+gl.texImage2D(gl.TEXTURE_2D, 1, gl.RGBA, 8, 8, 0, gl.RGBA, gl.UNSIGNED_BYTE, blue);
+mips: 
+
+PASS texture that is only using the largest 2 mips should draw with blue
+PASS texture that is only using the smallest 2 mips should draw with green
+gl.createTexture()
+mips: 
+
+gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 8, 8, 0, gl.RGBA, gl.UNSIGNED_BYTE, cyan);
+mips: 
+
+gl.genreateMipmap(gl.TEXTURE_2D)
+mips: 
+
+PASS texture that has 3 mips should draw with cyan
+gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 16, 16, 0, gl.RGBA, gl.UNSIGNED_BYTE, blue);
+mips: 
+
+gl.texParameteri(TEXTURE_2D, TEXTURE_MIN_FILTER, LINEAR)
+PASS texture that is only using top mips should draw with blue
+gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 8, 8, 0, gl.RGBA, gl.UNSIGNED_BYTE, red);
+mips: 
+
+gl.texParameteri(TEXTURE_2D, TEXTURE_MIN_FILTER, LINEAR_MIPMAP_NEAREST)
+PASS texture that is only using smallest mips should draw with cyan
+PASS texture that is using only the largest mip should draw with red
+gl.createTexture()
+mips: 
+
+gl.texImage2D(gl.TEXTURE_2D, 2, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE, green);
+mips: 
+
+gl.texImage2D(gl.TEXTURE_2D, 1, gl.RGBA, 2, 2, 0, gl.RGBA, gl.UNSIGNED_BYTE, green);
+mips: 
+
+gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 4, 4, 0, gl.RGBA, gl.UNSIGNED_BYTE, green);
+mips: 
+
+PASS texture that was built smallest mip first should draw with green
+gl.createTexture()
+mips: 
+
+gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 16, 16, 0, gl.RGBA, gl.UNSIGNED_BYTE, red);
+mips: 
+
+gl.genreateMipmap(gl.TEXTURE_2D)
+mips: 
+
+PASS texture with 1 genmipmaps should draw with red
+gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 16, 16, 0, gl.RGBA, gl.UNSIGNED_BYTE, blue);
+mips: 
+
+gl.genreateMipmap(gl.TEXTURE_2D)
+mips: 
+
+gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 16, 16, 0, gl.RGBA, gl.UNSIGNED_BYTE, green);
+mips: 
+
+gl.genreateMipmap(gl.TEXTURE_2D)
+mips: 
+
+PASS texture with 2 genmipmaps should draw with green
+PASS getError was expected value: NO_ERROR : Should be no errors.
+PASS successfullyParsed is true
+
+TEST COMPLETE
+

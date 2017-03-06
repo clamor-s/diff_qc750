@@ -1,0 +1,48 @@
+################################### tell Emacs this is a -*- makefile-gmake -*-
+#
+# Copyright (c) 2011-2012 NVIDIA CORPORATION.  All Rights Reserved.
+#
+# NVIDIA CORPORATION and its licensors retain all intellectual property
+# and proprietary rights in and to this software, related documentation
+# and any modifications thereto.  Any use, reproduction, disclosure or
+# distribution of this software and related documentation without an express
+# license agreement from NVIDIA CORPORATION is strictly prohibited.
+#
+# tmake for SW Mobile component makefile
+#
+# libnvmm_avp_common static library component makefile
+#
+###############################################################################
+
+ifdef NV_COMPONENT_FLAG_STATIC_LIBRARY_SECTION
+include $(NV_BUILD_START_COMPONENT)
+
+NV_COMPONENT_NAME              := libnvmm_avp_common
+NV_COMPONENT_OWN_INTERFACE_DIR := .
+NV_COMPONENT_SOURCES           := \
+	../transport/avp/nvmm_block_avpentry.c \
+	../blocks/common/nvmm_block.c \
+	../service/nvmm_service_swi/nvmm_service_swi.c \
+	../transport/nvmm_stats.c \
+	../utils/nvmm_util.c \
+	../utils/nvmm_ulp_util.c \
+	../utils/nvmm_queue.c
+
+ifeq ($(NV_BUILD_CONFIGURATION_LOGGER_ENABLED),1)
+NV_COMPONENT_SOURCES           := \
+	../utils/nvmm_logger.c \
+	../utils/nvmm_logger_default.c
+endif
+
+NV_COMPONENT_INCLUDES          := \
+	$(NV_SOURCE)/camera/core/include \
+	$(NV_SOURCE)/camera-partner/imager/include \
+	$(NV_SOURCE)/graphics/2d/include
+
+include $(NV_BUILD_STATIC_LIBRARY)
+endif
+
+# Local Variables:
+# indent-tabs-mode: t
+# tab-width: 8
+# End:

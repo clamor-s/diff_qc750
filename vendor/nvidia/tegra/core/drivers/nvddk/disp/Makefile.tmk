@@ -1,0 +1,100 @@
+################################### tell Emacs this is a -*- makefile-gmake -*-
+#
+# Copyright (c) 2011-2012, NVIDIA CORPORATION.  All rights reserved.
+#
+# NVIDIA CORPORATION and its licensors retain all intellectual property
+# and proprietary rights in and to this software, related documentation
+# and any modifications thereto.  Any use, reproduction, disclosure or
+# distribution of this software and related documentation without an express
+# license agreement from NVIDIA CORPORATION is strictly prohibited.
+#
+# tmake for SW Mobile component makefile
+#
+# libnvddk_disp static library component makefile
+#
+###############################################################################
+
+_common_sources                        := \
+        nvddk_disp.c \
+        nvddk_disp_hw.c \
+        nvddk_disp_edid.c \
+        dc_hal.c \
+        dc_crt_hal.c \
+        dc_dsi_hal.c \
+        dc_hdmi_hal.c \
+        dc_tvo2_hal.c \
+        dc_tvo_common.c \
+        dc_sd3.c
+
+_common_includes                := \
+        ../../hwinc/$(NV_TARGET_SOC) \
+        $(NV_SOURCE)/core-private/drivers/hwinc \
+        $(NV_SOURCE)/camera/core/hwinc/$(NV_TARGET_SOC)
+
+_common_interfaces              := \
+	../../nvrm
+
+ifneq ($(filter ap20, $(NV_TARGET_SOC)),)
+else
+_common_cflags                        := \
+	-DNV_MIPI_PAD_CTRL_EXISTS
+endif
+
+ifeq ($(NV_TARGET_BOOTLOADER_PINMUX),kernel)
+_common_cflags += -DSET_KERNEL_PINMUX
+endif
+
+_common_has_broken_code		:= \
+        cast-align \
+        missing-field-initializers
+
+# Begin static library section
+ifdef NV_COMPONENT_FLAG_STATIC_LIBRARY_SECTION
+include $(NV_BUILD_START_COMPONENT)
+
+NV_COMPONENT_NAME                  := libnvddk_disp
+NV_COMPONENT_OWN_INTERFACE_DIR     := .
+NV_COMPONENT_SOURCES               := $(_common_sources)
+NV_COMPONENT_INCLUDES              := $(_common_includes)
+NV_COMPONENT_CFLAGS                += $(_common_cflags)
+NV_COMPONENT_NEEDED_INTERFACE_DIRS := $(_common_interfaces)
+NV_COMPONENT_HAS_BROKEN_CODE       := $(_common_has_broken_code)
+
+include $(NV_BUILD_STATIC_LIBRARY)
+endif
+
+# Begin shared library section
+ifdef NV_COMPONENT_FLAG_SHARED_LIBRARY_SECTION
+include $(NV_BUILD_START_COMPONENT)
+
+NV_COMPONENT_NAME                  := nvddk_disp
+NV_COMPONENT_OWN_INTERFACE_DIR     := .
+NV_COMPONENT_SOURCES               := $(_common_sources)
+NV_COMPONENT_INCLUDES              := $(_common_includes)
+NV_COMPONENT_NEEDED_INTERFACE_DIRS := \
+	$(_common_interfaces) \
+	../../../utils/nvos \
+	../../nvrm/graphics \
+	../../nvodm/disp \
+	../../nvodm/query
+
+NV_COMPONENT_NEEDED_STATIC_INTERFACE_DIRS := \
+	../../../utils/nvfxmath \
+	../../nvodm/services
+
+ifeq ($(NV_TARGET_REFERENCE_BOARD),cardhu)
+NV_COMPONENT_NEEDED_STATIC_INTERFACE_DIRS += \
+        $(NV_SOURCE)/core-private/drivers/nvddk/fuse
+endif
+
+NV_COMPONENT_CFLAGS                       += $(_common_cflags)
+NV_COMPONENT_HAS_BROKEN_CODE              := $(_common_has_broken_code)
+
+include $(NV_BUILD_SHARED_LIBRARY)
+endif
+
+# Local Variables:
+# indent-tabs-mode: t
+# tab-width: 8
+# End:
+# vi: set tabstop=8 noexpandtab:

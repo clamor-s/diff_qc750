@@ -1,0 +1,159 @@
+MODULE_IN_EBOOT ?=
+MODULE_IN_MONITOR ?=
+MODULE_FORCE_EBOOT_BUILD ?=
+
+define munged_name
+$(addsuffix $(OBJ_SUFFIX),$(addprefix $(OUTDIR)/$(1)_,$(basename $(notdir $(2)))))
+endef
+
+TARGET_LIB := $(OUTDIR)/$(MODULE_NAME)$(MODULE_SUFFIX)
+TARGET_OAL :=
+TARGET_MON :=
+
+ALL_MODULES := module_lib
+
+ifneq ($(EMPTY),$(filter $(TARGET_OS),wince $(MODULE_FORCE_KERNEL_BUILD)))
+  ifneq ($(strip $(MODULE_IN_EBOOT)),)
+    TARGET_OAL := $(OUTDIR)/$(MODULE_NAME)_$(MODULE_IN_EBOOT)$(LIB_SUFFIX)
+    ALL_MODULES += module_oal
+  endif
+endif
+
+ifneq ($(EMPTY),$(filter $(TARGET_OS)-$(ENABLE_SECURITY),eabi-1 rvds-1))
+  ifneq (,$(filter $(TARGET_CPU),armv6))
+    ifneq ($(MODULE_IN_MONITOR),$(EMPTY))
+      TARGET_MON := $(OUTDIR)/$(MODULE_NAME)_$(MODULE_IN_MONITOR)$(LIB_SUFFIX)
+      ALL_MODULES += module_monitor
+    endif
+  endif
+endif
+
+TARGETS := $(TARGET_LIB) $(TARGET_OAL) $(TARGET_MON)
+
+TARGETS_DLL := $(filter %$(DLL_SUFFIX),$(TARGETS))
+
+LCINCS += $(sort $(MODULE_INCLUDE_DIRS) $(NVLIB_COMMON_INCLUDES))
+
+# if the ODM kit directory which is being compiled happens to have
+# an export file in it, use it.  otherwise, use the standard export
+# file.
+local_exports := $(wildcard *.export)
+ifneq ($(local_exports),)
+  EXPORT_FILES := $(local_exports)
+else
+  EXPORT_FILES := $(TEGRA_TOP)/core/drivers/nvodm/$(MODULE_NAME).export
+endif
+
+SECURE_MODULE_SOURCES ?= $(MODULE_SOURCES)
+
+DO_OAL_BUILD ?= 0
+DO_MONITOR_BUILD ?= 0
+
+ifeq ($(DO_MONITOR_BUILD),1)
+  C_FILES := $(filter %.c,$(SECURE_MODULE_SOURCES))
+else
+  C_FILES := $(filter %.c,$(MODULE_SOURCES))
+endif
+
+# HACK for the release package list -- object file dependencies
+# for libraries are matched against the base name of the source file;
+# however, since the object files in the ODM kit build are munged
+# to reflect the destination library (oal_, lib_, ...), the source
+# names need to be munged appropriately based on which target is
+# being built
+ifeq ($(NV_LIST_RELEASE_PACKAGE),1)
+  RELEASE_PACKAGE_PREFIX ?= lib
+  ifeq ($(origin $(RELEASE_PACKAGE_FILES)),undefined)
+    RELEASE_PACKAGE_FILES := $(notdir $(C_FILES))
+    RELEASE_PACKAGE_FILES += $(addprefix $(RELEASE_PACKAGE_PREFIX)_,$(notdir $(C_FILES)))
+  endif
+endif
+
+ifeq ($(TARGET_CPU),armv4)
+  LCDEFS += -DNV_IS_AVP=1
+else
+  LCDEFS += -DNV_IS_AVP=0
+endif
+
+default: $(ALL_MODULES)
+	$(NV_INSTALL) -l $(TARGETS) $(NVODMLIB_INSTALL_TARGET)
+
+
+$(TARGETS): $(MODULE_STATIC_LIBS)
+
+$(TARGET_LIB): $(call munged_name,lib,$(C_FILES))
+
+ifneq ($(TARGETS_DLL),$(EMPTY))
+$(MODULE_NAME).def: $(EXPORT_FILES) $(OUTDIR)/dummy.txt
+	$(PYTHON) $(GET_EXPORTS) $(MAKE_EXPORT_FILE_FLAGS) $(BUILD_FLAVOR) $(TARGET_OS) $(TARGET_CPU) $(filter %.export,$^) >$@
+
+$(TARGETS_DLL): $(OUTDIR)/$(MODULE_NAME).def
+$(TARGETS_DLL): $(NVLIB_NVOS)
+$(TARGETS_DLL): $(NVLIB_NVODM_SERVICES)
+ifneq ($(MODULE_NAME),libnvodm_query)
+$(TARGETS_DLL): $(NVLIB_NVODM_QUERY)
+endif
+$(TARGETS_DLL): $(NVLIB_NVRM_KERNEL)
+$(TARGETS_DLL): $(MODULE_DYNAMIC_LIBS)
+endif
+
+.PHONY: module_lib module_oal module_monitor
+module_lib: $(OUTDIR)/dummy.txt
+	$(MAKE) RELEASE_PACKAGE_PREFIX=lib DO_OAL_BUILD=0 $(TARGET_LIB)
+
+ifneq ($(TARGET_OAL),$(EMPTY))
+$(TARGET_OAL): $(call munged_name,oal,$(C_FILES))
+
+module_oal: $(OUTDIR)/dummy.txt
+	$(MAKE) RELEASE_PACKAGE_PREFIX=oal WINCE_USE_STATIC_RUNTIME_LIBS=1 DO_OAL_BUILD=1 $(TARGET_OAL)
+	$(NV_INSTALL) -l $(TARGET_OAL) $(NVODMLIB_INSTALL_TARGET)
+
+else
+module_oal:
+	$(error $(MODULE_NAME) is not supported in EBoot environment)
+
+endif
+
+ifneq ($(TARGET_MON),)
+$(TARGET_MON): $(call munged_name,mon,$(C_FILES))
+
+module_monitor: $(OUTDIR)/dummy.txt
+	$(MAKE) RELEASE_PACKAGE_PREFIX=mon DO_MONITOR_BUILD=1 $(TARGET_MON)
+else
+module_monitor:
+	$(error $(MODULE_NAME) is not supported in monitor environment)
+endif
+
+# HACK - to get the variable expansions needed for compilation, the
+# compile rules need to come after including the toplevel Makefile.rules
+# however, to ensure that the catch-all rule for release package object
+# file lists isn't triggered, the release package rules need to come
+# before hand.
+
+ifeq ($(NV_LIST_RELEASE_PACKAGE),1)
+$(OUTDIR)/lib_%$(OBJ_SUFFIX): %.c
+	@$(ECHO) "--release[obj][$@]=$<"
+
+$(OUTDIR)/oal_%$(OBJ_SUFFIX): %.c
+	@$(ECHO) "--release[obj][$@]=$<"
+
+$(OUTDIR)/mon_%$(OBJ_SUFFIX): %.c
+	@$(ECHO) "--release[obj][$@]=$<"
+
+endif
+
+include $(TEGRA_TOP)/core-private/make/Makefile.rules
+
+ifneq ($(NV_LIST_RELEASE_PACKAGE),1)
+
+$(OUTDIR)/lib_%$(OBJ_SUFFIX): %.c $(OUTDIR)/dummy.txt
+	$(CC) $(CFLAGS) $(LST) $(COMP_ONLY) $< $(CC_TARGET_PREFIX)$@ $(MKDEPOPT)
+
+$(OUTDIR)/oal_%$(OBJ_SUFFIX): %.c $(OUTDIR)/dummy.txt
+	$(CC) $(CFLAGS) $(LST) $(COMP_ONLY) $< $(CC_TARGET_PREFIX)$@ $(MKDEPOPT)
+
+
+$(OUTDIR)/mon_%$(OBJ_SUFFIX): %.c $(OUTDIR)/dummy.txt
+	$(CC) $(CFLAGS) $(LST) $(COMP_ONLY) $< $(CC_TARGET_PREFIX)$@ $(MKDEPOPT)
+
+endif

@@ -1,0 +1,45 @@
+################################### tell Emacs this is a -*- makefile-gmake -*-
+#
+# Copyright (c) 2012 NVIDIA CORPORATION.  All Rights Reserved.
+#
+# NVIDIA CORPORATION and its licensors retain all intellectual property
+# and proprietary rights in and to this software, related documentation
+# and any modifications thereto.  Any use, reproduction, disclosure or
+# distribution of this software and related documentation without an express
+# license agreement from NVIDIA CORPORATION is strictly prohibited.
+#
+# tmake for SW Mobile component makefile
+#
+# nvodm_charging static library component makefile
+#
+###############################################################################
+
+ifdef NV_COMPONENT_FLAG_STATIC_LIBRARY_SECTION
+include $(NV_BUILD_START_COMPONENT)
+
+NV_COMPONENT_NAME              := libnvodm_charging
+NV_COMPONENT_OWN_INTERFACE_DIR := .
+NV_COMPONENT_SOURCES           := \
+	battery-basic.c \
+	charging.c \
+	charger-usb.c
+NV_COMPONENT_INCLUDES          := \
+	. \
+	$(NV_SOURCE)/core/system/nvaboot
+
+ifneq ($(NV_BUILD_CONFIGURATION_IS_EMULATION),1)
+# FPGA and simulation platforms can never support USB changing
+NV_COMPONENT_CFLAGS            += \
+	-DLPM_BATTERY_CHARGING=1
+endif
+
+NV_COMPONENT_HAS_BROKEN_CODE   := \
+	missing-prototypes
+
+include $(NV_BUILD_STATIC_LIBRARY)
+endif
+
+# Local Variables:
+# indent-tabs-mode: t
+# tab-width: 8
+# End:

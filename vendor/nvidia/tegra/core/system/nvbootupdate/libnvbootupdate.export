@@ -1,0 +1,12 @@
+NvBuBctCryptoOps
+NvBuBctUpdate
+NvBuBctRecover
+NvBuBctCreateBadBlockTable
+NvBuAddBlPartition
+NvBuUpdateBlInfo
+NvBuQueryBlOrder
+NvBuUpdateBlOrder
+NvBuSetBlBootable
+NvBuQueryIsInterruptedUpdate
+NvBuQueryIsPrimaryBlRunning
+NvBuQueryIsUpdateAllowed

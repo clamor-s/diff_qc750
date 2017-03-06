@@ -1,0 +1,16 @@
+NvOdmSdioOpen@1
+NvOdmSdioClose@2
+NvOdmSdioSuspend@3
+NvOdmSdioResume@4
+
+NvOdmUartOpen@5
+NvOdmUartClose@6
+NvOdmUartSuspend@7
+NvOdmUartResume@8
+
+NvOdmKbcFilterKeys@9
+
+NvOdmUsbUlpiOpen@10
+NvOdmUsbUlpiClose@11
+
+

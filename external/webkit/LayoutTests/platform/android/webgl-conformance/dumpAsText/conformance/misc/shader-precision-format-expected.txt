@@ -1,0 +1,11 @@
+WebGL shader precision format test.
+
+On success, you will see a series of "PASS" messages, followed by "TEST COMPLETE".
+
+Tests that WebGLShaderPrecisionFormat class and getShaderPrecisionFormat work.
+
+getShaderPrecisionFormat() function not found.
+PASS successfullyParsed is true
+
+TEST COMPLETE
+

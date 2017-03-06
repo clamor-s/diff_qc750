@@ -1,0 +1,13 @@
+CONSOLE MESSAGE: line 24: *** Error compiling shader '[object WebGLShader]':ERROR: 0:2: '' :  
+
+shader with error directive using characters outside of allowed set fails
+
+On success, you will see a series of "PASS" messages, followed by "TEST COMPLETE".
+
+test: shader with error directive using characters outside of allowed set fails
+default vertex shader
+test fragment shaderPASS shader with error directive using characters outside of allowed set fails
+PASS successfullyParsed is true
+
+TEST COMPLETE
+

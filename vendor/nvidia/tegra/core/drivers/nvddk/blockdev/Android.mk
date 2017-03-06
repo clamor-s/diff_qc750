@@ -1,0 +1,16 @@
+LOCAL_PATH := $(call my-dir)
+include $(NVIDIA_DEFAULTS)
+
+LOCAL_MODULE := libnvddk_blockdevmgr
+
+LOCAL_NVIDIA_NO_COVERAGE := true
+LOCAL_CFLAGS += -DNV_USE_FUSE_CLOCK_ENABLE=0
+LOCAL_CFLAGS += -DNV_IS_AVP=0
+ifneq ($(TARGET_TEGRA_VERSION),ap20)
+LOCAL_CFLAGS += -DNV_IF_NOT_AP20
+endif
+
+LOCAL_SRC_FILES += nvddk_blockdevmgr.c
+
+include $(NVIDIA_STATIC_LIBRARY)
+

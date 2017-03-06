@@ -1,0 +1,510 @@
+/*
+ * Copyright (c) 2007 NVIDIA Corporation.  All rights reserved.
+ *
+ * NVIDIA Corporation and its licensors retain all intellectual property
+ * and proprietary rights in and to this software, related documentation
+ * and any modifications thereto.  Any use, reproduction, disclosure or
+ * distribution of this software and related documentation without an express
+ * license agreement from NVIDIA Corporation is strictly prohibited.
+ */
+
+/!
+/** @file
+ * @brief <b>NVIDIA Accelerometer API</b>
+ *
+ * @b Description: Declares the Accelerometer API to be used by applications to
+ *                 interact with the Accelerometer HW.
+ */
+!/
+
+/* used to generate the dispatcher */
+package NvAcr
+{
+    nvaccelerometer,
+}
+
+package NvAcr;
+
+interface nvaccelerometer {
+
+/!
+#include "nvcommon.h"
+#include "nvos.h"
+!/
+
+/!
+/*
+ * @ingroup nvaccelerometer
+ * @{
+ */
+!/
+
+/!
+/**
+ * Max message queue name length.
+ */
+!/
+#define MAX_ACCELEROMETER_MESSAGE_QUEUE_NAME_LEN 40
+
+/!
+/**
+ * Max clients who will use accelerometer at the same time
+ */
+!/
+#define MAX_ACCELEROMETER_CLIENTS 10
+
+
+/!
+/**
+ * Standard max force value divisor
+ * // [TODO 2008-08-21 mholtmanns] This should also be something to be read
+ * from the ODM layer directly!
+ */
+!/
+#define MAX_ACCELEROMETER_FORCE_DIVISOR 1000
+
+/!
+/**
+ * NvAcrDeviceHandle is an opaque handle to a Accelerometer device.
+ */
+!/
+handle NvAcrDeviceHandle;
+
+/!
+/**
+ * @brief This enum stores the capabilities of the device
+ */
+!/
+enum NvAccelerometerCapabilities
+{
+/!
+    /** Indicate accelerometer support motion interrupt, when the force value */
+    /** on one axis is over the threshold, it will generate a interrupt. */
+!/
+    NvAccelerometer_None = 0,
+/!
+    /** Indicate accelerometer support motion interrupt, when the force value */
+    /** on one axis is over the threshold, it will generate a interrupt. */
+!/
+    NvAccelerometer_Int_Motion_Threshold = 0x0001,
+
+/!
+    /** Indicates accelerometer supports tap interrupt, when the force value */
+    /** on one axis is over the threshold and decrease under the threshold   */
+    /** in a time threshold, it will generate a interrupt. */
+!/
+    NvAccelerometer_Tap_Threshold_Single = 0x0002,
+
+/!
+    /** Indicates accelerometer support double tap interrupt. */
+    /** Currently not supported. */
+!/
+    NvAccelerometer_Tap_Threshold_Double = 0x0004,
+
+/!
+    /** Indicates that an interrupt has been generated due to detection of */
+    /** linear freefall motion. */
+!/
+    NvAccelerometer_Freefall = 0x0008,
+/!
+    /** Extra feature can be add here in future*/
+!/
+}
+
+/!
+/**
+ * @brief   Structure to hold information about the device settings per client
+ *  a HW independent way
+ */!/
+struct NvAccelerometerDeviceSettings
+{
+/!
+    /** The requested sampling rate of the device in Hz */
+!/
+    NvU32       RequestSampleRate;
+/!
+    /** The granted sampling rate of the device in Hz */
+!/
+    NvU32       SampleRate;
+/!
+    /** Which Tap mode is requested: reuse Event struct */
+!/
+    NvAccelerometerCapabilities  RequestTapAndMotion;
+/!
+    /** Which Tap mode is supported: reuse Event struct */
+!/
+    NvAccelerometerCapabilities  TapAndMotion;
+}
+
+typedef struct NvAccelerometerDeviceSettings;
+
+/!
+/**
+ * @brief Context structure used by the applications which contains
+ *   the device handle and the client specific message Q name.
+ */
+!/
+struct NvAcrContext
+{
+/!
+    /** Accelerometer device handle */
+!/
+    NvAcrDeviceHandle hAcrDevice;
+/!
+    /** Application client ID */
+!/
+    NvU32   ClientID;
+/!
+    /** Application minimum requirements */
+!/
+    NvAccelerometerDeviceSettings Settings;
+/!
+    wchar_t MessageQueName[MAX_ACCELEROMETER_MESSAGE_QUEUE_NAME_LEN];
+!/
+
+}
+
+typedef struct NvAcrContext;
+
+
+
+/!
+/**
+ * @brief The message structure that is used between applications and shims
+ */
+!/
+struct NvAcrAcceleration
+{
+/!
+    /**
+     * Acceleration on x axis
+     */
+!/
+NvS32 Acceleration_X;
+
+/!
+    /**
+     * Acceleration on y axis
+     */
+!/
+NvS32 Acceleration_Y;
+
+/!
+    /**
+     * Acceleration on z axis
+     */
+!/
+NvS32 Acceleration_Z;
+
+}
+
+typedef struct NvAcrAcceleration;
+
+
+
+/!
+    /** Current setting of accelerometer*/
+!/
+struct NvAcrCurrentSetting
+{
+/!
+    /**
+     * Duration in milliseconds
+     */
+!/
+    NvU32 Tap_DurationMS;
+
+/!
+    /**
+     * Current motion threshold
+     */
+!/
+    NvU32 Motion_Threshold;
+
+/!
+    /**
+     * Current tap threshold
+     */
+!/
+    NvU32 Tap_Threshold;
+
+/!
+    /**
+     * Current sample rate
+     */
+!/
+    NvU32 Sample_Rate;
+
+}
+
+typedef struct NvAcrCurrentSetting;
+
+
+/!
+/**
+ * @brief This enum stores the power state of the device
+ */
+!/
+enum NvAccelerometerPowerState
+{
+/!
+    /** Indicate accelerometer is in fullrun mode*/
+!/
+    NvAccelerometer_Full_Run = 0x0001,
+
+/!
+    /** Indicates accelerometer is in low power mode*/
+!/
+    NvAccelerometer_Low_Power = 0x0002,
+
+/!
+    /** Indicates accelerometer is in suspend mode*/
+!/
+    NvAccelerometer_Suspend = 0x0004,
+/!
+    /** Indicates accelerometer is power off mode*/
+!/
+    NvAccelerometer_Power_Off = 0x0008,
+/!
+    /** Extra feature can be add here in future*/
+!/
+}
+
+/**
+ * @brief This enum tell which anxis generate interrupt.
+ */
+!/
+enum NvAccelerometerAxis
+{
+/!
+	/** Indicate interrupt happend on x axis*/
+!/
+    NvAccelerometer_Axis_None = 0x0,
+/!
+    /** Indicate interrupt happend on x axis*/
+!/
+    NvAccelerometer_Axis_X = 0x0001,
+
+/!
+    /** Indicate interrupt happend on x axis*/
+!/
+    NvAccelerometer_Axis_Y = 0x0002,
+
+/!
+    /** Indicate interrupt happend on x axis*/
+!/
+    NvAccelerometer_Axis_Z = 0x0004,
+/!
+    /** Extra feature can be add here in future*/
+!/
+}
+
+/!
+/**
+ * @brief The message structure that is used between applications and shims
+ */
+!/
+struct NvAcrIntrruptInfo
+{
+/!
+    /**
+     * Indicate Interrupt type
+     */
+!/
+NvAccelerometerCapabilities Interrupt_Type;
+
+/!
+    /**
+     * Indicate which axis generate motion interrupt
+     */
+!/
+NvAccelerometerAxis Acceleration_Motion_Axis;
+
+/!
+	/**
+     * Indicate which axis generate tap interrupt
+     */
+!/
+NvAccelerometerAxis Acceleration_Tap_Axis;
+
+}
+
+typedef struct NvAcrIntrruptInfo;
+
+
+/!
+/**
+ * @brief The attributes that the applications should use to communicate
+ *  with the Accelerometer device
+ */
+!/
+enum NvAcrAttribute
+{
+/!
+    /** Invalid attribute */
+!/
+    NvAcrAttribute_Invalid = 0,
+/!
+    /** current acceleration data on each axis */
+    /** returns three NvS32 values */
+!/
+    NvAcrAttribute_Acceleration,
+/!
+    /** set accelerometer's sample rate*/
+    /** returns one NvU32 values */
+!/
+    NvAcrAttribute_Sample_Rate,
+/!
+    /** query device capabilities*/
+    /** returns one NvU32 values */
+!/
+    NvAcrAttribute_Capabilities,
+/!
+    /** query max G force and resolution */
+    /** returns two NvU32 values */
+!/
+    NvAcrAttribute_MaxG_Resolution,
+/!
+    /** Extra feature can be add here in future*/
+!/
+}
+
+/!
+/**
+ * Opens the Accelerometer device and gets a handle to the device. The
+ * message queue name is returned in the context structure to be used by
+ * clients.
+ *
+ * Can be called multiple times for a given device. Subsequent
+ * calls will not necessarily return the same handle. Each call to
+ * NvAcrOpen() must be paired with a corresponding call to NvAcrClose().
+ *
+ * This call will perform all the significant hardware
+ * initialization of the device and will initialize internal data
+ * structures that are involved in managing the device.
+ *
+ * @param pContext the Accelerometer device context is stored here.
+ * Assert encountered in debug mode if pContext is NULL.
+ *
+ * @param pContext the Accelerometer context.
+ *
+ * @retval NvSuccess Indicates that device was successfully opened.
+ * @retval NvError_InsufficientMemory Indicates that shim was unable to allocate
+ *     memory for its internal data structures.
+ */
+NvError NvAcrOpen(NvAcrContext *pContext);
+!/
+
+/!
+/**
+ * Closes the Accelerometer device.
+ *
+ * Each call to NvAcrOpen() must be paired with a corresponding call
+ * to NvAcrClose().
+ *
+ * @param pContext The Accelerometer device context. If pContext is NULL,
+ *                 this API has no effect.
+ *
+ */
+void NvAcrClose(NvAcrContext *pContext);
+!/
+
+/!
+/**
+ * Sets attributes to the Accelerometer device.
+ *
+ * @param pContext The Accelerometer device context. If pContext is NULL,
+ *                 this API has no effect.
+ * @param Attributes The attribute that you want to use.
+ * @param Length Size of the attribute value pointer
+ * @param pAttribData Pointer to the attribute data
+ *
+ * @retval NvSuccess Indicates that the settings were done successfully.
+ * @retval NvError_InsufficientMemory Indicates that shim was unable to allocate
+ *     memory for its internal data structures.
+ */
+!/
+NvError
+NvAcrSetAttributes(
+    [in] NvAcrContext pContext,
+    [in] NvAcrAttribute Attribute,
+    [in] NvU32 Length,
+    [in, count(Length)] NvU32 pAttribData);
+
+/!
+/**
+ * Gets attributes as specified in NvAcrAttribute structure from the
+ * accelerometer device.
+ *
+ * @param pContext The Accelerometer device context. If pContext is NULL,
+ *                 this API has no effect.
+ * @param Attribute The attribute that the application needs.
+ * @param Length Size of the attribute value pointer
+ * @param AttributeValue The value of the attribute querried from the device
+ *
+ * @retval NvSuccess Indicates that device was successfully opened.
+ * @retval NvError_InsufficientMemory Indicates that shim was unable to allocate
+ *     memory for its internal data structures.
+ */
+!/
+NvError
+NvAcrGetAttributes(
+    [in] NvAcrContext pContext,
+    [in] NvAcrAttribute Attribute,
+    [in] NvU32 Length,
+    [out, count(Length)] NvU32 pAttributeValue);
+
+
+/!
+/**
+ * Gets acceleration as specified in NvAcrAcceleration structure from the
+ * accelerometer device.
+ *
+ * @param pContext The Accelerometer device context. If pContext is NULL, this
+ *                 API has no effect.
+ * @param pAcceleration returns the current acceleration values
+ *
+ * @retval NvSuccess Indicates that device was successfully set the capabilites.
+ * @retval NvError_BadParameter Indicates that the hContext is NULL.
+ * @retval NvError_InsufficientMemory Indicates that shim was unable to allocate
+ *     memory for its internal data structures.
+ */
+!/
+NvError
+NvAcrGetAcceleration(
+    [in]  NvAcrContext pContext,
+    [out] NvAcrAcceleration *pAcceleration);
+
+/!
+/** @} */
+!/
+
+/!
+/**
+ * Set the required sample rate for this client context
+ *
+ * @param pContext The Accelerometer device context. If pContext is NULL this
+ *                 API has no effect.
+ * @param SampleRate Requested sample rate of this client
+ * @param pSupportedSampleRate returns the actual sample rate supported by
+ *                             the device for this client
+ *
+ * @retval NvSuccess indicates the new sample rate was set corectly
+ * @retval NvError_BadParameter
+ *                  pContext is not a valid AccelerometerClientContext or
+                    pSupportedSampleRate is NULL
+ * @retval NvError_BadValue SampleRate did not correspond to an exact match of
+ *                          supported sample rates
+ * @retval NvError_InsufficientMemory Indicates that shim was unable to allocate
+ *     memory for its internal data structures.
+ */
+!/
+NvError
+NvAccelerometerSetSampleRate(
+    [in]  NvAcrContext  pContext,
+    [in]  NvU32         SampleRate,
+    [out] NvU32         pSupportedSampleRate
+);
+
+
+} // interface

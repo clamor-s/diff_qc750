@@ -1,0 +1,15 @@
+NvRmSurfaceInitNonRmPitch
+NvRmSurfaceInitRmPitch
+NvRmSurfaceFree
+NvRmSurfaceComputePitch
+NvRmSurfaceComputeSize
+NvRmSurfaceComputeAlignment
+NvRmSurfaceComputeOffset
+NvRmSurfaceWrite
+NvRmSurfaceRead
+NvRmSurfaceGetYuvColorFormat
+NvRmSurfaceComputeName
+NvRmSurfaceDump
+NvRmSurfaceComputeMD5
+NvRm_NvIdlGetIoctlFile
+NvRm_MemmgrGetIoctlFile

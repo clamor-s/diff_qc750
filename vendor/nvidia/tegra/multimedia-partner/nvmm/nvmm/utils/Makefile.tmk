@@ -1,0 +1,99 @@
+################################### tell Emacs this is a -*- makefile-gmake -*-
+#
+# Copyright (c) 2012, NVIDIA CORPORATION.  All Rights Reserved.
+#
+# NVIDIA CORPORATION and its licensors retain all intellectual property
+# and proprietary rights in and to this software, related documentation
+# and any modifications thereto.  Any use, reproduction, disclosure or
+# distribution of this software and related documentation without an express
+# license agreement from NVIDIA CORPORATION is strictly prohibited.
+#
+# tmake for SW Mobile component makefile
+#
+# nvmm_utils: shared library
+#
+###############################################################################
+
+ifdef NV_COMPONENT_FLAG_SHARED_LIBRARY_SECTION
+include $(NV_BUILD_START_COMPONENT)
+
+NV_COMPONENT_NAME                  := nvmm_utils
+NV_COMPONENT_OWN_INTERFACE_DIR     := .
+NV_COMPONENT_SOURCES               := \
+	nvmetafile_asxparser.c \
+	nvmetafile_m3uparser.c \
+	nvmetafile_parser.c \
+	nvmm_bufmgr.c \
+	nvmm_file_util.c \
+	nvmm_format_scan.c \
+	nvmm_logger.c \
+	nvmm_mediaclock.c \
+	nvmm_queue.c \
+	nvmm_sock_util.c \
+	nvmm_ulp_kpi_logger.c \
+	nvmm_ulp_util.c \
+	nvmm_util.c
+NV_COMPONENT_HAS_BROKEN_CODE       := \
+	cast-align \
+	sign-compare
+NV_COMPONENT_INCLUDES              := \
+	../include \
+	$(NV_SOURCE)/camera/core/include \
+	$(NV_SOURCE)/camera-partner/imager/include \
+	$(NV_SOURCE)/graphics/2d/include \
+	$(NV_SOURCE)/multimedia-partner/openmax/include
+NV_COMPONENT_NEEDED_INTERFACE_DIRS := \
+	../service \
+	$(NV_SOURCE)/core/drivers/nvrm \
+	$(NV_SOURCE)/core/drivers/nvrm/graphics \
+	$(NV_SOURCE)/core/utils/nvos \
+	$(NV_SOURCE)/multimedia-partner/utils/nvavp
+
+ifeq ($(NV_BUILD_CONFIGURATION_IS_ANDROID),1)
+NV_COMPONENT_SOURCES               += \
+	nvmm_logger_android.c \
+	nvmm_sock_linux.c
+NV_COMPONENT_CFLAGS                += \
+	-DNV_USE_NVAVP=1
+NV_COMPONENT_NEEDED_INTERFACE_DIRS += \
+	$(NV_SOURCE)/tmake/external/android/log
+else ifeq ($(NV_BUILD_CONFIGURATION_IS_QNX),1)
+NV_COMPONENT_SOURCES               += \
+	nvmm_logger_default.c \
+	nvmm_sock_null.c
+NV_COMPONENT_CFLAGS                += \
+	-DNV_USE_NVAVP=0
+else ifeq ($(NV_BUILD_CONFIGURATION_IS_CSIM),1)
+NV_COMPONENT_SOURCES               += \
+	nvmm_logger_default.c \
+	nvmm_sock_linux.c
+NV_COMPONENT_CFLAGS                += \
+	-DNV_USE_NVAVP=1
+else
+NV_COMPONENT_SOURCES               += \
+	nvmm_logger_default.c \
+	nvmm_sock_linux.c
+NV_COMPONENT_CFLAGS                += \
+	-DNV_USE_NVAVP=1
+NV_COMPONENT_CFLAGS                += \
+	$(NV_TOOLCHAIN_X11_CFLAGS)
+NV_COMPONENT_NEEDED_INTERFACE_DIRS += \
+	$(NV_SOURCE)/l4t/3rdpartystub/X11 \
+	$(NV_SOURCE)/l4t/3rdpartystub/Xext
+NV_COMPONENT_NEEDED_STATIC_INTERFACE_DIRS += \
+	$(NV_SOURCE)/graphics/X11/drivers/tegra/src/tdr
+
+# according to L4T legacy build this file is only needed for testing
+systemimage:: $(NV_SYSTEMIMAGE_TESTS_DIR)/metafileformatlibs.xml
+$(NV_SYSTEMIMAGE_TESTS_DIR)/metafileformatlibs.xml: $(NV_COMPONENT_DIR)/metafileformatlibs.xml
+	$(CP) $< $@
+endif
+
+include $(NV_BUILD_SHARED_LIBRARY)
+endif
+
+# Local Variables:
+# indent-tabs-mode: t
+# tab-width: 8
+# End:
+# vi: set tabstop=8 noexpandtab:

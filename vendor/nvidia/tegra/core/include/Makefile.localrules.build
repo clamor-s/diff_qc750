@@ -1,0 +1,81 @@
+# Don't build header files in our HOST_BUILD; better to be on the safe side and
+# only have one make invocation that has a rule for building them
+ifneq ($(HOST_BUILD),1)
+$(HOST_OUTDIR)/%.h: %.idl $(HOST_OUTDIR)/dummy.txt $(IDL_COMPILER)
+	$(IDL_COMPILER) $(IDL_FLAGS) -h -o $@ $<
+
+endif
+
+ifeq ($(TARGET_OS_WINDOWS),1)
+$(TARGETS): $(OUTDIR)/%$(IMPLIB_SUFFIX): $(OUTDIR)/%.def
+	$(AR) -nologo -def:$< -out:$@ -machine:$(WIN_MACHINE)
+
+# Special rules for creating certain special .def files
+
+$(OUTDIR)/libnvrm_graphics.def: $(TEGRA_TOP)/core/drivers/nvrm/graphics/libnvrm_graphics_stub.export
+$(OUTDIR)/libnvrm_graphics.def: $(TEGRA_TOP)/core/drivers/nvrm/graphics/libnvrm_graphics.export
+ifeq ($(NVRM_TRANSPORT_IN_KERNEL), 0)
+$(OUTDIR)/libnvrm_graphics.def: $(TEGRA_TOP)/core/drivers/nvrm/libnvrm_transport.export
+endif
+$(OUTDIR)/libnvrm_graphics.def: $(OUTDIR)/dummy.txt $(GET_EXPORTS)
+	$(PYTHON) $(GET_EXPORTS) $(MAKE_EXPORT_FILE_FLAGS) $(BUILD_FLAVOR) $(TARGET_OS) $(TARGET_CPU) $(filter %.export,$^) >$@
+
+$(OUTDIR)/libnvrm.def: $(TEGRA_TOP)/core/drivers/nvrm/libnvrm.export
+ifeq ($(NVRM_TRANSPORT_IN_KERNEL), 1)
+$(OUTDIR)/libnvrm.def: $(TEGRA_TOP)/core/drivers/nvrm/libnvrm_transport.export
+endif
+$(OUTDIR)/libnvrm.def: $(TEGRA_TOP)/core/drivers/nvrm/libnvrm_stub.export
+$(OUTDIR)/libnvrm.def: $(OUTDIR)/dummy.txt $(GET_EXPORTS)
+	$(PYTHON) $(GET_EXPORTS) $(MAKE_EXPORT_FILE_FLAGS) $(BUILD_FLAVOR) $(TARGET_OS) $(TARGET_CPU) $(filter %.export,$^) >$@
+
+else
+ifneq ($(EMPTY),$(filter $(TARGET_OS),linux qnx))
+$(OUTDIR)/%.c: %.export $(OUTDIR)/dummy.txt $(GET_EXPORTS)
+	$(PYTHON) $(GET_EXPORTS) -c $(BUILD_FLAVOR) $(TARGET_OS) $(TARGET_CPU) $< >$@
+
+ifeq ($(BUILD_STUBS),1)
+$(OUTDIR)/libnvodm_kernel_query.c: $(TEGRA_TOP)/core/drivers/nvodm/libnvodm_query.export
+	$(PYTHON) $(GET_EXPORTS) -c $(BUILD_FLAVOR) $(TARGET_OS) $(TARGET_CPU) $(filter %.export,$^) >$@
+
+$(OUTDIR)/libnvrm_impl.c: $(TEGRA_TOP)/core/drivers/nvrm/libnvrm.export
+ifeq ($(NVRM_TRANSPORT_IN_KERNEL), 1)
+$(OUTDIR)/libnvrm_impl.c: $(TEGRA_TOP)/core/drivers/nvrm/libnvrm_transport.export
+endif
+$(OUTDIR)/libnvrm_impl.c: $(TEGRA_TOP)/core/drivers/nvrm/libnvrm_stub.export
+ifeq ($(TARGET_OS),qnx)
+$(OUTDIR)/libnvrm_impl.c: $(TEGRA_TOP)/core/drivers/nvrm/libnvrm_qnx.export
+endif
+$(OUTDIR)/libnvrm_impl.c: $(OUTDIR)/dummy.txt $(GET_EXPORTS)
+	$(PYTHON) $(GET_EXPORTS) -c $(BUILD_FLAVOR) $(TARGET_OS) $(TARGET_CPU) $(filter %.export,$^) >$@
+
+$(OUTDIR)/libnvrm_graphics_impl.c: $(TEGRA_TOP)/core/drivers/nvrm/graphics/libnvrm_graphics.export
+ifeq ($(NVRM_TRANSPORT_IN_KERNEL), 0)
+$(OUTDIR)/libnvrm_graphics_impl.c: $(TEGRA_TOP)/core/drivers/nvrm/libnvrm_transport.export
+endif
+$(OUTDIR)/libnvrm_graphics_impl.c: $(TEGRA_TOP)/core/drivers/nvrm/graphics/libnvrm_graphics_stub.export
+	$(PYTHON) $(GET_EXPORTS) -c $(BUILD_FLAVOR) $(TARGET_OS) $(TARGET_CPU) $(filter %.export,$^) >$@
+
+$(OUTDIR)/libnvstormgr_stub.c: $(TEGRA_TOP)/core/system/nvstormgr/libnvstormgr.export
+	$(PYTHON) $(GET_EXPORTS) -c $(BUILD_FLAVOR) $(TARGET_OS) $(TARGET_CPU) $(filter %.export,$^) >$@
+
+endif
+
+$(OUTDIR)/libnvrm_graphics.c: $(TEGRA_TOP)/core/drivers/nvrm/graphics/libnvrm_graphics.export
+ifeq ($(NVRM_TRANSPORT_IN_KERNEL), 0)
+$(OUTDIR)/libnvrm_graphics.c: $(TEGRA_TOP)/core/drivers/nvrm/libnvrm_transport.export
+endif
+$(OUTDIR)/libnvrm_graphics.c: $(TEGRA_TOP)/core/drivers/nvrm/graphics/libnvrm_graphics_stub.export
+$(OUTDIR)/libnvrm_graphics.c: $(OUTDIR)/dummy.txt $(GET_EXPORTS)
+	$(PYTHON) $(GET_EXPORTS) -c $(BUILD_FLAVOR) $(TARGET_OS) $(TARGET_CPU) $(filter %.export,$^) >$@
+
+$(OUTDIR)/libnvrm.c: $(TEGRA_TOP)/core/drivers/nvrm/libnvrm.export
+ifeq ($(NVRM_TRANSPORT_IN_KERNEL), 1)
+$(OUTDIR)/libnvrm.c: $(TEGRA_TOP)/core/drivers/nvrm/libnvrm_transport.export
+endif
+$(OUTDIR)/libnvrm.c: $(TEGRA_TOP)/core/drivers/nvrm/libnvrm_stub.export
+$(OUTDIR)/libnvrm.c: $(OUTDIR)/dummy.txt $(GET_EXPORTS)
+	$(PYTHON) $(GET_EXPORTS) -c $(BUILD_FLAVOR) $(TARGET_OS) $(TARGET_CPU) $(filter %.export,$^) >$@
+
+$(TARGETS): $(OUTDIR)/%$(IMPLIB_SUFFIX): $(OUTDIR)/%$(OBJ_SUFFIX)
+endif
+endif

@@ -1,0 +1,6 @@
+ Checks that a fragment with empty preprocessor macro  parameter list does not cause a crash
+PASS empty preprocessor macro parameter list should not cause a crash
+PASS successfullyParsed is true
+
+TEST COMPLETE
+

@@ -1,0 +1,35 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "drm_client", "drm_client.vcproj", "{202EAD03-7F22-42C1-8AC4-037EA74EAD21}"
+	ProjectSection(ProjectDependencies) = postProject
+		{86E22F39-33FE-4097-B881-49578EBDB40F} = {86E22F39-33FE-4097-B881-49578EBDB40F}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "drm_stub", "drm_stub.vcproj", "{86E22F39-33FE-4097-B881-49578EBDB40F}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "drm_service", "drm_service.vcproj", "{B60E0162-393B-4575-B044-63A426502565}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{202EAD03-7F22-42C1-8AC4-037EA74EAD21}.Debug|Win32.ActiveCfg = Debug|Win32
+		{202EAD03-7F22-42C1-8AC4-037EA74EAD21}.Debug|Win32.Build.0 = Debug|Win32
+		{202EAD03-7F22-42C1-8AC4-037EA74EAD21}.Release|Win32.ActiveCfg = Release|Win32
+		{202EAD03-7F22-42C1-8AC4-037EA74EAD21}.Release|Win32.Build.0 = Release|Win32
+		{86E22F39-33FE-4097-B881-49578EBDB40F}.Debug|Win32.ActiveCfg = Debug|Win32
+		{86E22F39-33FE-4097-B881-49578EBDB40F}.Debug|Win32.Build.0 = Debug|Win32
+		{86E22F39-33FE-4097-B881-49578EBDB40F}.Release|Win32.ActiveCfg = Release|Win32
+		{86E22F39-33FE-4097-B881-49578EBDB40F}.Release|Win32.Build.0 = Release|Win32
+		{B60E0162-393B-4575-B044-63A426502565}.Debug|Win32.ActiveCfg = Debug|Win32
+		{B60E0162-393B-4575-B044-63A426502565}.Debug|Win32.Build.0 = Debug|Win32
+		{B60E0162-393B-4575-B044-63A426502565}.Release|Win32.ActiveCfg = Release|Win32
+		{B60E0162-393B-4575-B044-63A426502565}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

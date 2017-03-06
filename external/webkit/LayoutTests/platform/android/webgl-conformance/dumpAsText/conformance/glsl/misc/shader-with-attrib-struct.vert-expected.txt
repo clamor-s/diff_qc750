@@ -1,0 +1,13 @@
+CONSOLE MESSAGE: line 24: *** Error compiling shader '[object WebGLShader]':ERROR: 0:3: 'attribute' : syntax error 
+
+vertex shader that uses attribute struct should fail per GLSL ES section 4.4.3, "Attribute", p. 30
+
+On success, you will see a series of "PASS" messages, followed by "TEST COMPLETE".
+
+test: vertex shader that uses attribute struct should fail per GLSL ES section 4.4.3, "Attribute", p. 30
+test vertex shader
+default fragment shaderPASS vertex shader that uses attribute struct should fail per GLSL ES section 4.4.3, "Attribute", p. 30
+PASS successfullyParsed is true
+
+TEST COMPLETE
+

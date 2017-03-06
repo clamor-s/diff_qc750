@@ -1,0 +1,31 @@
+<html>
+<body>
+<svg><circle cx="100" cy="50" r="40" fill="red" /></svg>
+<pre id="result"></pre>
+</body>
+<script type="text/javascript">
+function touchEventCallback() { }
+
+var body = document.getElementsByTagName("body")[0];
+
+body.addEventListener("touchstart", touchEventCallback, false);
+
+if (window.layoutTestController) {
+    layoutTestController.waitUntilDone();
+    layoutTestController.dumpAsText();
+}
+if (window.eventSender) {
+    eventSender.clearTouchPoints();
+    eventSender.addTouchPoint(10, 10);
+    eventSender.touchStart();
+
+    eventSender.releaseTouchPoint(0);
+    eventSender.touchEnd();
+
+}
+document.getElementById("result").innerHTML += "PASS";
+if (window.layoutTestController)
+    layoutTestController.notifyDone();
+
+</script>
+</html>

@@ -1,0 +1,54 @@
+LOCAL_PATH := $(call my-dir)
+include $(NVIDIA_DEFAULTS)
+
+LOCAL_MODULE := libnvbct
+
+LOCAL_CFLAGS += -DNV_USE_FUSE_CLOCK_ENABLE=0
+LOCAL_CFLAGS += -DNVODM_BOARD_IS_SIMULATION=0
+
+LOCAL_SRC_FILES += nvbct_private_ap20.c
+LOCAL_SRC_FILES += nvbit_private_ap20.c
+LOCAL_SRC_FILES += nvbct_private_t30.c
+LOCAL_SRC_FILES += nvbit_private_t30.c
+LOCAL_SRC_FILES += nvbct.c
+LOCAL_SRC_FILES += nvbit.c
+LOCAL_SRC_FILES += nvfuse.c
+LOCAL_SRC_FILES += nvfuse_ap20.c
+LOCAL_SRC_FILES += nvfuse_t30.c
+
+LOCAL_NVIDIA_NO_EXTRA_WARNINGS := 1
+include $(NVIDIA_STATIC_LIBRARY)
+include $(NVIDIA_DEFAULTS)
+LOCAL_MODULE := libnvbct_avp
+LOCAL_CFLAGS += -DNV_USE_FUSE_CLOCK_ENABLE=0
+LOCAL_CFLAGS += -Os -ggdb0
+LOCAL_CFLAGS += -DNVODM_BOARD_IS_SIMULATION=0
+
+LOCAL_SRC_FILES += nvbct_private_ap20.c
+LOCAL_SRC_FILES += nvbit_private_ap20.c
+LOCAL_SRC_FILES += nvbct_private_t30.c
+LOCAL_SRC_FILES += nvbit_private_t30.c
+LOCAL_SRC_FILES += nvbct.c
+LOCAL_SRC_FILES += nvbit.c
+LOCAL_SRC_FILES += nvfuse.c
+LOCAL_SRC_FILES += nvfuse_ap20.c
+LOCAL_SRC_FILES += nvfuse_t30.c
+
+include $(NVIDIA_STATIC_AVP_LIBRARY)
+include $(NVIDIA_DEFAULTS)
+LOCAL_MODULE := libnvbcthost
+
+LOCAL_CFLAGS += -DNV_USE_FUSE_CLOCK_ENABLE=0
+LOCAL_C_INCLUDES += $(TARGET_OUT_HEADERS)
+LOCAL_CFLAGS += -DNVODM_BOARD_IS_SIMULATION=1
+
+LOCAL_SRC_FILES += nvbct_private_ap20.c
+LOCAL_SRC_FILES += nvbit_private_ap20.c
+LOCAL_SRC_FILES += nvbct_private_t30.c
+LOCAL_SRC_FILES += nvbit_private_t30.c
+LOCAL_SRC_FILES += nvbct.c
+LOCAL_SRC_FILES += nvbit.c
+LOCAL_SRC_FILES += nvfuse.c
+LOCAL_SRC_FILES += nvfuse_ap20.c
+LOCAL_SRC_FILES += nvfuse_t30.c
+include $(NVIDIA_HOST_STATIC_LIBRARY)

@@ -1,0 +1,10 @@
+config.s.serviceID: 5EB638A8-D9AF-48f5-B79F-AFD42EC165A1
+config.s.lazy_instantiation: true
+config.s.multi_instance: false
+config.s.multi_session: true
+config.s.multi_command: true
+config.s.default_stack_size: 1024
+config.s.heap_size: 4096
+smx.name: SERVICE DATE B
+smx.vendor: Trusted Logic S.A.
+smx.description: An example of secure date

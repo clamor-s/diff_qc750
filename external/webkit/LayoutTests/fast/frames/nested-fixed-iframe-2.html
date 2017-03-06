@@ -1,0 +1,46 @@
+<html>
+<head>
+<title>Test nested position:fixed IFRAMEs with implicit fixed position</title>
+<style type="text/css">
+body {
+    margin: 0;
+    height: 1000px;
+}
+div.d {
+    position: relative;
+    top: 110px; /* scroll pos + iframe green rect */
+    left: 10px;
+    width: 50px;
+    height: 50px;
+    background-color: red;
+}
+iframe.d {
+    position: fixed;
+    /* implicitly positioned at top: height of div.container */
+    width: 500px;
+    height: 200px;
+    border: none;
+}
+</style>
+</head>
+<body>
+<!--You shouldn't see any red -->
+<div class="d"></div>
+<iframe class="d" src="resources/nested-fixed-iframe-contents.html" scrolling="yes"></iframe>
+
+<script type="text/javascript">
+if (window.layoutTestController) {
+    layoutTestController.dumpAsText(true);
+    layoutTestController.waitUntilDone();
+}
+setTimeout(function() {
+    window.scrollTo(0,150);
+    window.scrollTo(0, 50);
+    document.getElementsByTagName("iframe")[0].contentWindow.scrollTo(0, 50);
+    if (window.layoutTestController) {
+        layoutTestController.notifyDone();
+    }
+}, 10);
+</script>
+</body>
+</html>

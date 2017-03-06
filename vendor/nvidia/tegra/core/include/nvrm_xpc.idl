@@ -1,0 +1,170 @@
+/*
+ * Copyright (c) 2007 NVIDIA Corporation.  All rights reserved.
+ *
+ * NVIDIA Corporation and its licensors retain all intellectual property
+ * and proprietary rights in and to this software, related documentation
+ * and any modifications thereto.  Any use, reproduction, disclosure or
+ * distribution of this software and related documentation without an express
+ * license agreement from NVIDIA Corporation is strictly prohibited.
+ */
+
+/!
+
+/** 
+ * @file
+ * @brief <b>NVIDIA Driver Development Kit: 
+ *           Cross Processor Communication driver </b>
+ *
+ * @b Description: Defines the interface to the Rm XPC.
+ * 
+ */
+
+
+/**
+ * @defgroup rm_xpc RM Cross processor communication mechanism API
+ * 
+ * This is the cross communication API to communicate between the two processor. 
+ * One of the processor is self one on which this code is running. The other 
+ * processor can be selected when creating the xpc message handle.
+ *
+ * This will be used to send and receive message between the processor.
+ *
+ * This interface only transmit/receive the message to/from target processor and 
+ * does not add any protocols on the message to identify the details of the 
+ * message.
+ *
+ * This interface also supports cross processor synchronization via the
+ * ModuleAcquire/ModuleRelease APIs that use arbitration semaphores.
+ *
+ * @ingroup nvddk_rm
+ * @{
+ *
+ */
+!/
+
+import nvrm_init.idl;
+import nvrm.idl;
+import nvrm_module.idl;
+
+package NvRm;
+
+
+interface nvrm_xpc
+{
+
+/!
+#include "nvcommon.h"
+#include "nvos.h"
+#include "nvrm_init.h"
+#include "nvrm_interrupt.h"
+!/
+
+/!
+/** 
+ * @brief 16 Byte allignment for the shared memory message transfer.
+ */
+!/
+enum Xpc_Alignment
+{ 
+    XPC_MESSAGE_ALIGNMENT_SIZE = 0x10,
+}
+
+/!
+/**
+ * NvRmPrivXpcMessageHandle is an opaque handle to NvRmPrivXpcMessage.
+ * 
+ * @ingroup nvrm_xpc
+ */
+!/
+handle NvRmPrivXpcMessageHandle;
+
+/!
+/**
+ * Create the xpc message handles for sending/receiving the message to/from 
+ * target processor.
+ * This function allocates the memory (from multiprocessor shared memory 
+ * region) and os resources for the message transfer and synchrnoisation.
+ *
+ * @see NvRmPrivXpcSendMessage()
+ * @see NvRmPrivXpcGetMessage()
+ *
+ * @param hDevice Handle to the Rm device which is required by Ddk to acquire 
+ * the resources from RM.
+ * @param phXpcMessage Pointer to the handle to Xpc message where created 
+ * Xpc message handle is stored.
+ *
+ * @retval NvSuccess Indicates the message queue is successfully created.
+ * @retval NvError_BadValue The parameter passed are incorrect.
+ * @retval NvError_InsufficientMemory Indicates that function fails to allocate the 
+ * memory for message queue.
+ * @retval NvError_MemoryMapFailed Indicates that the memory mapping for xpc 
+ * controller register failed.
+ * @retval NvError_NotSupported Indicates that the requested operation is not 
+ * supported for the given target processor/Instance.
+ * 
+ */
+ !/
+NvError 
+NvRmPrivXpcCreate(
+    [in] NvRmDeviceHandle hDevice,
+    [out] NvRmPrivXpcMessageHandle *phXpcMessage);
+
+/!
+/**
+ * Destroy the created Xpc message handle. This frees all the resources
+ * allocated for the xpc message handle.
+ *
+ * @note After calling this function client will not able to  send/receive any 
+ * message.
+ *
+ * @see NvRmPrivXpcMessageCreate()
+ *
+ * @param hXpcMessage Xpc message queue handle which need to be destroy. 
+ * This cas created when function NvRmPrivXpcMessageCreate() was called.
+ *
+ */
+!/
+void NvRmPrivXpcDestroy([in] NvRmPrivXpcMessageHandle hXpcMessage);
+
+
+NvError
+NvRmPrivXpcSendMessage([in] NvRmPrivXpcMessageHandle hXpcMessage, 
+                       [in] NvU32 data);
+
+NvU32
+NvRmPrivXpcGetMessage([in] NvRmPrivXpcMessageHandle hXpcMessage);
+
+
+/!
+/**
+ * Initializes the Arbitration semaphore system for cross processor synchronization.
+ *
+ * @param hDevice The RM handle.
+ *
+ * @retval "NvError_IrqRegistrationFailed" if interupt is already registred.
+ * @retval "NvSuccess" if successfull.
+ */
+!/
+NvError NvRmXpcInitArbSemaSystem( [in] NvRmDeviceHandle hDevice );
+
+
+/!
+/**
+ * Tries to obtain a hw arbitration semaphore. This API is used to
+ * synchronize access to hw blocks across processors.
+ *
+ * @param modId The module that we need to cross-processor safe access to.
+ */
+!/
+void NvRmXpcModuleAcquire([in] NvRmModuleID modId);
+
+/!
+/**
+ * Releases the arbitration semaphore corresponding to the given module id.
+ *
+ * @param modId The module that we are releasing.
+ */
+!/
+void NvRmXpcModuleRelease([in] NvRmModuleID modId);
+
+} // interface

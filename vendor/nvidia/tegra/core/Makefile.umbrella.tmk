@@ -1,0 +1,75 @@
+################################### tell Emacs this is a -*- makefile-gmake -*-
+#
+# Copyright (c) 2011-2012, NVIDIA CORPORATION.  All Rights Reserved.
+#
+# NVIDIA CORPORATION and its licensors retain all intellectual property
+# and proprietary rights in and to this software, related documentation
+# and any modifications thereto.  Any use, reproduction, disclosure or
+# distribution of this software and related documentation without an express
+# license agreement from NVIDIA CORPORATION is strictly prohibited.
+#
+# tmake for SW Mobile
+#
+# Repository umbrella makefile fragment for "core"
+#
+###############################################################################
+#
+# Build tools in this repository
+#
+NV_REPOSITORY_BUILD_TOOLS := \
+	utils/nvidl
+#
+# Components in this repository
+#
+NV_REPOSITORY_COMPONENTS := \
+	drivers/nvtestio \
+	drivers/nvddk/disp \
+	drivers/nvrm/graphics \
+	drivers/nvrm/nvrmkernel \
+	drivers/nvodm/disp \
+	drivers/nvodm/misc \
+	drivers/nvodm/dtvtuner \
+	drivers/nvodm/query \
+	mobile_linux/daemons/nv_hciattach \
+	utils/aes_keysched_lock \
+	utils/nvos \
+	utils/nvapputil \
+	utils/nvtestresults
+
+#
+# Platform specific components in this repository
+#
+ifeq ($(NV_BUILD_CONFIGURATION_IS_ANDROID),1)
+NV_REPOSITORY_COMPONENTS += \
+	drivers/libnvdc \
+	utils/nvos/cplconnectclient \
+	utils/tegrastats
+else
+# L4T
+NV_REPOSITORY_COMPONENTS += \
+	drivers/nvddk/blockdev \
+	drivers/nvddk/kbc \
+	drivers/nvddk/nand \
+	drivers/nvddk/sdio \
+	drivers/nvddk/se \
+	drivers/nvddk/snor \
+	drivers/nvddk/spi_flash \
+	drivers/nvddk/usb
+
+ifeq ($(NV_BUILD_CONFIGURATION_IS_QNX),1)
+NV_REPOSITORY_COMPONENTS += \
+	drivers/libnvdc/qnx
+else
+NV_REPOSITORY_COMPONENTS += \
+	drivers/libnvdc \
+	mobile_linux/daemons/nvrm/idlhelper \
+	utils/ad1937 \
+	utils/tegrastats
+endif
+endif
+
+# Local Variables:
+# indent-tabs-mode: t
+# tab-width: 8
+# End:
+# vi: set tabstop=8 noexpandtab:

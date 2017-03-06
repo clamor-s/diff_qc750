@@ -1,0 +1,58 @@
+<html>
+<head>
+<meta name="viewport" content="width=480"/>
+<style>
+div {
+  margin: 10px;
+  height: 800px;
+  -webkit-transform: translateZ(0px);
+  border: 1px dashed black;
+}
+.fixed {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  height: 100px;
+  border: 1px dashed gray;
+}
+</style>
+</head>
+<body>
+<p style="float:right">find this floating right
+<div>
+<p>find this in first div
+<p>find this in first div
+<p>find this in first div
+</div>
+<div>
+<p>find this in second div
+<p>find this in second div
+<p>find this in second div
+<P>find this in second div
+</div>
+<div class="fixed">
+find this in fixed layer
+</div>
+<script>
+if (window.layoutTestController) {
+    layoutTestController.dumpAsText(true);
+    layoutTestController.waitUntilDone();
+}
+
+window.onload = function() {
+    // Wait for a while, otherwise rects won't be in correct place.
+    window.setTimeout(function() {
+        layoutTestController.showFindDialog("find");
+        layoutTestController.findNext(true);
+        layoutTestController.findNext(true);
+        layoutTestController.findNext(true);
+        layoutTestController.findNext(true);
+        layoutTestController.findNext(true);
+        window.setTimeout(function() {
+            layoutTestController.notifyDone();
+        }, 400);
+    }, 100);
+};
+</script>
+</body>
+</html>

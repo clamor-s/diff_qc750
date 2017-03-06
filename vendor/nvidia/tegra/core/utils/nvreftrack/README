@@ -1,0 +1,112 @@
+
+NVREFTRACK README
+Document last updated 8/31/2009
+ahatala@nvidia.com
+
+-------------------------------------------------------------------------------
+ Overview
+-------------------------------------------------------------------------------
+
+Nvreftrack is a very simple and small utility database for keeping
+track of driver object handles owned by a usermode process. The
+motivation for maintaining the database is solely so that on an
+abnormal process exit the driver can iterate over the references owned
+by the just-terminated process and free them. The ability to do this
+does not mean that the usermode part of the driver should not do
+proper cleanup when possible; it is expected that on a successful
+normal process exit the usermode driver has freed all references to
+driver objects and therefore the nvreftrack database for that process
+should be empty.
+
+Note that libnvreftrack is a static library. You are supposed to link it
+statically into drivers that use it. The final binary size should be around
+a couple of kilobytes, so it makes no sense whatsoever to turn this into
+a dynamically loaded library.
+
+-------------------------------------------------------------------------------
+ Making use of nvreftrack
+-------------------------------------------------------------------------------
+
+Nvreftrack itself is driver agnostic. It doesn't automatically solve
+anything, the driver author has to actively participate in making use
+of it.
+
+Nvreftack is intended to be used with the NVIDL code generation
+utility. It is possible to use the database component alone in
+handwritten driver code as well, but as all NVIDIA mobile drivers that
+require usermode-to-kernel or usermode-to-daemon transitions are
+expected to use IDL interfaces this documentation only describes that
+scenario.
+
+The process of harnessing nvreftrack is roughly:
+
+1. Identify client references to handles in your driver (IDL)
+   interface and introduce the handle types to nvreftrack.
+
+   Nvreftrack only tracks handles, so you have to make sure that all
+   driver object reference adds and deletes (object creation and
+   destruction being the most typical case) pass handles correctly. If
+   you have followed sane API design guidelines this should be the
+   case already. If not, you'll have to update the API to correctly
+   pass handles.
+
+   Introduce the handle types you want to track to nvreftrack by
+   creating an enumeration of your driver handles in nvreftrack.h.
+   Note the naming convention of the enumeration documented in the
+   header file.
+
+   For example:
+
+   typedef enum
+   {
+       NvRtObjType_NvRm_NvRmMemHandle = 0,
+       NvRtObjType_NvRm_Num,
+       NvRtObjType_NvRm_ForceWord = 0x7FFFFFFF
+   } NvRtObjType_NvRm;
+
+   The package "NvRm" only has a single handle type, NvRmMemHandle,
+   that we want to track.
+
+2. Add hints for reference adds and deletes to your IDL description.
+
+   Here's a simple example of a client reference add (in
+   nvrm_memmgr.idl):
+
+   NvError NvRmMemHandleCreate(
+    [in] NvRmDeviceHandle hDevice,
+    [out] NvRmMemHandle phMem,
+    [in] NvU32 Size);
+
+   The function creates a NvRmMemHandle (and therefore adds a single
+   reference to the NvRmMemHandle object from the client). It returns
+   the newly created handle as parameter phMem. We want to tell the
+   IDL dispatcher generator to create code for adding a reference to
+   this handle into the nvreftrack database. This is done via the
+   'refadd' modifier to the function parameter, like this:
+
+   NvError NvRmMemHandleCreate(
+    [in] NvRmDeviceHandle hDevice,
+    [out, refadd] NvRmMemHandle phMem,
+    [in] NvU32 Size);
+
+   Similarly for reference deletions you add the 'refdel' modifier:
+
+   void NvRmMemHandleFree([in, refdel] NvRmMemHandle hMem);
+
+3. Setup the reference database in your driver context, register and
+   unregister clients and pass the required info into your driver's
+   master dispatch function.
+
+   See drivers/wince/nvrm/nvrm_wince/nvrm_wince_osdriver.c for an
+   example.
+
+4. Upon client termination, iterate over client references and
+   implement freeing the leaked handles.
+
+   See drivers/wince/nvrm/nvrm_wince/nvrm_wince_osdriver.c for an
+   example.
+
+5. Use the 'killer' test utility to check that no driver resources
+   are leaked on abnormal process termination.
+
+   See tests/nvreftrack/killer for documentation.

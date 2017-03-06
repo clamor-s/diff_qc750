@@ -1,0 +1,103 @@
+TOPDIR := ../..
+include $(TEGRA_TOP)/core-private/make/Makefile.defs
+
+ifneq ($(NO_SRC_MODULES),1)
+  ifneq ($(shell ls -d $(TARGET_BOARD_DIR)),)
+    SUBDIRS += $(TARGET_BOARD_DIR)/odm_kit/query
+  endif
+  ifneq ($(NVODMDIR_ODM_ADDITIONAL_DIRS),)
+    SUBDIRS += $(addprefix $(TEGRA_TOP)/core/,$(NVODMDIR_ODM_ADDITIONAL_DIRS))
+  endif
+  ifneq ($(NVODMDIR_ODM_AUDIOCODEC),)
+    SUBDIRS += $(NVODMDIR_ODM_AUDIOCODEC)
+  endif
+  ifneq ($(NVODMDIR_ODM_DISPLAY),)
+    SUBDIRS += $(NVODMDIR_ODM_DISPLAY)
+  endif
+  ifneq ($(NVODMDIR_ODM_PMU),)
+    SUBDIRS += $(NVODMDIR_ODM_PMU)
+  endif
+  ifneq ($(NVODMDIR_ODM_FUELGAUGEFWUPGRADE),)
+    SUBDIRS += $(NVODMDIR_ODM_FUELGAUGEFWUPGRADE)
+  endif
+  ifneq ($(NVODMDIR_ODM_GPIO_EXT),)
+    SUBDIRS += $(NVODMDIR_ODM_GPIO_EXT)
+  endif
+  ifneq ($(NVODMDIR_ODM_USB_MUX),)
+    SUBDIRS += $(NVODMDIR_ODM_USB_MUX)
+  endif
+  ifneq ($(NVODMDIR_ODM_MISC),)
+    SUBDIRS += $(NVODMDIR_ODM_MISC)
+  endif
+  ifneq ($(NVODMDIR_ODM_DTVTUNER),)
+    SUBDIRS += $(NVODMDIR_ODM_DTVTUNER)
+  endif
+  ifneq ($(NVCAMERA_SUPPORTED),0)
+    ifneq ($(NVODMDIR_ODM_IMAGER),)
+      SUBDIRS += $(NVODMDIR_ODM_IMAGER)
+    endif
+  endif
+  ifneq ($(NVODMDIR_ODM_ACCEL),)
+    SUBDIRS += $(NVODMDIR_ODM_ACCEL)
+  endif
+  ifneq ($(NVODMDIR_ODM_TOUCH),)
+    SUBDIRS += $(NVODMDIR_ODM_TOUCH)
+  endif
+  ifneq ($(NVODMDIR_ODM_SCROLLWHEEL),)
+    SUBDIRS += $(NVODMDIR_ODM_SCROLLWHEEL)
+  endif
+  ifneq ($(NVODMDIR_ODM_VIBRATE),)
+    SUBDIRS += $(NVODMDIR_ODM_VIBRATE)
+  endif
+  ifneq ($(NVODMDIR_ODM_KEYBOARD),)
+    SUBDIRS += $(NVODMDIR_ODM_KEYBOARD)
+  endif
+  ifneq ($(NVODMDIR_ODM_OTA),)
+    SUBDIRS += $(NVODMDIR_ODM_OTA)
+  endif
+  ifneq ($(NVODMDIR_ODM_MOUSE),)
+    SUBDIRS += $(NVODMDIR_ODM_MOUSE)
+  endif
+  ifneq ($(NVODMDIR_ODM_NLED),)
+    ifneq ($(TARGET_OS),linux)
+      SUBDIRS += $(NVODMDIR_ODM_NLED)
+    endif
+  endif
+  ifneq ($(NVODMDIR_ODM_TMON),)
+    SUBDIRS += $(NVODMDIR_ODM_TMON)
+  endif
+  ifneq ($(NVODMDIR_ODM_CHARGING),)
+    SUBDIRS += $(NVODMDIR_ODM_CHARGING)
+  endif
+  ifneq ($(NVODMDIR_ODM_KBDLAYOUT),)
+      SUBDIRS += $(NVODMDIR_ODM_KBDLAYOUT)
+  endif
+  ifneq ($(NVODMDIR_ODM_KBCMAPPING),)
+      SUBDIRS += $(NVODMDIR_ODM_KBCMAPPING)
+  endif
+
+  ifneq ($(NVODMDIR_ODM_BATTERY),)
+    SUBDIRS += $(NVODMDIR_ODM_BATTERY)
+  endif
+
+  ifneq ($(NVODMDIR_ODM_POWERKEYS),)
+    SUBDIRS += $(NVODMDIR_ODM_POWERKEYS)
+  endif
+  ifneq ($(NVODMDIR_ODM_EXTFSMGR_LINUX),)
+    ifneq (,$(filter $(TARGET_OS)-$(TARGET_OS_SUBTYPE),eabi-aos linux-aos rvds-rvds))
+      SUBDIRS += $(NVODMDIR_ODM_EXTFSMGR_LINUX)
+    endif
+  endif
+  ifneq ($(NVODMDIR_ODM_EXTFS_LINUX),)
+    ifneq (,$(filter $(TARGET_OS)-$(TARGET_OS_SUBTYPE),eabi-aos linux-aos rvds-rvds))
+      SUBDIRS += $(NVODMDIR_ODM_EXTFS_LINUX)
+    endif
+  endif
+  ifneq ($(NVODMDIR_ODM_HDMI),)
+    ifeq (,$(filter $(strip $(TARGET_OS)),rvds eabi))
+      SUBDIRS += $(NVODMDIR_ODM_HDMI)
+    endif
+  endif
+endif
+
+include $(TEGRA_TOP)/core-private//make/Makefile.rules

@@ -1,0 +1,107 @@
+################################### tell Emacs this is a -*- makefile-gmake -*-
+#
+# Copyright (c) 2012, NVIDIA CORPORATION.  All rights reserved.
+#
+# NVIDIA CORPORATION and its licensors retain all intellectual property
+# and proprietary rights in and to this software, related documentation
+# and any modifications thereto.  Any use, reproduction, disclosure or
+# distribution of this software and related documentation without an express
+# license agreement from NVIDIA CORPORATION is strictly prohibited.
+#
+# tmake for SW Mobile component makefile
+#
+# microboot
+#
+###############################################################################
+#
+# Sanity checks: board & SoC
+#
+$(call NV_BUILD_VARIABLES_SANITY_CHECK, NV_TARGET_SOC)
+
+ifdef NV_COMPONENT_FLAG_STATIC_EXECUTABLE_SECTION
+
+include $(NV_BUILD_START_COMPONENT)
+
+NV_COMPONENT_NAME     := microboot
+NV_COMPONENT_MAP_FILE := $(NV_COMPONENT_NAME).map
+NV_COMPONENT_SOURCES  := microboot.c
+
+NV_COMPONENT_HAS_BROKEN_CODE := ignore-all
+
+NV_COMPONENT_INCLUDES  := \
+	../../utils/nvos/aos
+
+NVBOOT_DRIVER_ROOT    := \
+	$(NV_SOURCE)/core-private/drivers/nvboot/$(NV_TARGET_SOC)
+
+NV_COMPONENT_NEEDED_HEADER_INTERFACE_DIRS := \
+	../../drivers/nvrm
+
+NV_COMPONENT_NEEDED_STATIC_INTERFACE_DIRS := \
+	../nvbct \
+	../../drivers/nvodm/services \
+	../../utils/nvos/aos/avp \
+	../../utils/nvos/aos/libgcc \
+	$(NV_SOURCE)/core-private/system/microboot \
+	$(NVBOOT_DRIVER_ROOT)/clocks \
+	$(NVBOOT_DRIVER_ROOT)/fuse \
+	$(NVBOOT_DRIVER_ROOT)/nand \
+	$(NVBOOT_DRIVER_ROOT)/pads \
+	$(NVBOOT_DRIVER_ROOT)/pmc \
+	$(NVBOOT_DRIVER_ROOT)/reset \
+	$(NVBOOT_DRIVER_ROOT)/sdram \
+	$(NVBOOT_DRIVER_ROOT)/spi_flash \
+	$(NVBOOT_DRIVER_ROOT)/util \
+	../../drivers/nvavp/uart
+
+# C startup code provided by utils/nvos/aos/nvap/nvos_aos_gcc.c
+NV_COMPONENT_FLAG_C_INIT_PROVIDED_BY_NVOS := 1
+
+#
+# Board specific components
+#
+NV_COMPONENT_ODM_STATIC       := \
+	pmu \
+	query \
+	tmon
+# microboot doesn't wholly link in any ODM components
+NV_COMPONENT_ODM_WHOLE_STATIC :=
+include $(NV_SOURCE)/customers/nvidia-partner/Makefile.odm.tmk
+
+ifneq ($(filter ap20, $(NV_TARGET_SOC)),)
+NV_COMPONENT_CFLAGS       += \
+	-DNV_AOS_ENTRY_POINT=0x00108000
+NV_COMPONENT_NEEDED_STATIC_INTERFACE_DIRS += \
+	$(NV_SOURCE)/core-private/utils/aes_keysched_lock
+else
+NV_COMPONENT_CFLAGS       += \
+	-DNV_AOS_ENTRY_POINT=0x80108000
+ifeq ($(NV_TARGET_BOOTLOADER_PINMUX),kernel)
+NV_COMPONENT_CFLAGS += -DSET_KERNEL_PINMUX
+endif
+
+NV_COMPONENT_NEEDED_STATIC_INTERFACE_DIRS += \
+	$(NVBOOT_DRIVER_ROOT)/ahb \
+	$(NVBOOT_DRIVER_ROOT)/irom_patch
+endif
+ifneq ($(filter t30, $(NV_TARGET_SOC)),)
+	NV_COMPONENT_NEEDED_STATIC_INTERFACE_DIRS += \
+	$(NV_SOURCE)/core/utils/aes_keysched_lock
+endif
+NV_COMPONENT_SCATTER_FILE := $(NV_TARGET_SOC)/microboot.x
+
+build:: $(NV_COMPONENT_NAME).bin
+
+$(NV_COMPONENT_NAME).bin: $(NV_COMPONENT_NAME)$(STATIC_EXECUTABLE_SUFFIX)
+	$(call NV_BUILD_MACRO_ELF2BIN) -R USB_BUFFER1 -R HEAP_START -R USB_BUFFER2 -R .stack
+
+NV_COMPONENT_FLAG_SYSTEMIMAGE_SKIP := 1
+
+include $(NV_BUILD_STATIC_EXECUTABLE)
+endif
+
+# Local Variables:
+# indent-tabs-mode: t
+# tab-width: 8
+# End:
+# vi: set tabstop=8 noexpandtab:

@@ -1,0 +1,106 @@
+{|border="1" cellspacing="0"
+|-
+| style="background:#c0c0f0" align = "center" | '''Board'''
+| style="background:#c0c0f0" align = "center" | '''Osc'''
+| style="background:#c0c0f0" align = "center" | '''Mem Type'''
+| style="background:#c0c0f0" align = "center" | '''Mem Part'''
+| style="background:#c0c0f0" align = "center" | '''Mem Clk'''
+| style="background:#c0c0f0" align = "center" | '''Mem Size'''
+| style="background:#c0c0f0" align = "center" | '''Boot Dev Type'''
+| style="background:#c0c0f0" align = "center" | '''Boot Dev Part'''
+| style="background:#c0c0f0" align = "center" | '''Download'''
+| style="background:#c0c0f0" align = "center" | '''Updated'''
+| style="background:#c0c0f0" align = "center" | '''Notes'''
+|-
+| Whistler A02p Pop || 12MHz || LPDDR2 || EDB4032B1PB6DF || 333MHZ || 512MB || eMMC x4 || THGBM1G6D4EBAI4 || <P4>p4sw:2006//sw/mobile/main/customers/nvidia/whistler/nvflash/whistler_a02p_pop_12MHz_EDB4032B1PB6DF_333Mhz_512MB_emmc_THGBM1G6D4EBAI4.bct | BCT </P4> <P4>p4sw:2006//sw/mobile/main/customers/nvidia/whistler/nvflash/whistler_a02p_pop_12MHz_EDB4032B1PB6DF_333Mhz_512MB_emmc_THGBM1G6D4EBAI4.cfg | CFG </P4> || CL6011367 2010/05/04 || Standard BCT for SW.
+|-
+| Whistler A02p Pop || 12MHz || LPDDR2 || EDB4032B1PB6DF || 333MHZ || 512MB || eMMC x8 || THGBM1G6D4EBAI4 || <P4>p4sw:2006//sw/mobile/main/customers/nvidia/whistler/nvflash/whistler_a02p_pop_12MHz_EDB4032B1PB6DF_333Mhz_512MB_emmc_THGBM1G6D4EBAI4_x8.bct | BCT </P4> <P4>p4sw:2006//sw/mobile/main/customers/nvidia/whistler/nvflash/whistler_a02p_pop_12MHz_EDB4032B1PB6DF_333Mhz_512MB_emmc_THGBM1G6D4EBAI4_x8.cfg | CFG </P4> || CL6011367 2010/05/04 || Standard BCT for SW.
+|-
+| Whistler A02p Pop || 12MHz || LPDDR2 || EDB4032B1PB6DF || 333MHZ || 512MB || NAND x8 || K5E2G16ACM-D060 || <P4>p4sw:2006//sw/mobile/main/customers/nvidia/whistler/nvflash/whistler_a02p_pop_12MHz_EDB4032B1PB6DF_333Mhz_512MB_2K8Nand_K5E2G16ACM-D060.bct | BCT </P4> <P4>p4sw:2006//sw/mobile/main/customers/nvidia/whistler/nvflash/whistler_a02p_pop_12MHz_EDB4032B1PB6DF_333Mhz_512MB_2K8Nand_K5E2G16ACM-D060.cfg | CFG </P4> || CL5678620 2010/03/21 || Standard BCT for SW.
+|-
+| Whistler A02 || 12Mhz || DDR2 || H5PS1G63EFR || 333MHZ || 512MB || eMMC x4 || THGBM1G6D4EBAI4 || <P4>p4sw:2006//sw/mobile/main/customers/nvidia/whistler/nvflash/whistler_a02_12Mhz_H5PS1G63EFR_333Mhz_512MB_emmc_THGBM1G6D4EBAI4.bct | BCT </P4> <P4>p4sw:2006//sw/mobile/main/customers/nvidia/whistler/nvflash/whistler_a02_12Mhz_H5PS1G63EFR_333Mhz_512MB_emmc_THGBM1G6D4EBAI4.cfg | CFG </P4> || CL6011367 2010/05/04 || Tested across PVT. Standard BCT for SW.
+|-
+| Whistler A02 || 12Mhz || DDR2 || H5PS1G63EFR || 333MHZ || 512MB || eMMC x8 || THGBM1G6D4EBAI4 || <P4>p4sw:2006//sw/mobile/main/customers/nvidia/whistler/nvflash/whistler_a02_12Mhz_H5PS1G63EFR_333Mhz_512MB_emmc_THGBM1G6D4EBAI4_x8.bct | BCT </P4> <P4>p4sw:2006//sw/mobile/main/customers/nvidia/whistler/nvflash/whistler_a02_12Mhz_H5PS1G63EFR_333Mhz_512MB_emmc_THGBM1G6D4EBAI4_x8.cfg | CFG </P4> || CL6011367 2010/05/04 || Tested across PVT. Standard BCT for SW.
+|-
+| Whistler A02 || 12Mhz || DDR2 || H5PS1G63EFR || 333MHZ || 512MB || NAND x8 || K5E2G16ACM-D060 || <P4>p4sw:2006//sw/mobile/main/customers/nvidia/whistler/nvflash/whistler_a02_12Mhz_H5PS1G63EFR_333Mhz_512MB_2K8Nand_K5E2G16ACM-D060.bct | BCT </P4> <P4>p4sw:2006//sw/mobile/main/customers/nvidia/whistler/nvflash/whistler_a02_12Mhz_H5PS1G63EFR_333Mhz_512MB_2K8Nand_K5E2G16ACM-D060.cfg | CFG </P4> || CL5424360 2010/02/03 || Tested across PVT. Standard BCT for SW.
+|-
+| Whistler A02p Pop || 12Mhz || LPDDR2 || H5LD1G23MFR-S6 || 300MHZ || 256MB || eMMC x4 || THGBM1G6D4EBAI4 || <P4>p4sw:2006//sw/mobile/main/customers/nvidia/whistler/nvflash/whistler_a02p_pop_12Mhz_H5LD1G23MFR-S6_300Mhz_256MB_emmc_THGBM1G6D4EBAI4.bct | BCT </P4> <P4>p4sw:2006//sw/mobile/main/customers/nvidia/whistler/nvflash/whistler_a02p_pop_12Mhz_H5LD1G23MFR-S6_300Mhz_256MB_emmc_THGBM1G6D4EBAI4.cfg | CFG </P4> || CL6011367 2010/05/04 || Tested across PVT. Standard BCT for SW. Hynix LPDDR2.
+|-
+| Whistler A02p Pop || 12Mhz || LPDDR2 || H5LD1G23MFR-S6 || 300MHZ || 256MB || eMMC x8 || THGBM1G6D4EBAI4 || <P4>p4sw:2006//sw/mobile/main/customers/nvidia/whistler/nvflash/whistler_a02p_pop_12Mhz_H5LD1G23MFR-S6_300Mhz_256MB_emmc_THGBM1G6D4EBAI4_x8.bct | BCT </P4> <P4>p4sw:2006//sw/mobile/main/customers/nvidia/whistler/nvflash/whistler_a02p_pop_12Mhz_H5LD1G23MFR-S6_300Mhz_256MB_emmc_THGBM1G6D4EBAI4_x8.cfg | CFG </P4> || CL6011367 2010/05/04 || Tested across PVT. Standard BCT for SW. Hynix LPDDR2.
+|-
+| Whistler A02p Pop || 12Mhz || LPDDR2 || H5LD1G23MFR-S6 || 300MHZ || 256MB || NAND x8 || K5E2G16ACM-D060 || <P4>p4sw:2006//sw/mobile/main/customers/nvidia/whistler/nvflash/whistler_a02p_pop_12Mhz_H5LD1G23MFR-S6_300Mhz_256MB_2K8Nand_K5E2G16ACM-D060.bct | BCT </P4> <P4>p4sw:2006//sw/mobile/main/customers/nvidia/whistler/nvflash/whistler_a02p_pop_12Mhz_H5LD1G23MFR-S6_300Mhz_256MB_2K8Nand_K5E2G16ACM-D060.cfg | CFG </P4> || CL5424360 2010/02/03 || Tested across PVT. Standard BCT for SW. Hynix LPDDR2.
+|-
+| Whistler || 12Mhz || LPDDR2 || H8TBR00Q0MLR-0DM || 300MHZ || 256MB || NAND x8 || K9LBG08U0M-PCB0 || <P4>p4sw:2006//sw/mobile/main/customers/nvidia/whistler/nvflash/whistler_12Mhz_H8TBR00Q0MLR-0DM_300Mhz_256MB_4K8Nand_K9LBG08U0M-PCB0.bct | BCT </P4> <P4>p4sw:2006//sw/mobile/main/customers/nvidia/whistler/nvflash/whistler_12Mhz_H8TBR00Q0MLR-0DM_300Mhz_256MB_4K8Nand_K9LBG08U0M-PCB0.cfg | CFG </P4> || CL5424360 2010/02/03 || 4K page NAND
+|-
+| Whistler || 12Mhz || DDR2 || H5PS1G63EFR || 150MHZ || 512MB || eMMC x4 || THGBM1G6D4EBAI4 || <P4>p4sw:2006//sw/mobile/main/customers/nvidia/whistler/nvflash/whistler_12Mhz_H5PS1G63EFR_150Mhz_512MB_emmc_THGBM1G6D4EBAI4.bct | BCT </P4> <P4>p4sw:2006//sw/mobile/main/customers/nvidia/whistler/nvflash/whistler_12Mhz_H5PS1G63EFR_150Mhz_512MB_emmc_THGBM1G6D4EBAI4.cfg | CFG </P4> || CL6011367 2010/05/04 || 
+|-
+| Whistler || 12Mhz || DDR2 || H5PS1G63EFR || 150MHZ || 512MB || eMMC x8 || THGBM1G6D4EBAI4 || <P4>p4sw:2006//sw/mobile/main/customers/nvidia/whistler/nvflash/whistler_12Mhz_H5PS1G63EFR_150Mhz_512MB_emmc_THGBM1G6D4EBAI4_x8.bct | BCT </P4> <P4>p4sw:2006//sw/mobile/main/customers/nvidia/whistler/nvflash/whistler_12Mhz_H5PS1G63EFR_150Mhz_512MB_emmc_THGBM1G6D4EBAI4_x8.cfg | CFG </P4> || CL6011367 2010/05/04 || 
+|-
+| Whistler || 12Mhz || DDR2 || H5PS1G63EFR || 150MHZ || 512MB || NAND x8 || K5E2G16ACM-D060 || <P4>p4sw:2006//sw/mobile/main/customers/nvidia/whistler/nvflash/whistler_12Mhz_H5PS1G63EFR_150Mhz_512MB_2K8Nand_K5E2G16ACM-D060.bct | BCT </P4> <P4>p4sw:2006//sw/mobile/main/customers/nvidia/whistler/nvflash/whistler_12Mhz_H5PS1G63EFR_150Mhz_512MB_2K8Nand_K5E2G16ACM-D060.cfg | CFG </P4> || CL5424360 2010/02/03 || 
+|-
+| Whistler || 12Mhz || DDR2 || H5PS1G63EFR || 200MHZ || 512MB || eMMC x4 || THGBM1G6D4EBAI4 || <P4>p4sw:2006//sw/mobile/main/customers/nvidia/whistler/nvflash/whistler_12Mhz_H5PS1G63EFR_200Mhz_512MB_emmc_THGBM1G6D4EBAI4.bct | BCT </P4> <P4>p4sw:2006//sw/mobile/main/customers/nvidia/whistler/nvflash/whistler_12Mhz_H5PS1G63EFR_200Mhz_512MB_emmc_THGBM1G6D4EBAI4.cfg | CFG </P4> || CL6011367 2010/05/04 || 
+|-
+| Whistler || 12Mhz || DDR2 || H5PS1G63EFR || 200MHZ || 512MB || eMMC x8 || THGBM1G6D4EBAI4 || <P4>p4sw:2006//sw/mobile/main/customers/nvidia/whistler/nvflash/whistler_12Mhz_H5PS1G63EFR_200Mhz_512MB_emmc_THGBM1G6D4EBAI4_x8.bct | BCT </P4> <P4>p4sw:2006//sw/mobile/main/customers/nvidia/whistler/nvflash/whistler_12Mhz_H5PS1G63EFR_200Mhz_512MB_emmc_THGBM1G6D4EBAI4_x8.cfg | CFG </P4> || CL6011367 2010/05/04 || 
+|-
+| Whistler || 12Mhz || DDR2 || H5PS1G63EFR || 200MHZ || 512MB || NAND x8 || K5E2G16ACM-D060 || <P4>p4sw:2006//sw/mobile/main/customers/nvidia/whistler/nvflash/whistler_12Mhz_H5PS1G63EFR_200Mhz_512MB_2K8Nand_K5E2G16ACM-D060.bct | BCT </P4> <P4>p4sw:2006//sw/mobile/main/customers/nvidia/whistler/nvflash/whistler_12Mhz_H5PS1G63EFR_200Mhz_512MB_2K8Nand_K5E2G16ACM-D060.cfg | CFG </P4> || CL5424360 2010/02/03 || 
+|-
+| Whistler || 12Mhz || DDR2 || H5PS1G63EFR || 333MHZ || 512MB || eMMC x4 || THGBM1G6D4EBAI4 || <P4>p4sw:2006//sw/mobile/main/customers/nvidia/whistler/nvflash/whistler_12Mhz_H5PS1G63EFR_333Mhz_512MB_emmc_THGBM1G6D4EBAI4.bct | BCT </P4> <P4>p4sw:2006//sw/mobile/main/customers/nvidia/whistler/nvflash/whistler_12Mhz_H5PS1G63EFR_333Mhz_512MB_emmc_THGBM1G6D4EBAI4.cfg | CFG </P4> || CL6011367 2010/05/04 || 
+|-
+| Whistler || 12Mhz || DDR2 || H5PS1G63EFR || 333MHZ || 512MB || eMMC x8 || THGBM1G6D4EBAI4 || <P4>p4sw:2006//sw/mobile/main/customers/nvidia/whistler/nvflash/whistler_12Mhz_H5PS1G63EFR_333Mhz_512MB_emmc_THGBM1G6D4EBAI4_x8.bct | BCT </P4> <P4>p4sw:2006//sw/mobile/main/customers/nvidia/whistler/nvflash/whistler_12Mhz_H5PS1G63EFR_333Mhz_512MB_emmc_THGBM1G6D4EBAI4_x8.cfg | CFG </P4> || CL6011367 2010/05/04 || 
+|-
+| Whistler || 12Mhz || DDR2 || H5PS1G63EFR || 333MHZ || 512MB || NAND x8 || K5E2G16ACM-D060 || <P4>p4sw:2006//sw/mobile/main/customers/nvidia/whistler/nvflash/whistler_12Mhz_H5PS1G63EFR_333Mhz_512MB_2K8Nand_K5E2G16ACM-D060.bct | BCT </P4> <P4>p4sw:2006//sw/mobile/main/customers/nvidia/whistler/nvflash/whistler_12Mhz_H5PS1G63EFR_333Mhz_512MB_2K8Nand_K5E2G16ACM-D060.cfg | CFG </P4> || CL5424360 2010/02/03 || 
+|-
+| Whistler || 12Mhz || LPDDR2 || H8TBR00Q0MLR-0DM || 100MHZ || 256MB || eMMC x4 || THGBM1G6D4EBAI4 || <P4>p4sw:2006//sw/mobile/main/customers/nvidia/whistler/nvflash/whistler_12Mhz_H8TBR00Q0MLR-0DM_100Mhz_256MB_emmc_THGBM1G6D4EBAI4.bct | BCT </P4> <P4>p4sw:2006//sw/mobile/main/customers/nvidia/whistler/nvflash/whistler_12Mhz_H8TBR00Q0MLR-0DM_100Mhz_256MB_emmc_THGBM1G6D4EBAI4.cfg | CFG </P4> || CL6011367 2010/05/04 || 
+|-
+| Whistler || 12Mhz || LPDDR2 || H8TBR00Q0MLR-0DM || 100MHZ || 256MB || eMMC x8 || THGBM1G6D4EBAI4 || <P4>p4sw:2006//sw/mobile/main/customers/nvidia/whistler/nvflash/whistler_12Mhz_H8TBR00Q0MLR-0DM_100Mhz_256MB_emmc_THGBM1G6D4EBAI4_x8.bct | BCT </P4> <P4>p4sw:2006//sw/mobile/main/customers/nvidia/whistler/nvflash/whistler_12Mhz_H8TBR00Q0MLR-0DM_100Mhz_256MB_emmc_THGBM1G6D4EBAI4_x8.cfg | CFG </P4> || CL6011367 2010/05/04 || 
+|-
+| Whistler || 12Mhz || LPDDR2 || H8TBR00Q0MLR-0DM || 100MHZ || 256MB || NAND x8 || K5E2G16ACM-D060 || <P4>p4sw:2006//sw/mobile/main/customers/nvidia/whistler/nvflash/whistler_12Mhz_H8TBR00Q0MLR-0DM_100Mhz_256MB_2K8Nand_K5E2G16ACM-D060.bct | BCT </P4> <P4>p4sw:2006//sw/mobile/main/customers/nvidia/whistler/nvflash/whistler_12Mhz_H8TBR00Q0MLR-0DM_100Mhz_256MB_2K8Nand_K5E2G16ACM-D060.cfg | CFG </P4> || CL5424360 2010/02/03 || 
+|-
+| Whistler || 12Mhz || LPDDR2 || H8TBR00Q0MLR-0DM || 150MHZ || 256MB || eMMC x4 || THGBM1G6D4EBAI4 || <P4>p4sw:2006//sw/mobile/main/customers/nvidia/whistler/nvflash/whistler_12Mhz_H8TBR00Q0MLR-0DM_150Mhz_256MB_emmc_THGBM1G6D4EBAI4.bct | BCT </P4> <P4>p4sw:2006//sw/mobile/main/customers/nvidia/whistler/nvflash/whistler_12Mhz_H8TBR00Q0MLR-0DM_150Mhz_256MB_emmc_THGBM1G6D4EBAI4.cfg | CFG </P4> || CL6011367 2010/05/04 || 
+|-
+| Whistler || 12Mhz || LPDDR2 || H8TBR00Q0MLR-0DM || 150MHZ || 256MB || eMMC x8 || THGBM1G6D4EBAI4 || <P4>p4sw:2006//sw/mobile/main/customers/nvidia/whistler/nvflash/whistler_12Mhz_H8TBR00Q0MLR-0DM_150Mhz_256MB_emmc_THGBM1G6D4EBAI4_x8.bct | BCT </P4> <P4>p4sw:2006//sw/mobile/main/customers/nvidia/whistler/nvflash/whistler_12Mhz_H8TBR00Q0MLR-0DM_150Mhz_256MB_emmc_THGBM1G6D4EBAI4_x8.cfg | CFG </P4> || CL6011367 2010/05/04 || 
+|-
+| Whistler || 12Mhz || LPDDR2 || H8TBR00Q0MLR-0DM || 150MHZ || 256MB || NAND x8 || K5E2G16ACM-D060 || <P4>p4sw:2006//sw/mobile/main/customers/nvidia/whistler/nvflash/whistler_12Mhz_H8TBR00Q0MLR-0DM_150Mhz_256MB_2K8Nand_K5E2G16ACM-D060.bct | BCT </P4> <P4>p4sw:2006//sw/mobile/main/customers/nvidia/whistler/nvflash/whistler_12Mhz_H8TBR00Q0MLR-0DM_150Mhz_256MB_2K8Nand_K5E2G16ACM-D060.cfg | CFG </P4> || CL5424360 2010/02/03 || 
+|-
+| Whistler || 12Mhz || LPDDR2 || H8TBR00Q0MLR-0DM || 200MHZ || 256MB || eMMC x4 || THGBM1G6D4EBAI4 || <P4>p4sw:2006//sw/mobile/main/customers/nvidia/whistler/nvflash/whistler_12Mhz_H8TBR00Q0MLR-0DM_200Mhz_256MB_emmc_THGBM1G6D4EBAI4.bct | BCT </P4> <P4>p4sw:2006//sw/mobile/main/customers/nvidia/whistler/nvflash/whistler_12Mhz_H8TBR00Q0MLR-0DM_200Mhz_256MB_emmc_THGBM1G6D4EBAI4.cfg | CFG </P4> || CL6011367 2010/05/04 || 
+|-
+| Whistler || 12Mhz || LPDDR2 || H8TBR00Q0MLR-0DM || 200MHZ || 256MB || eMMC x8 || THGBM1G6D4EBAI4 || <P4>p4sw:2006//sw/mobile/main/customers/nvidia/whistler/nvflash/whistler_12Mhz_H8TBR00Q0MLR-0DM_200Mhz_256MB_emmc_THGBM1G6D4EBAI4_x8.bct | BCT </P4> <P4>p4sw:2006//sw/mobile/main/customers/nvidia/whistler/nvflash/whistler_12Mhz_H8TBR00Q0MLR-0DM_200Mhz_256MB_emmc_THGBM1G6D4EBAI4_x8.cfg | CFG </P4> || CL6011367 2010/05/04 || 
+|-
+| Whistler || 12Mhz || LPDDR2 || H8TBR00Q0MLR-0DM || 200MHZ || 256MB || NAND x8 || K5E2G16ACM-D060 || <P4>p4sw:2006//sw/mobile/main/customers/nvidia/whistler/nvflash/whistler_12Mhz_H8TBR00Q0MLR-0DM_200Mhz_256MB_2K8Nand_K5E2G16ACM-D060.bct | BCT </P4> <P4>p4sw:2006//sw/mobile/main/customers/nvidia/whistler/nvflash/whistler_12Mhz_H8TBR00Q0MLR-0DM_200Mhz_256MB_2K8Nand_K5E2G16ACM-D060.cfg | CFG </P4> || CL5424360 2010/02/03 || 
+|-
+| Whistler || 12Mhz || LPDDR2 || H8TBR00Q0MLR-0DM || 250MHZ || 256MB || eMMC x4 || THGBM1G6D4EBAI4 || <P4>p4sw:2006//sw/mobile/main/customers/nvidia/whistler/nvflash/whistler_12Mhz_H8TBR00Q0MLR-0DM_250Mhz_256MB_emmc_THGBM1G6D4EBAI4.bct | BCT </P4> <P4>p4sw:2006//sw/mobile/main/customers/nvidia/whistler/nvflash/whistler_12Mhz_H8TBR00Q0MLR-0DM_250Mhz_256MB_emmc_THGBM1G6D4EBAI4.cfg | CFG </P4> || CL6011367 2010/05/04 || 
+|-
+| Whistler || 12Mhz || LPDDR2 || H8TBR00Q0MLR-0DM || 250MHZ || 256MB || eMMC x8 || THGBM1G6D4EBAI4 || <P4>p4sw:2006//sw/mobile/main/customers/nvidia/whistler/nvflash/whistler_12Mhz_H8TBR00Q0MLR-0DM_250Mhz_256MB_emmc_THGBM1G6D4EBAI4_x8.bct | BCT </P4> <P4>p4sw:2006//sw/mobile/main/customers/nvidia/whistler/nvflash/whistler_12Mhz_H8TBR00Q0MLR-0DM_250Mhz_256MB_emmc_THGBM1G6D4EBAI4_x8.cfg | CFG </P4> || CL6011367 2010/05/04 || 
+|-
+| Whistler || 12Mhz || LPDDR2 || H8TBR00Q0MLR-0DM || 250MHZ || 256MB || NAND x8 || K5E2G16ACM-D060 || <P4>p4sw:2006//sw/mobile/main/customers/nvidia/whistler/nvflash/whistler_12Mhz_H8TBR00Q0MLR-0DM_250Mhz_256MB_2K8Nand_K5E2G16ACM-D060.bct | BCT </P4> <P4>p4sw:2006//sw/mobile/main/customers/nvidia/whistler/nvflash/whistler_12Mhz_H8TBR00Q0MLR-0DM_250Mhz_256MB_2K8Nand_K5E2G16ACM-D060.cfg | CFG </P4> || CL5424360 2010/02/03 || 
+|-
+| Whistler || 12Mhz || LPDDR2 || H8TBR00Q0MLR-0DM || 300MHZ || 256MB || eMMC x4 || THGBM1G6D4EBAI4 || <P4>p4sw:2006//sw/mobile/main/customers/nvidia/whistler/nvflash/whistler_12Mhz_H8TBR00Q0MLR-0DM_300Mhz_256MB_emmc_THGBM1G6D4EBAI4.bct | BCT </P4> <P4>p4sw:2006//sw/mobile/main/customers/nvidia/whistler/nvflash/whistler_12Mhz_H8TBR00Q0MLR-0DM_300Mhz_256MB_emmc_THGBM1G6D4EBAI4.cfg | CFG </P4> || CL6011367 2010/05/04 || 
+|-
+| Whistler || 12Mhz || LPDDR2 || H8TBR00Q0MLR-0DM || 300MHZ || 256MB || eMMC x8 || THGBM1G6D4EBAI4 || <P4>p4sw:2006//sw/mobile/main/customers/nvidia/whistler/nvflash/whistler_12Mhz_H8TBR00Q0MLR-0DM_300Mhz_256MB_emmc_THGBM1G6D4EBAI4_x8.bct | BCT </P4> <P4>p4sw:2006//sw/mobile/main/customers/nvidia/whistler/nvflash/whistler_12Mhz_H8TBR00Q0MLR-0DM_300Mhz_256MB_emmc_THGBM1G6D4EBAI4_x8.cfg | CFG </P4> || CL6011367 2010/05/04 || 
+|-
+| Whistler || 12Mhz || LPDDR2 || H8TBR00Q0MLR-0DM || 300MHZ || 256MB || NAND x8 || K5E2G16ACM-D060 || <P4>p4sw:2006//sw/mobile/main/customers/nvidia/whistler/nvflash/whistler_12Mhz_H8TBR00Q0MLR-0DM_300Mhz_256MB_2K8Nand_K5E2G16ACM-D060.bct | BCT </P4> <P4>p4sw:2006//sw/mobile/main/customers/nvidia/whistler/nvflash/whistler_12Mhz_H8TBR00Q0MLR-0DM_300Mhz_256MB_2K8Nand_K5E2G16ACM-D060.cfg | CFG </P4> || CL5424360 2010/02/03 || 
+|-
+| Whistler || 26Mhz || DDR2 || H5PS1G63EFR || 300MHZ || 512MB || eMMC x4 || THGBM1G6D4EBAI4 || <P4>p4sw:2006//sw/mobile/main/customers/nvidia/whistler/nvflash/whistler_26Mhz_H5PS1G63EFR_300Mhz_512MB_emmc_THGBM1G6D4EBAI4.bct | BCT </P4> <P4>p4sw:2006//sw/mobile/main/customers/nvidia/whistler/nvflash/whistler_26Mhz_H5PS1G63EFR_300Mhz_512MB_emmc_THGBM1G6D4EBAI4.cfg | CFG </P4> || CL6011367 2010/05/04 || 
+|-
+| Whistler || 26Mhz || DDR2 || H5PS1G63EFR || 300MHZ || 512MB || eMMC x8 || THGBM1G6D4EBAI4 || <P4>p4sw:2006//sw/mobile/main/customers/nvidia/whistler/nvflash/whistler_26Mhz_H5PS1G63EFR_300Mhz_512MB_emmc_THGBM1G6D4EBAI4_x8.bct | BCT </P4> <P4>p4sw:2006//sw/mobile/main/customers/nvidia/whistler/nvflash/whistler_26Mhz_H5PS1G63EFR_300Mhz_512MB_emmc_THGBM1G6D4EBAI4_x8.cfg | CFG </P4> || CL6011367 2010/05/04 || 
+|-
+| Whistler || 26Mhz || DDR2 || H5PS1G63EFR || 300MHZ || 512MB || NAND x8 || K5E2G16ACM-D060 || <P4>p4sw:2006//sw/mobile/main/customers/nvidia/whistler/nvflash/whistler_26Mhz_H5PS1G63EFR_300Mhz_512MB_2K8Nand_K5E2G16ACM-D060.bct | BCT </P4> <P4>p4sw:2006//sw/mobile/main/customers/nvidia/whistler/nvflash/whistler_26Mhz_H5PS1G63EFR_300Mhz_512MB_2K8Nand_K5E2G16ACM-D060.cfg | CFG </P4> || CL5424360 2010/02/03 || 
+|-
+| Whistler || 26Mhz || LPDDR2 || H8TBR00Q0MLR-0DM || 300MHZ || 256MB || eMMC x4 || THGBM1G6D4EBAI4 || <P4>p4sw:2006//sw/mobile/main/customers/nvidia/whistler/nvflash/whistler_26Mhz_H8TBR00Q0MLR-0DM_300Mhz_256MB_emmc_THGBM1G6D4EBAI4.bct | BCT </P4> <P4>p4sw:2006//sw/mobile/main/customers/nvidia/whistler/nvflash/whistler_26Mhz_H8TBR00Q0MLR-0DM_300Mhz_256MB_emmc_THGBM1G6D4EBAI4.cfg | CFG </P4> || CL6011367 2010/05/04 || 
+|-
+| Whistler || 26Mhz || LPDDR2 || H8TBR00Q0MLR-0DM || 300MHZ || 256MB || eMMC x8 || THGBM1G6D4EBAI4 || <P4>p4sw:2006//sw/mobile/main/customers/nvidia/whistler/nvflash/whistler_26Mhz_H8TBR00Q0MLR-0DM_300Mhz_256MB_emmc_THGBM1G6D4EBAI4_x8.bct | BCT </P4> <P4>p4sw:2006//sw/mobile/main/customers/nvidia/whistler/nvflash/whistler_26Mhz_H8TBR00Q0MLR-0DM_300Mhz_256MB_emmc_THGBM1G6D4EBAI4_x8.cfg | CFG </P4> || CL6011367 2010/05/04 || 
+|-
+| Whistler || 26Mhz || LPDDR2 || H8TBR00Q0MLR-0DM || 300MHZ || 256MB || NAND x8 || K5E2G16ACM-D060 || <P4>p4sw:2006//sw/mobile/main/customers/nvidia/whistler/nvflash/whistler_26Mhz_H8TBR00Q0MLR-0DM_300Mhz_256MB_2K8Nand_K5E2G16ACM-D060.bct | BCT </P4> <P4>p4sw:2006//sw/mobile/main/customers/nvidia/whistler/nvflash/whistler_26Mhz_H8TBR00Q0MLR-0DM_300Mhz_256MB_2K8Nand_K5E2G16ACM-D060.cfg | CFG </P4> || CL5424360 2010/02/03 || 
+|-
+| Whistler A02 || 12Mhz || DDR2 || H5PS1G63EFR || 333MHZ || 512MB || eMMC x4 || THGBM1G6D4EBAI4 || <P4>p4sw:2006//sw/mobile/main/customers/nvidia/whistler/nvflash/whistler_a02_12Mhz_H5PS1G63EFR_333Mhz_512MB_emmc_THGBM1G6D4EBAI4.bct | BCT </P4> <P4>p4sw:2006//sw/mobile/main/customers/nvidia/whistler/nvflash/whistler_a02_12Mhz_H5PS1G63EFR_333Mhz_512MB_emmc_THGBM1G6D4EBAI4.cfg | CFG </P4> || CL6011367 2010/05/04 || 
+|-
+| Whistler A02 || 12Mhz || DDR2 || H5PS1G63EFR || 333MHZ || 512MB || eMMC x8 || THGBM1G6D4EBAI4 || <P4>p4sw:2006//sw/mobile/main/customers/nvidia/whistler/nvflash/whistler_a02_12Mhz_H5PS1G63EFR_333Mhz_512MB_emmc_THGBM1G6D4EBAI4_x8.bct | BCT </P4> <P4>p4sw:2006//sw/mobile/main/customers/nvidia/whistler/nvflash/whistler_a02_12Mhz_H5PS1G63EFR_333Mhz_512MB_emmc_THGBM1G6D4EBAI4_x8.cfg | CFG </P4> || CL6011367 2010/05/04 || 
+|-
+| Whistler A02 || 12Mhz || DDR2 || H5PS1G63EFR || 333MHZ || 512MB || NAND x8 || K5E2G16ACM-D060 || <P4>p4sw:2006//sw/mobile/main/customers/nvidia/whistler/nvflash/whistler_a02_12Mhz_H5PS1G63EFR_333Mhz_512MB_2K8Nand_K5E2G16ACM-D060.bct | BCT </P4> <P4>p4sw:2006//sw/mobile/main/customers/nvidia/whistler/nvflash/whistler_a02_12Mhz_H5PS1G63EFR_333Mhz_512MB_2K8Nand_K5E2G16ACM-D060.cfg | CFG </P4> || CL5424360 2010/02/03 || 
+|-
+| Whistler A02p Pop || 12Mhz || LPDDR2 || H5LD1G23MFR-S6 || 300MHZ || 256MB || eMMC x4 || THGBM1G6D4EBAI4 || <P4>p4sw:2006//sw/mobile/main/customers/nvidia/whistler/nvflash/whistler_a02p_pop_12Mhz_H5LD1G23MFR-S6_300Mhz_256MB_emmc_THGBM1G6D4EBAI4.bct | BCT </P4> <P4>p4sw:2006//sw/mobile/main/customers/nvidia/whistler/nvflash/whistler_a02p_pop_12Mhz_H5LD1G23MFR-S6_300Mhz_256MB_emmc_THGBM1G6D4EBAI4.cfg | CFG </P4> || CL6011367 2010/05/04 || 
+|-
+| Whistler A02p Pop || 12Mhz || LPDDR2 || H5LD1G23MFR-S6 || 300MHZ || 256MB || eMMC x8 || THGBM1G6D4EBAI4 || <P4>p4sw:2006//sw/mobile/main/customers/nvidia/whistler/nvflash/whistler_a02p_pop_12Mhz_H5LD1G23MFR-S6_300Mhz_256MB_emmc_THGBM1G6D4EBAI4_x8.bct | BCT </P4> <P4>p4sw:2006//sw/mobile/main/customers/nvidia/whistler/nvflash/whistler_a02p_pop_12Mhz_H5LD1G23MFR-S6_300Mhz_256MB_emmc_THGBM1G6D4EBAI4_x8.cfg | CFG </P4> || CL6011367 2010/05/04 || 
+|-
+| Whistler A02p Pop || 12Mhz || LPDDR2 || H5LD1G23MFR-S6 || 300MHZ || 256MB || NAND x8 || K5E2G16ACM-D060 || <P4>p4sw:2006//sw/mobile/main/customers/nvidia/whistler/nvflash/whistler_a02p_pop_12Mhz_H5LD1G23MFR-S6_300Mhz_256MB_2K8Nand_K5E2G16ACM-D060.bct | BCT </P4> <P4>p4sw:2006//sw/mobile/main/customers/nvidia/whistler/nvflash/whistler_a02p_pop_12Mhz_H5LD1G23MFR-S6_300Mhz_256MB_2K8Nand_K5E2G16ACM-D060.cfg | CFG </P4> || CL5424360 2010/02/03 || 
+|}

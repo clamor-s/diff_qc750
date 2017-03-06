@@ -1,0 +1,38 @@
+This tests framebuffer/renderbuffer-related functions
+
+On success, you will see a series of "PASS" messages, followed by "TEST COMPLETE".
+
+
+Canvas.getContext
+PASS context exists
+
+Checking framebuffer/renderbuffer stuff.
+PASS getError was expected value: INVALID_OPERATION : calling getFramebufferAttachmentParameter on the default framebuffer should generate INVALID_OPERATION.
+PASS calling checkFramebufferStatus on the default framebuffer should generate FRAMEBUFFER_COMPLETE.
+PASS getError was expected value: INVALID_OPERATION : trying to attach a texture to default framebuffer should generate INVALID_OPERATION.
+PASS getError was expected value: INVALID_OPERATION : trying to detach default renderbuffer from default framebuffer should generate INVALID_OPERATION.
+PASS getError was expected value: NO_ERROR : allocating renderbuffer storage of a newly created renderbuffer should succeed.
+PASS getError was expected value: INVALID_OPERATION : trying to attach a renderbuffer to the default framebuffer should generate INVALID_OPERATION.
+PASS getError was expected value: NO_ERROR : binding a newly created framebuffer should succeed.
+PASS getError was expected value: INVALID_ENUM : calling getFramebufferAttachmentParameter with target = READ_FRAMEBUFFER should generate INVALID_ENUM.
+PASS calling checkFramebufferStatus with target = READ_FRAMEBUFFER should return 0.
+PASS getError was expected value: INVALID_ENUM : calling checkFramebufferStatus with target = READ_FRAMEBUFFER should generate INVALID_ENUM.
+PASS getError was expected value: INVALID_ENUM : calling bindFramebuffer with target = READ_FRAMEBUFFER should generate INVALID_ENUM.
+PASS calling bindFramebuffer with target = READ_FRAMEBUFFER should not change FRAMEBUFFER_BINDING.
+PASS getError was expected value: INVALID_ENUM : calling getFramebufferAttachmentParameter with target = READ_FRAMEBUFFER should generate INVALID_ENUM.
+PASS getError was expected value: INVALID_ENUM : calling framebufferTexImage2D with target = READ_FRAMEBUFFER should generate INVALID_ENUM.
+PASS getError was expected value: INVALID_ENUM : calling framebufferRenderbuffer with target = READ_FRAMEBUFFER should generate INVALID_ENUM.
+PASS getError was expected value: INVALID_ENUM : calling framebufferTexImage2D with attachment = COLOR_ATTACHMENT1 should generate INVALID_ENUM.
+PASS getError was expected value: INVALID_ENUM : calling framebufferRenderbuffer with attachment = COLOR_ATTACHMENT1 should generate INVALID_ENUM.
+PASS getError was expected value: INVALID_ENUM : calling getFramebufferAttachmentParameter with pname = GL_FRAMEBUFFER_ATTACHMENT_COLOR_ENCODING should generate INVALID_ENUM.
+PASS getError was expected value: NO_ERROR : attaching a texture to a framebuffer should succeed.
+PASS getError was expected value: NO_ERROR : detaching a texture from a framebuffer should succeed.
+PASS getError was expected value: INVALID_VALUE : calling framebufferTexture2D with non-zero mipmap level should generate INVALID_VALUE.
+PASS getError was expected value: NO_ERROR : attaching a renderbuffer to a framebuffer should succeed.
+PASS getError was expected value: NO_ERROR : detaching a renderbuffer from a framebuffer should succeed.
+PASS getError was expected value: NO_ERROR : binding default (null) framebuffer should succeed.
+
+PASS successfullyParsed is true
+
+TEST COMPLETE
+

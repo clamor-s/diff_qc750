@@ -1,0 +1,106 @@
+This test ensures WebGL implementations allow the OpenGL ES 2.0 texture formats and do not allow DesktopGL texture formats.
+
+On success, you will see a series of "PASS" messages, followed by "TEST COMPLETE".
+
+
+Canvas.getContext
+PASS context exists
+
+Checking texture formats.
+PASS not able to create invalid format: GL_1
+PASS not able to create invalid format: GL_2
+PASS not able to create invalid format: GL_3
+PASS not able to create invalid format: GL_4
+PASS not able to create invalid format: GL_RGB4
+PASS not able to create invalid format: GL_RGB5
+PASS not able to create invalid format: GL_RGB8
+PASS not able to create invalid format: GL_RGB10
+PASS not able to create invalid format: GL_RGB12
+PASS not able to create invalid format: GL_RGB16
+PASS not able to create invalid format: GL_RGBA2
+PASS not able to create invalid format: GL_RGBA4
+PASS not able to create invalid format: GL_RGB5_A1
+PASS not able to create invalid format: GL_RGBA8
+PASS not able to create invalid format: GL_RGB10_A2
+PASS not able to create invalid format: GL_RGBA12
+PASS not able to create invalid format: GL_RGBA16
+PASS not able to create invalid format: GL_BGR
+PASS not able to create invalid format: GL_BGRA
+PASS not able to create invalid format: GL_ALPHA4_EXT
+PASS not able to create invalid format: GL_ALPHA8_EXT
+PASS not able to create invalid format: GL_ALPHA12_EXT
+PASS not able to create invalid format: GL_ALPHA16_EXT
+PASS not able to create invalid format: GL_COMPRESSED_ALPHA
+PASS not able to create invalid format: GL_COMPRESSED_LUMINANCE
+PASS not able to create invalid format: GL_COMPRESSED_LUMINANCE_ALPHA
+PASS not able to create invalid format: GL_COMPRESSED_INTENSITY
+PASS not able to create invalid format: GL_COMPRESSED_RGB
+PASS not able to create invalid format: GL_COMPRESSED_RGBA
+PASS not able to create invalid format: GL_DEPTH_COMPONENT16
+PASS not able to create invalid format: GL_DEPTH_COMPONENT24
+PASS not able to create invalid format: GL_DEPTH_COMPONENT32
+PASS not able to create invalid format: GL_LUMINANCE4_EXT
+PASS not able to create invalid format: GL_LUMINANCE8_EXT
+PASS not able to create invalid format: GL_LUMINANCE12_EXT
+PASS not able to create invalid format: GL_LUMINANCE16_EXT
+PASS not able to create invalid format: GL_LUMINANCE4_ALPHA4_EXT
+PASS not able to create invalid format: GL_LUMINANCE6_ALPHA2_EXT
+PASS not able to create invalid format: GL_LUMINANCE8_ALPHA8_EXT
+PASS not able to create invalid format: GL_LUMINANCE12_ALPHA4_EXT
+PASS not able to create invalid format: GL_LUMINANCE12_ALPHA12_EXT
+PASS not able to create invalid format: GL_LUMINANCE16_ALPHA16_EXT
+PASS not able to create invalid format: GL_INTENSITY_EXT
+PASS not able to create invalid format: GL_INTENSITY4_EXT
+PASS not able to create invalid format: GL_INTENSITY8_EXT
+PASS not able to create invalid format: GL_INTENSITY12_EXT
+PASS not able to create invalid format: GL_INTENSITY16_EXT
+PASS not able to create invalid format: GL_RGB4_EXT
+PASS not able to create invalid format: GL_RGB5_EXT
+PASS not able to create invalid format: GL_RGB8_EXT
+PASS not able to create invalid format: GL_RGB10_EXT
+PASS not able to create invalid format: GL_RGB12_EXT
+PASS not able to create invalid format: GL_RGB16_EXT
+PASS not able to create invalid format: GL_RGBA2_EXT
+PASS not able to create invalid format: GL_RGBA4_EXT
+PASS not able to create invalid format: GL_RGB5_A1_EXT
+PASS not able to create invalid format: GL_RGBA8_EXT
+PASS not able to create invalid format: GL_RGB10_A2_EXT
+PASS not able to create invalid format: GL_RGBA12_EXT
+PASS not able to create invalid format: GL_RGBA16_EXT
+PASS not able to create invalid format: GL_SLUMINANCE_EXT
+PASS not able to create invalid format: GL_SLUMINANCE8_EXT
+PASS not able to create invalid format: GL_SLUMINANCE_ALPHA_EXT
+PASS not able to create invalid format: GL_SLUMINANCE8_ALPHA8_EXT
+PASS not able to create invalid format: GL_SRGB_EXT
+PASS not able to create invalid format: GL_SRGB8_EXT
+PASS not able to create invalid format: GL_SRGB_ALPHA_EXT
+PASS not able to create invalid format: GL_SRGB8_ALPHA8
+PASS getError was expected value: NO_ERROR : was able to create texture of gl.ALPHA
+PASS getError was expected value: NO_ERROR : was able to create texture of gl.RGB
+PASS getError was expected value: NO_ERROR : was able to create texture of gl.RGBA
+PASS getError was expected value: NO_ERROR : was able to create texture of gl.LUMINANCE
+PASS getError was expected value: NO_ERROR : was able to create texture of gl.LUMINANCE_ALPHA
+
+checking non 0 border parameter to gl.TexImage2D
+PASS getError was expected value: INVALID_VALUE : non 0 border to gl.TexImage2D should return INVALID_VALUE
+
+checking gl.texImage2D with type: 5121
+PASS getError was expected value: NO_ERROR : gl.texImage2D with 5121 should generate NO_ERROR
+PASS texture type 5121 should draw with 0, 255, 0, 255
+
+checking gl.texImage2D with type: 32819
+PASS getError was expected value: NO_ERROR : gl.texImage2D with 32819 should generate NO_ERROR
+PASS texture type 32819 should draw with 0, 0, 255, 255
+
+checking gl.texImage2D with type: 33635
+PASS getError was expected value: NO_ERROR : gl.texImage2D with 33635 should generate NO_ERROR
+PASS texture type 33635 should draw with 0, 255, 0, 255
+
+checking gl.texImage2D with type: 32820
+PASS getError was expected value: NO_ERROR : gl.texImage2D with 32820 should generate NO_ERROR
+PASS texture type 32820 should draw with 0, 0, 255, 255
+
+PASS successfullyParsed is true
+
+TEST COMPLETE
+ 
